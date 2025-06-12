@@ -1,0 +1,76 @@
+<div class="miles-card padded">
+    <h4 class="permissions">PERMISSIONS</h4>
+    <ng-container *ngIf="permissions?.length > 10">
+        <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+        <br />
+    </ng-container>
+    <mt-entity-list [entities]="filteredPermissions" [itemsPerPage]="permissions?.length" [entityListConfig]="entityListConfig">
+        <ng-template mtEntityListHeader>
+            <!-- intentionally left blank -->
+        </ng-template>
+        <ng-template mtEntityListItem let-entity>
+            <tr *ngIf="!entity.claimType.ParentId" class="permission">
+                <td>
+                    <h4 class="claim-type-name">{{ entity.claimType.Name }}</h4>
+                </td>
+                <td class="claim-value-buttons">
+                    <div
+                        *ngIf="canEdit"
+                        class="btn-group btn-group-toggle"
+                        [(ngModel)]="entity.value"
+                        (ngModelChange)="permissionUpdated(entity)"
+                        ngbRadioGroup
+                    >
+                        <label ngbButtonLabel *ngFor="let option of claimValues" class="btn-primary-inverse">
+                            <input ngbButton type="radio" [value]="option.Id" />
+                            {{ option.Name }}
+                        </label>
+                    </div>
+                    <!-- the ngbRadioGroup has a known bug when it comes to disabling, so we have to have a different representation for disabled state -->
+                    <div *ngIf="!canEdit" class="btn-group disabled" disabled>
+                        <label
+                            *ngFor="let option of claimValues"
+                            class="btn btn-primary-inverse disabled"
+                            [class.active]="entity.value === option.Id"
+                            disabled
+                        >
+                            {{ option.Name }}
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <tr *ngIf="entity.claimType.ParentId" class="permission child-permission">
+                <td>
+                    <i class="fa fa-caret-right fa-lg pull-left"></i>
+                    {{ entity.claimType.Name }}
+                </td>
+                <td>
+                    <div
+                        *ngIf="canEdit"
+                        class="btn-group btn-group-toggle"
+                        [(ngModel)]="entity.value"
+                        (ngModelChange)="permissionUpdated(entity)"
+                        ngbRadioGroup
+                    >
+                        <label ngbButtonLabel *ngFor="let option of childClaimValues" class="btn-primary-inverse" [class.read-only]="option.Id === 2">
+                            <input ngbButton type="radio" [value]="option.Id" />
+                            {{ option.Name }}
+                        </label>
+                    </div>
+                    <!-- the ngbRadioGroup has a known bug when it comes to disabling, so we have to have a different representation for disabled state -->
+                    <div *ngIf="!canEdit" class="btn-group disabled" disabled>
+                        <label
+                            *ngFor="let option of childClaimValues"
+                            class="btn btn-primary-inverse disabled"
+                            [class.active]="entity.value === option.Id"
+                            disabled
+                            [class.read-only]="option.Id === 2"
+                        >
+                            {{ option.Name }}
+                        </label>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </mt-entity-list>
+</div>

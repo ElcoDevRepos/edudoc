@@ -1,0 +1,47 @@
+<div class="row">
+
+    <!-- LEFT -->
+    <div class="col-md-6" *ngIf="schools">
+        <div class="miles-form padded">
+            <h4>STUDENT INFO</h4>
+            <div>
+                <span class="control-label">
+                    <span class="dynamic-field-label">
+                        <label>Parental Consent Status</label>
+                    </span>
+                </span>
+                {{latestConsent?.StudentParentalConsentType.Name}}
+            </div>
+            <div>
+                <span class="control-label">
+                    <span class="dynamic-field-label">
+                        <label>Parental Consent Effective Date</label>
+                    </span>
+                </span>
+                {{latestConsent ? (latestConsent.ParentalConsentEffectiveDate | date) : ''}}
+            </div>
+            <mt-dynamic-form [config]="formObject" (submitted)="formSubmitted($event)">
+                <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+                    Save
+                </button>
+            </mt-dynamic-form>
+        </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="col-md-6">
+        <div class="miles-form padded">
+            <h4>
+                SELECT STUDENT
+            </h4>
+            <mt-type-ahead [items]="studentOptions" [minimumCharactersToShow]="0" [placeholder]="'Begin typing...'"
+                (selectionChanged)="studentSelected($event)" (ready)="typeAheadControlReady($event)"></mt-type-ahead>
+        </div>
+        <br />
+
+        <app-merge-students-merge *ngIf="studentToMerge" [studentToMerge]="studentToMerge"
+            [latestConsentToMerge]="latestConsentToMerge" (mergeStudent)="mergeStudent()">
+        </app-merge-students-merge>
+    </div>
+
+</div>

@@ -1,0 +1,9 @@
+# robotstxt.org
+
+# use below block to disallow all crawling
+User-agent: *
+Disallow: /
+
+# use below block to allow all crawling
+# User-agent: *
+# Disallow:

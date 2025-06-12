@@ -1,0 +1,19 @@
+<div *ngIf="cptCode && cptCode.Id > 0">
+    <div class="row">
+        <div class="col-md-6"><app-cpt-code-basic-info [cptCode]="cptCode" [canEdit]="canEdit"></app-cpt-code-basic-info><br /></div>
+    </div>
+    <app-cpt-code-associations
+        [cptCodeId]="cptCode.Id"
+        [cptCodeAssociations]="cptCode.CptCodeAssocations"
+        [canEdit]="canEdit"
+        (onAssociationsSaved)="getCptCode()"
+    >
+    </app-cpt-code-associations>
+    <br />
+    <a routerLink="/cpt-codes" class="btn btn-default">Close</a>
+</div>
+<div *ngIf="cptCode && cptCode.Id === 0">
+    <div class="row">
+        <div class="col-md-6"><app-cpt-code-basic-info [cptCode]="cptCode"></app-cpt-code-basic-info><br /></div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<div>
+    <div class="row">
+        <div class="col-md-7">
+            <h2>Voucher</h2>
+        </div>
+    </div>
+</div>
+<div *ngIf="formCreated">
+    <form class="miles-form padded row" [formGroup]="voucherForm" (ngSubmit)="formSubmitted()">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Voucher</h4>
+                <mt-dynamic-field [field]="abstractVoucherControls.VoucherDate" [form]="voucherForm"></mt-dynamic-field>
+                <mt-dynamic-field [field]="abstractVoucherControls.VoucherAmount" [form]="voucherForm"></mt-dynamic-field>
+                <mt-dynamic-field [field]="abstractVoucherControls.ServiceCode" [form]="voucherForm"></mt-dynamic-field>
+                <mt-dynamic-field [field]="abstractVoucherControls.SchoolYear" [form]="voucherForm"></mt-dynamic-field>
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+                Save
+            </button>
+            <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>

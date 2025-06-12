@@ -1,0 +1,66 @@
+<div class="row" style="padding-left: 15px">
+    <div class="col-md-3">
+        <label>Reporting Period</label>
+        <label *ngIf="!isCreatedByCurrentUser">: {{ startDate | date : 'shortDate' }}-{{ endDate | date : 'shortDate' }}</label
+        ><br />
+        <span *ngIf="!canEdit">{{startDate | date}} - {{endDate | date}}</span>
+        <mt-search-filter-daterange
+            *ngIf="canEdit && progressReport && isCreatedByCurrentUser"
+            [startDate]="startDate"
+            [endDate]="endDate"
+            entity="Date"
+            (selectionChanged)="dateSelectionChanged($event)"
+        >
+        </mt-search-filter-daterange>
+    </div>
+</div>
+<p class="col-md-9 text-danger" *ngIf="!startDate || !endDate">Please select a reporting period.</p>
+<br />
+
+<!-- LEFT -->
+<div class="col-md-9" style="border-right: 5px solid black">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div
+                    class="miles-editable miles-card padded"
+                    *ngIf="!isEditing && progressReport.Id > 0"
+                    (mouseenter)="isHovered = true"
+                    (mouseleave)="isHovered = false"
+                    (click)="edit()"
+                    [style.cursor]="_canEdit ? 'pointer' : 'default'"
+                >
+                    <span class="pull-right" *ngIf="_canEdit">
+                        <i class="fa fa-lg fa-edit"></i>
+                    </span>
+                    <mt-dynamic-view [config]="viewOnly"></mt-dynamic-view>
+                    <ng-container *ngIf="!isCreatedByCurrentUser && isSupervisor && permissions.CanCosignProgressReports">
+                        <button *ngIf="!progressReport.SupervisorESignedById" class="btn btn-primary" (click)="coSign($event)">Co-sign</button>
+                        <button *ngIf="progressReport.SupervisorESignedById" class="btn btn-primary" disabled>Co-signed</button>
+                    </ng-container>
+                </div>
+
+                <div class="miles-form padded" *ngIf="formObject && isEditing">
+                    <mt-dynamic-form (formCreated)="formCreated($event)" [config]="formObject" (submitted)="formSubmitted($event)">
+                        <div class="pull-right">
+                            <button type="submit" Class="btn btn-flat btn-success" *ngIf="showSign && isCreatedByCurrentUser">E-Sign Note</button>
+                            <button type="submit" Class="btn btn-flat btn-success" *ngIf="!showSign">Approve</button>
+                            <button *ngIf="progressReport.Id > 0" type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+                                Cancel
+                            </button>
+                        </div>
+                    </mt-dynamic-form>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+</div>
+<!-- RIGHT -->
+<div class="col-md-3">
+    <app-progress-report-case-notes [caseNotes]="caseNotes"></app-progress-report-case-notes>
+</div>
+
+<div *ngIf="!isEditing" class="col-md-4">
+    <button type="button" class="btn btn-success float-right" (click)="printProgressReport()">Print</button>
+</div>

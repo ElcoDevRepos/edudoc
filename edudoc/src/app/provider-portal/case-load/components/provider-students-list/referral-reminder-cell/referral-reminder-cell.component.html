@@ -1,0 +1,15 @@
+<div *ngIf="providerStudent && referralNeedsSignature && referralIsBillable" style="display: inline-block; width: 120px;">
+    <!-- send reminder button -->
+    <button class="btn btn-flat btn-success" (click)="sendReminder($event)" title="Send Reminder">
+        Send<br />
+        Reminder
+    </button>
+</div>
+
+<div *ngIf="providerStudent && !latestReferral && (!referralNeedsSignature || !referralIsBillable)" style="display: inline-block; width: 120px; text-align: center;">
+    Not Required
+</div>
+
+<div *ngIf="providerStudent && latestReferral" style="display: inline-block; width: 120px; text-align: center;">
+    -
+</div>

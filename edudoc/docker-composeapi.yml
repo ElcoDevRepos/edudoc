@@ -1,0 +1,19 @@
+version: '2.2'
+services:
+  api:
+    image: "${ImageName}:${ImageTag}"
+    ports:
+      - "${USEPORT}:9001"
+    volumes:
+      - docs:c:\docs
+    dns: "${DNS}"
+    dns_search: "${DNS_SEARCH}"
+    restart: unless-stopped
+    cpu_count: 1
+    mem_limit: 536870912
+volumes:
+  docs:
+networks:
+  default:
+    external:
+      name: nat

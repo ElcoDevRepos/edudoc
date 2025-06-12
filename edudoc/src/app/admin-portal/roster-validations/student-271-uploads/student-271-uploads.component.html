@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>271 Uploaded Students</h2>
+        <label *ngIf="latestUploadDate">Latest Upload Date: {{ latestUploadDate | date: 'MM/dd/yyyy hh:mm a' }}</label>
+        <label *ngIf="!latestUploadDate">Latest Upload Date: No 271 file uploaded yet.</label>
+    </div>
+</div>
+<div>
+    <mt-search-bar (searched)="search($event)"></mt-search-bar>
+<br>
+</div>
+<div class="row">
+    <div class="pull-left" style="padding-left: 20px;">
+        <div (click)="isSuccessfullyProcessedOnly = !isSuccessfullyProcessedOnly; search(query)">
+            <input type="checkbox" [checked]="isSuccessfullyProcessedOnly">
+            <label>Is Successfully Processed Only</label>
+        </div>
+    </div>
+</div>
+<mt-entity-list [entities]="rosterValidationStudents" [total]="total" [(currentPage)]="currentPage" [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="getRosterValidationStudents()" (itemSelectedEvent)="rosterValidationStudentSelected($event)" (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="entityListConfig">
+</mt-entity-list>

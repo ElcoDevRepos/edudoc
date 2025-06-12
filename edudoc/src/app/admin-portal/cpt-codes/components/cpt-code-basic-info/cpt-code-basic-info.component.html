@@ -1,0 +1,33 @@
+<div
+    class="miles-editable miles-card padded"
+    *ngIf="!isEditing && cptCode.Id > 0"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    (click)="edit()"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4>
+        CPT CODE INFO
+        <span class="pull-right" *ngIf="canEdit">
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+    <mt-dynamic-view [config]="viewOnly"></mt-dynamic-view>
+    <div  style="padding-left: 5px;" *ngIf="hasNursing">
+        <label>RN Default: </label> {{ cptCode.RnDefault ? 'Yes' : 'No' }} <br />
+        <label>LPN Default: </label> {{ cptCode.LpnDefault ? 'Yes' : 'No' }} <br />
+    </div>
+</div>
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4>CPT CODE INFO</h4>
+    <mt-dynamic-form [config]="formObject" ([isEditing])="(isEditing)" (submitted)="formSubmitted($event)">
+        <mt-dynamic-field *ngIf="hasNursing" [field]="getRNDefaultField()" (valueChanges)="cptCode.RnDefault = $event"></mt-dynamic-field>
+        <mt-dynamic-field *ngIf="hasNursing" [field]="getLPNDefaultField()" (valueChanges)="cptCode.LpnDefault = $event"></mt-dynamic-field>
+        <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+            Save
+        </button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </mt-dynamic-form>
+</div>

@@ -1,0 +1,33 @@
+<div class="miles-editable miles-card padded" *ngIf="!isAdding && student.Id > 0 && student" [style.cursor]="pointer">
+    <h4>SCHOOL DISTRICT - {{ currentDistrictName }}</h4>
+        <div  style="padding-left: 5px;">
+            <label>CURRENT DISTRICT: </label> {{ currentDistrictName }} <br />
+        </div>
+        <div  style="padding-left: 5px;">
+            <label>CURRENT BUILDING: </label> {{ student.School.Name }} <br />
+        </div>
+</div>
+
+<div *ngIf="isAdding && student.Id > 0 && student" class="miles-form padded">
+    <h4>SCHOOL DISTRICT</h4>
+        <div  style="padding-left: 5px;">
+            <label>Current School: </label> {{ student.School.Name }} <br />
+        </div>
+        <div  style="padding-left: 5px;">
+            <label>Current District: </label> {{ currentDistrictName }} <br />
+        </div>
+    <h4>DISTRICT SELECTION</h4>
+    <div *ngIf="showDistricts">
+        <mt-dynamic-field [field]="getSchoolDistrictsField()" (valueChanges)="districtSelected($event)"> </mt-dynamic-field>
+    </div>
+    <mt-dynamic-field *ngIf="selectedDistrict && schoolOptions.length" [field]="getSchoolBuildingsField()" (valueChanges)="schoolSelected($event)"> </mt-dynamic-field>
+    <div *ngIf="selectedDistrict && !schoolOptions.length">
+        <h3 style="text-align: center;">No school buildings.</h3>
+    </div>
+    <button type="button" Class="btn btn-flat btn-success" (click)="saveDistrictAssignment()">
+        Save
+    </button>
+    <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+        Cancel
+    </button>
+</div>

@@ -1,0 +1,67 @@
+<div *ngIf="myProfile" class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>My Profile</h2>
+    </div>
+</div>
+<div *ngIf="user && user.Id > 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-user-basic-info
+                [user]="user"
+                [canEdit]="canEdit"
+                ></app-user-basic-info>
+            <br />
+            <app-auth-user-portal-access
+                [isMyProfile]="user.Id === currentUser.Id"
+                [AuthUser]="user.AuthUser"
+                [showAccessButton]="false"
+                [userType]="user.AuthUser.UserRole.UserTypeId"
+                [canEdit]="canEdit"
+            ></app-auth-user-portal-access>
+            <br />
+            <app-auth-user-password [AuthUser]="user.AuthUser" [canEdit]="canEdit" (updateVersion)="updateVersion($event)"></app-auth-user-password>
+            <br />
+            <app-user-district-assignment [user]="user" *ngIf="canHaveAssignments"></app-user-district-assignment>
+        </div>
+        <div class="col-md-6">
+            <app-common-addresses-with-county
+                [canEdit]="canEdit"
+                [address]="userAddress"
+                (onSave)="saveAddress($event)"
+                [requireCounty]="false"
+                (onDelete)="deleteAddress($event)"
+                *ngIf="isNotProvider"
+            ></app-common-addresses-with-county>
+            <br />
+            <mt-common-phone [PhoneArray]="user.UserPhones" (saved)="savePhones($event)" [canEdit]="canEdit" *ngIf="isNotProvider">
+            </mt-common-phone>
+            <br />
+            <app-user-district-admin-assignment [user]="user" [canEdit]="canEdit" *ngIf="isSchoolDistrict">
+            </app-user-district-admin-assignment>
+            <app-school-district-hpc-admin-component
+                *ngIf="showDistricts"
+                [entity]="user"
+                [adminSchoolDistricts]="adminSchoolDistricts"
+                [service]="schoolDistrictService"
+                (onSave)="handleSchoolDistrictSave()"
+                [adminOrSchoolDistrict]="schoolDistrictAdminComponentModeEnums.ADMIN"
+            >
+            </app-school-district-hpc-admin-component>
+            <br />
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-info" *ngIf="isSchoolDistrict && showImpersonationButton" (click)="loginAsSchoolAdmin($event)">
+        Impersonate {{ user.AuthUser.Username }}
+    </button>
+</div>
+<div *ngIf="user && user.Id === 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-user-basic-info
+            [user]="user"
+            [userTypeId]="userTypeId"
+            ></app-user-basic-info>
+        </div>
+    </div>
+</div>

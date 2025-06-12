@@ -1,0 +1,18 @@
+.tableheader {
+    background-color: rgb(173, 216, 230) !important;
+}
+    .centerText {
+        text-align: center;
+    }
+    .rightAlign {
+        text-align: right;
+        padding-right: 50px;
+    }
+    .indentLeft {
+        padding-left: 100px;
+    }
+
+    .floatRight {
+        text-align: right;
+        padding-right: 100px;
+    }

@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-md-5" *ngIf="schools">
+        <div class="miles-form padded">
+            <h4>ROSTER INFO</h4>
+            <mt-dynamic-form [config]="formObject" (submitted)="formSubmitted($event)">
+                <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+                    Save
+                </button>
+                <button type="button" Class="btn btn-flat btn-danger pull-right" (click)="toggleModal()">
+                    Remove Issue
+                </button>
+                <button type="button" style="margin-right:5px;" Class="btn btn-flat btn-success pull-right" (click)="skipIssue()">
+                    Skip Issue
+                </button>
+            </mt-dynamic-form>
+        </div>
+    </div>
+
+    <div *ngIf="isMerging && studentsToMerge.length && !allStudentsAreProcessed">
+        <div class="col-md-5">
+            <app-school-district-roster-issues-merge
+                [totalConflicts]="studentsToMerge.length"
+                [(studentToMerge)]="currentStudent"
+                [studentIndex]="currentIndex"
+                [schoolDistrictRoster]="schoolDistrictRoster"
+                (studentProcessed)="processStudent($event)"
+                (prevConflictEvent)="goPrevConflict()"
+                (nextConflictEvent)="goNextConflict()"
+            >
+            </app-school-district-roster-issues-merge>
+        </div>
+    </div>
+    <div *ngIf="allStudentsAreProcessed && isMerging" class="col-md-5 text-center">
+        <div class="miles-form padded">
+            <h4>MERGE STUDENT CONFLICTS</h4>
+            <button
+                style="padding: 10px;"
+                mtDisableClickDuringHttpCalls
+                type="button"
+                class="btn btn-lg btn-primary"
+                (click)="completeMerge()"
+            >
+                Complete Merge
+            </button>
+        </div>
+    </div>
+</div>
+<mt-modal-wrapper *ngIf="showModal" [options]="modalOptions" (cancelClick)="showModal = false;" (okClick)="removeIssue()">
+    Are you sure you want to remove this roster issue?
+</mt-modal-wrapper>

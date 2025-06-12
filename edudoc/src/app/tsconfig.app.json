@@ -1,0 +1,19 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../../out-tsc/app",
+        "baseUrl": "./",
+        "module": "esnext",
+        "paths": {
+            "@model/*": ["model/*"],
+            "@common/*": ["common/*"],
+            "@admin/*": ["admin-portal/*"],
+            "@school-district-admin/*": ["school-district-admin-portal/*"],
+            "@provider/*": ["provider-portal/*"]
+        },
+        "types": [],
+        "experimentalDecorators": true
+    },
+    "include": ["main.ts", "polyfills.ts", "**/*.module.ts"],
+    "exclude": ["test.ts", "**/*.spec.ts"]
+}

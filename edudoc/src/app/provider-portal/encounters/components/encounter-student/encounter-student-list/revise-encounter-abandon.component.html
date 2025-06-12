@@ -1,0 +1,16 @@
+<span (click)="$event.stopImmediatePropagation()">
+    <i (click)="onAbandonClick($event);" title="Abandon" class="fa fa-2x fa-fw fa-chain-broken icon-main"
+        [ngClass]="{'disabled-icon': isDisabled}" aria-hidden="true"></i>
+
+</span>
+
+<mt-modal-wrapper *ngIf="showAbandonedNotesModal" [options]="modalOptions" (cancelClick)="showAbandonedNotesModal = false">
+    <h4>Reason for Abandonment</h4>
+    <mt-dynamic-field [field]="abandonedNotesField"
+        (controlCreated)="reasonForAbandonmentControl = $event"></mt-dynamic-field>
+    <button type="button" class="btn btn-success" [disabled]="reasonForAbandonmentControl.invalid"
+        mtDisableClickDuringHttpCalls (click)="updateEncounterStatus()">
+        Save Encounter
+    </button>
+    <button type="button" class="btn btn-default" (click)="showAbandonedNotesModal = false">Cancel</button>
+</mt-modal-wrapper>

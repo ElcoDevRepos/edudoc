@@ -1,0 +1,27 @@
+<div class="miles-editable miles-card padded" *ngIf="!isEditing && voucher.Id > 0" (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false" (click)="edit()" [style.cursor]="canEdit ? 'pointer' : 'default'">
+    <h4>
+        Voucher Info
+        <span class="pull-right" *ngIf="canEdit" [hidden]="!isHovered">
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+    <mt-dynamic-view [config]="viewOnly"></mt-dynamic-view>
+</div>
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4>Voucher Info</h4>
+    <mt-dynamic-form
+        [config]="formObject"
+        (formCreated)="formCreated($event)"
+        ([isEditing])="isEditing"
+        (submitted)="formSubmitted($event)">
+        
+        <button type="submit" mtDisableClickDuringHttpCalls
+            Class="btn btn-flat btn-success">
+            Save
+        </button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </mt-dynamic-form>
+</div>

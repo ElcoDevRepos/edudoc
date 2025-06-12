@@ -1,0 +1,101 @@
+<h3 mtSetTitle>Student Parental Consents</h3>
+
+<!-- Search Bar -->
+<div>
+    <mt-search-bar (searched)="getFilterSearchbar($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+    <br />
+</div>
+
+<!-- Filters -->
+<div class="row">
+    <div class="col-md-3">
+        <label>Consent Status</label><br />
+        <mt-search-filter-select
+            [items]="parentalConsentTypes"
+            entity="Consent Options"
+            [maxToShowInSelectedText]="1"
+        ></mt-search-filter-select>
+    </div>
+    <div class="col-md-2">
+        <label>Student DOB</label><br />
+        <mt-search-filter-daterange
+        [startDate]="startDate" [endDate]="endDate" entity="DOB"
+        (selectionChanged)="getFilterDateRange($event)"
+        ></mt-search-filter-daterange>
+    </div>
+    <div class="col-md-2">
+        <label>Grade</label><br />
+        <mt-search-filter-select
+            [items]="grades"
+            entity="Grade"
+            [maxToShowInSelectedText]="2"
+        ></mt-search-filter-select>
+    </div>
+    <div class="col-md-3">
+        <label>School</label><br />
+        <mt-search-filter-select
+            [items]="schools"
+            entity="School"
+            [maxToShowInSelectedText]="2"
+        ></mt-search-filter-select>
+    </div>
+    <div class="pull-left" style="padding-left: 20px;">
+        <mt-dynamic-field [field]="getEncountersOnlyField()" (valueChanges)="withEncountersOnly = $event;"> </mt-dynamic-field>
+    </div>
+    <div class="col-md-2">
+        <button type="button" Class="btn btn-flat btn-success" (click)="applyClicked($event)">
+            Apply
+        </button>
+    </div>
+</div>
+
+<!-- TODO SD: Show the total number of STUDENTS per selected status at the top of the report -->
+<div style="padding-left: 5px;">
+    <label>Total Students: </label>
+    <span>{{ totalStudents ? totalStudents : '' }}</span>
+</div>
+
+<mt-entity-list
+    [entities]="studentsWithParentalConsents"
+    [total]="totalStudents"
+    [(currentPage)]="currentPage"
+    (pageChanged)="getStudentsWithParentalConsents()"
+    (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="entityListConfig"
+>
+</mt-entity-list>
+
+<!-- TODO SD: Show the total number of BILLABLE CLAIMS shown, there is a grand total of all of them at the bottom of the report -->
+<div style="padding-left: 5px;">
+    <label>Total Encounters: </label>
+    <span>{{ totalClaims ? totalClaims : 'N/A' }}</span>
+</div>
+
+<ng-container *ngIf="claimsSummaryLoaded">
+    <div class="col-md-8">
+        <div class="miles-editable miles-card padded">
+            <h4>ENCOUNTERS SUMMARY</h4>
+            <div style="display:flex;">
+                <div style="width:50%">
+                    <label>Speech Therapy: </label> {{ claimsSummary.SpeechTherapy }} <br />
+                    <label>Psychology: </label> {{ claimsSummary.Psychology }}<br />
+                    <label>Occupational Therapy: </label> {{ claimsSummary.OccupationalTherapy }}<br />
+                    <label>Physical Therapy: </label> {{ claimsSummary.PhysicalTherapy }}<br />
+                </div>
+                <div style="width:50%">
+                    <label>Nursing: </label> {{ claimsSummary.Nursing }}<br />
+                    <label>Non MSP Service: </label> {{ claimsSummary.NonMSPService }}<br />
+                    <label>Counseling/Social Work: </label> {{ claimsSummary.Counseling }}<br />
+                    <label>Audiology: </label> {{ claimsSummary.Audiology }}<br />
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<br />
+
+<!-- <div *ngIf="canAddStudent" class="fab-wrap-b-r">
+    <a class="btn btn-primary btn-fab-lg" [routerLink]="['/school', schoolId, 'students', 'add']">
+        <span class="fa fa-plus"></span>
+    </a>
+</div> -->

@@ -1,0 +1,76 @@
+<div class="miles-form padded">
+    <h4>Add Student Schedule</h4>
+    <div *ngIf="encounterLocations && formData">
+        <div class="row">
+            <div class="col-md-4">
+                <mt-dynamic-field
+                    [field]="formData.controls.EncounterLocationId"
+                    (valueChanges)="handleLocationChange($event)"
+                    [form]="formData.form"
+                ></mt-dynamic-field>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="!studentTherapyForArchival">
+            <div class="col-md-4">
+                <mt-dynamic-field [field]="getExistingGroupField()" (valueChanges)="handleExistingStatusChange($event)" [form]="formData.form"></mt-dynamic-field>
+            </div>
+            <div class="col-md-4" *ngIf="existingGroup">
+                <mt-dynamic-field [field]="getGroupField()" (valueChanges)="groupSelected($event)" [form]="formData.form"></mt-dynamic-field>
+            </div>
+            <div class="col-md-4">
+                <mt-dynamic-field *ngIf="(!existingGroup || studentTherapyForArchival)"
+                    [field]="getNewGroupNameField()"
+                    (valueChanges)="groupName = $event"
+                    [form]="formData.form"
+                ></mt-dynamic-field>
+            </div>
+        </div>
+
+        <div *ngIf="selectedGroup && !studentTherapyForArchival">
+            <label>Selected Group: </label>{{ selectedGroup.Name }}
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-3">
+                <mt-dynamic-field class="field-margin" [field]="formData.controls.StartDate" [form]="formData.form"></mt-dynamic-field>
+            </div>
+            <div class="col-md-3">
+                <mt-dynamic-field class="field-margin" [field]="formData.controls.EndDate" [form]="formData.form"></mt-dynamic-field>
+            </div>
+            <div class="col-md-3">
+                <mt-dynamic-field class="field-margin" [field]="formData.controls.StartTime" [form]="formData.form"></mt-dynamic-field>
+            </div>
+            <div class="col-md-3">
+                <mt-dynamic-field class="field-margin" [field]="formData.controls.EndTime" [form]="formData.form"></mt-dynamic-field>
+            </div>
+        </div>
+        <div class="row" style="margin-top:1.5em;">
+            <div class="col-md-12">
+                <label>Days of the Week <span class="errortext">*</span> </label>
+                <div class="row">
+                    <div class="col-md-4" [style.display]="'flex'" [style.justify-content]="'space-between'">
+                        <mt-dynamic-field [field]="formData.controls.Monday" [form]="formData.form"></mt-dynamic-field>
+                        <mt-dynamic-field [field]="formData.controls.Tuesday" [form]="formData.form"></mt-dynamic-field>
+                        <mt-dynamic-field [field]="formData.controls.Wednesday" [form]="formData.form"></mt-dynamic-field>
+                        <mt-dynamic-field [field]="formData.controls.Thursday" [form]="formData.form"></mt-dynamic-field>
+                        <mt-dynamic-field [field]="formData.controls.Friday" [form]="formData.form"></mt-dynamic-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <button
+            type="submit"
+            mt-doubleClickDisabled
+            class="btn btn-flat btn-success"
+            (click)="formSubmitted()"
+        >
+            Save
+        </button>
+        <button type="button" class="btn btn-flat btn-default" (click)="close()">
+            Cancel
+        </button>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="miles-form padded">
+    <h4>
+        MERGE STUDENT CONFLICTS 
+        <br /><span class="text-danger">({{ totalConflicts - 1 }} conflict{{ totalConflicts !== 2 ? 's' : '' }} remain{{ totalConflicts === 2 ? 's' : '' }})</span>
+    </h4>
+    <div *ngIf="studentForm">
+        <form [formGroup]="studentForm" (ngSubmit)="mergeStudent()">
+            <div *ngFor="let checkbox of formCheckboxes">
+                <div class="row" style="padding-left: 5px;">
+                    <div class="col-md-7">
+                        <label>{{ checkbox.label }}</label>
+                    </div>
+                    <div class="col-md-5 studentField">
+                        {{ checkbox.value }}
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-5">
+                    <button
+                        *ngIf="!mergeSelected"
+                        type="submit"
+                        mtDisableClickDuringHttpCalls
+                        class="btn btn-flat btn-success"
+                    >
+                        Merge Student
+                    </button>
+                </div>
+                <div class="col-md-5 pull-right">
+                    <button
+                        *ngIf="!keepSelected"
+                        type="button"
+                        mtDisableClickDuringHttpCalls
+                        class="btn btn-flat btn-info"
+                        (click)="keep()"
+                    >
+                        Keep Student
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div *ngIf="totalConflicts > 1" [ngStyle]="{ 'padding-top': '10px' }" class="row">
+            <div class="col-md-2">
+                <button *ngIf="studentIndex > 0" class="btn btn-flat btn-success" (click)="prevConflict()">
+                    <i class="fa fa-lg fa-chevron-left"></i>
+                </button>
+            </div>
+            <div class="col-md-8" [ngStyle]="{ 'text-align': 'center', 'padding-top': '10px' }">
+                <span class="text-danger"><b>{{ studentIndex + 1 }} / {{totalConflicts}}</b></span>
+            </div>
+            <div class="col-md-2">
+                <button *ngIf="studentIndex < totalConflicts - 1" class="btn btn-flat btn-success" (click)="nextConflict()">
+                    <i class="fa fa-lg fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<div *ngIf="!isEditing">
+    <button type="button" (click)="edit($event);" [style.margin-right]="'5px'" [style.width]="'30px'">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+    </button>
+    <span>{{ cptCodes }}</span>
+</div>
+<div *ngIf="isEditing">
+    <button type="button" (click)="save($event);">
+        <i class="fa fa-check" aria-hidden="true"></i>
+    </button>
+    <button type="button" (click)="edit($event);">
+        <i class="fa fa-ban" aria-hidden="true"></i>
+    </button>
+    <br />
+    <mt-multiselect
+        *ngIf="cptCodeOptions && cptCodeOptions.length"
+        [items]="cptCodeOptions"
+        [showSelectAllButtons]="false"
+        [maxToShowInSelectedText]="1"
+        [autoClose]="true"
+        [filterMode]="false"
+        entity="Procedure Codes"
+        placeholder="Select Procedure Codes"
+    ></mt-multiselect>
+</div>

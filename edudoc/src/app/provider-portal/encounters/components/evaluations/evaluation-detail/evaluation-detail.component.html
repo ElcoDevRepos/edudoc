@@ -1,0 +1,134 @@
+<div class="miles-card padded">
+    <!--Encounter Info-->
+    <div *ngIf="!dataLoaded">
+        <div class="row">
+            <div class="col-md-12 inputs-side-by-side">
+                <span>Please wait while data is being loaded</span>
+                <div class="loader"></div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="dataLoaded">
+        <div class="row">
+            <ng-container *ngIf="!isEditing">
+                <div class="col-md-3"><label>Service Type:</label>&nbsp;<span>Evaluation/Assessment</span></div>
+                <div class="col-md-4">
+                    <label>Evaluation Type:</label>&nbsp;<span>{{ evaluationType }}</span>
+                </div>
+                <div class="col-md-5">
+                    <span class="pull-right">
+                        <i [style.cursor]="'pointer'" class="fa fa-lg fa-edit" (click)="isEditing = true"></i>
+                    </span>
+                    <label>Reason For Service:</label>&nbsp;<span>{{ reasonForService }}</span>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="isEditing">
+                <div class="col-md-5">
+                    <mt-dynamic-field
+                        *ngIf="evaluationTypes.length"
+                        [field]="getEvalTypeField()"
+                        (valueChanges)="encounter.EvaluationTypeId = $event"
+                    ></mt-dynamic-field>
+                </div>
+                <div class="col-md-5">
+                    <mt-dynamic-field
+                        *ngIf="reasonForServices.length"
+                        [field]="getReasonForServiceField()"
+                        (valueChanges)="encounter.DiagnosisCodeId = $event"
+                    ></mt-dynamic-field>
+                </div>
+                <div class="col-md-2">
+                    <span *ngIf="!isNewEncounter" class="pull-right">
+                        <i [style.cursor]="'pointer'" class="fa fa-lg fa-check" (click)="updateEncounter(); isEditing = false"></i>&nbsp;
+                        <i [style.cursor]="'pointer'" class="fa fa-lg fa-ban" (click)="isEditing = false"></i>
+                    </span>
+                </div>
+            </ng-container>
+        </div>
+        <!--END: Encounter Info-->
+        <!--Student Info-->
+        <div class="row">
+            <ng-container *ngIf="!isNewEncounter">
+                <div class="col-md-8">
+                    <label>Student: </label>&nbsp;<span>{{ studentName }}</span>
+                </div>
+                <div class="col-md-4 evaluation-action-buttons">
+                    <div class="col-md-6">
+                        <button (click)="showAddEncounterStudentModal = true; selectedEncounterStudent = null" class="btn btn-sm btn-primary">
+                            Add Additional Service
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-sm btn-primary" (click)="signEncounter()">E-Sign/Complete</button>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="isNewEncounter">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="inputs-side-by-side">
+                            <div>
+                                <label class="student-field">Student</label>
+                                <mt-type-ahead
+                                    [items]="studentOptions"
+                                    [minimumCharactersToShow]="0"
+                                    [placeholder]="placeholderText"
+                                    (selectionChanged)="studentSelected($event)"
+                                    (ready)="typeAheadControlReady($event)"
+                                ></mt-type-ahead>
+                            </div>
+                            <mt-dynamic-field
+                                *ngIf="districtsField"
+                                [field]="districtsField"
+                                (valueChanges)="districtFilterSelectionChanged($event)"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-md-7 student-button-group">
+                        <button class="btn btn-sm btn-primary" type="button" (click)="switchSelectionType()">
+                            {{ selectionType }}
+                        </button>
+                        <button class="btn btn-sm btn-primary" type="button" (click)="showAddCaseloadModal = true">
+                            <i class="fa fa-plus fa-lg" style="cursor: pointer" aria-hidden="true"></i>
+                            Add New Student to Edu-Doc
+                        </button>
+                        <button
+                            *ngIf="selectedStudentId && encounter.DiagnosisCodeId"
+                            class="btn btn-sm btn-primary"
+                            (click)="showAddEncounterStudentModal = true"
+                        >
+                            Create Encounter
+                        </button>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <!--END: Student Info-->
+    </div>
+</div>
+
+<app-encounter-add-student-modal
+    *ngIf="showAddCaseloadModal"
+    [encounter]="encounter"
+    [serviceCodeId]="serviceCodeId"
+    (closeAddStudentModal)="showAddCaseloadModal = false"
+    (studentAdded)="getStudentsFunction()"
+></app-encounter-add-student-modal>
+
+<app-evaluation-add-encounter-student
+    *ngIf="showAddEncounterStudentModal"
+    [encounter]="encounter"
+    [encounterStudent]="selectedEncounterStudent"
+    [studentId]="selectedStudentId"
+    [locations]="encounterLocations"
+    [deviationReasons]="deviationReasons"
+    (closeAddEncounterStudentModal)="showAddEncounterStudentModal = false"
+    (encounterStudentUpdated)="encounterStudentUpdated()"
+></app-evaluation-add-encounter-student>
+
+<br />
+<app-evaluation-list
+    *ngIf="!isNewEncounter"
+    [(encounterStudents)]="encounterStudents"
+    (encounterStudentSelected)="encounterStudentSelected($event)"
+></app-evaluation-list>

@@ -1,0 +1,77 @@
+<div class="miles-form padded" [@itemAnim] *ngIf="formRenderd">
+    <h4>MESSAGE INFO</h4>
+    <form [formGroup]="messageForm" *ngIf="messageForm" (ngSubmit)="formSubmitted(messageForm)">
+        <mt-dynamic-field [field]="abstractMessageControls.MessageFilterTypeId" [form]="messageForm" (valueChanges)="isLoginMessage = $event;"> </mt-dynamic-field>
+        <mt-dynamic-field [field]="abstractMessageControls.ForDistrictAdmins" [form]="messageForm" (valueChanges)="message.ForDistrictAdmins = $event;"> </mt-dynamic-field>
+
+        <div class="row">
+            <mt-search-filter-select
+            [items]="escs"
+            entity="ESCs"
+            [maxToShowInSelectedText]="1"
+            (selectionChanged)="handleFilterSelections(messageFilterTypeEnums.Esc, $event)"
+            ></mt-search-filter-select>
+        </div>
+
+        <div class="row">
+            <mt-search-filter-select
+            *ngIf="filteredSchoolDistricts.length"
+            [items]="filteredSchoolDistricts"
+            entity="SchoolDistricts"
+            [maxToShowInSelectedText]="1"
+            (selectionChanged)="handleFilterSelections(messageFilterTypeEnums.SchoolDistrict, $event)"
+            ></mt-search-filter-select>
+        </div>
+
+        <div class="row" *ngIf="districtsSelected && !message.ForDistrictAdmins">
+            <mt-search-filter-select
+            [items]="filteredServiceCodes"
+            entity="ServiceCodes"
+            [maxToShowInSelectedText]="1"
+            (selectionChanged)="handleFilterSelections(messageFilterTypeEnums.ServiceCode, $event)"
+            ></mt-search-filter-select>
+        </div>
+
+        <div class="row" *ngIf="filteredProviderTitles.length && districtsSelected && !message.ForDistrictAdmins">
+            <mt-search-filter-select
+            [items]="filteredProviderTitles"
+            entity="ProviderTitles"
+            [maxToShowInSelectedText]="1"
+            (selectionChanged)="handleFilterSelections(messageFilterTypeEnums.ProviderTitle, $event)"
+            ></mt-search-filter-select>
+        </div>
+
+        <div class="row" *ngIf="filteredProviders.length && !message.ForDistrictAdmins">
+            <mt-search-filter-select
+            [items]="filteredProviders"
+            entity="Providers"
+            [maxToShowInSelectedText]="1"
+            (selectionChanged)="handleFilterSelections(messageFilterTypeEnums.Provider, $event)"
+            ></mt-search-filter-select>
+        </div>
+
+        <mt-dynamic-field [field]="abstractMessageControls.Description" [form]="messageForm"> </mt-dynamic-field>
+
+        <mt-dynamic-field [field]="abstractMessageControls.ValidTill" [form]="messageForm"> </mt-dynamic-field>
+        <br />
+
+        <label>Copy Links</label>
+        <mt-virtual-type-ahead
+            [getItems]="getLinks"
+            [placeholder]="'Begin typing...'"
+            (selectionChanged)="handleLinkSelection($event)"
+        ></mt-virtual-type-ahead>
+        <br />
+
+        <mt-wysiwyg
+            [(value)]="text"
+            [config]="noteWysiwygConfig"
+        ></mt-wysiwyg>
+        <br />
+
+        <br />
+        <button type="submit" Class="btn btn-flat btn-success">
+            Save
+        </button>
+    </form>
+</div>

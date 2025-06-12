@@ -1,0 +1,172 @@
+<div *ngIf="billingSchedule && listsRendered">
+    <div class="row">
+        <div class="col-md-6">
+            <app-billing-schedule-basic-info [billingSchedule]="billingSchedule" [canEdit]="canEdit"></app-billing-schedule-basic-info>
+            <br />
+        </div>
+
+        <div class="col-md-6">
+            <app-mini-dashboard-list
+                [canDelete]="false"
+                [canEdit]="canEdit"
+                [labelGenerator]="entityLabelGenerator"
+                [totalItems]="districtInclusions.length"
+                [cardName]="districtInclusionsCardName"
+                [items]="districtInclusions"
+                [forceShowAll]="false"
+                [hideShowAll]="true"
+                (onAddItem)="addNewDistrictInclusion()"
+            >
+            </app-mini-dashboard-list>
+        </div>
+        
+    </div>
+    <br />
+
+    <div class="row" *ngIf="billingSchedule.Id > 0" style="padding-top: 15px">
+        <div class="col-md-4">
+            <app-mini-dashboard-list
+                [canDelete]="false"
+                [canEdit]="canEdit"
+                [labelGenerator]="entityLabelGenerator"
+                [totalItems]="providerExclusions.length"
+                [cardName]="providerExclusionsCardName"
+                [items]="providerExclusions"
+                [forceShowAll]="false"
+                [hideShowAll]="true"
+                (onAddItem)="addNewProviderExclusion()"
+            >
+            </app-mini-dashboard-list>
+        </div>
+        <div class="col-md-4">
+            <app-mini-dashboard-list
+                [canDelete]="false"
+                [canEdit]="canEdit"
+                [labelGenerator]="entityLabelGenerator"
+                [totalItems]="serviceCodeExclusions.length"
+                [cardName]="serviceCodeExclusionsCardName"
+                [items]="serviceCodeExclusions"
+                [forceShowAll]="false"
+                [hideShowAll]="true"
+                (onAddItem)="addNewServiceCodeExclusion()"
+            >
+            </app-mini-dashboard-list>
+        </div>
+        <div class="col-md-4">
+            <app-mini-dashboard-list
+                [canDelete]="false"
+                [canEdit]="canEdit"
+                [labelGenerator]="entityLabelGenerator"
+                [totalItems]="cptCodeExclusions.length"
+                [cardName]="cptCodeExclusionsCardName"
+                [items]="cptCodeExclusions"
+                [forceShowAll]="false"
+                [hideShowAll]="true"
+                (onAddItem)="addNewCptCodeExclusion()"
+            >
+            </app-mini-dashboard-list>
+        </div>
+        
+    </div>
+    <br />
+    <div class="row" *ngIf="billingSchedule.Id > 0" style="padding-top: 15px">
+        <div class="col-md-4">
+            <app-mini-dashboard-list
+                [canDelete]="false"
+                [canEdit]="canEdit"
+                [labelGenerator]="entityLabelGenerator"
+                [totalItems]="adminInclusions.length"
+                [cardName]="adminInclusionsCardName"
+                [items]="adminInclusions"
+                [forceShowAll]="false"
+                [hideShowAll]="true"
+                (onAddItem)="addNewAdminNotificationInclusion()"
+            >
+            </app-mini-dashboard-list>
+        </div>
+    </div>
+    <br />
+    <a routerLink="/billing-schedules" class="btn btn-default">Close</a>
+    <button
+        type="button"
+        [disabled]="inQueue"
+        class="btn btn-sm btn-success"
+        (click)="generateBillingFile()"
+    >
+        Generate Billing File
+    </button>
+</div>
+
+<mt-modal-wrapper *ngIf="showModal" [options]="modalOptions" (cancelClick)="toggleModal()">
+    <div class="row">
+
+        <div class="col-md-6" *ngIf="modalOptionEntitiesFiltered">
+            <div
+                class="miles-card padded"
+                (mouseenter)="isHovered = true"
+                (mouseleave)="isHovered = false"
+            >
+                <h4>ADD {{ modalEntityName }}</h4>
+                <mt-dynamic-field [field]="getSearchField()" (controlCreated)="searchOptionsControl = $event" (valueChanges)="filterModal($event, true)"></mt-dynamic-field>
+        
+                <div class="table-responsive overflow-y:auto;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="no-pointer">
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="no-pointer" *ngFor="let entity of modalOptionEntitiesFiltered" (click)="saveEntity(entity)">
+                                <td class="ellipsis">
+                                    {{ entity.Name }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div *ngIf="noEntityOptions">
+                    <h3 style="text-align: center;">No data to display.</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" *ngIf="modalSelectedEntitiesFiltered">
+            <div
+                class="miles-card padded"
+                (mouseenter)="isHovered = true"
+                (mouseleave)="isHovered = false"
+            >
+                <h4>REMOVE {{ modalEntityName }}</h4>
+                <mt-dynamic-field [field]="getSearchField()" (controlCreated)="searchSelectionsControl = $event" (valueChanges)="filterModal($event, false)"></mt-dynamic-field>
+        
+                <div class="table-responsive overflow-y:auto;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="no-pointer">
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="no-pointer" *ngFor="let entity of modalSelectedEntitiesFiltered" (click)="deleteEntity(entity)">
+                                <td class="ellipsis">
+                                    {{ entity.Name }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        
+                <div *ngIf="noEntitySelections">
+                    <h3 style="text-align: center;">No data to display.</h3>
+                </div>
+            </div>
+        </div>
+        <br />
+    </div>
+    <button type="button" class="btn btn-default" (click)="toggleModal()">Close</button>
+</mt-modal-wrapper>

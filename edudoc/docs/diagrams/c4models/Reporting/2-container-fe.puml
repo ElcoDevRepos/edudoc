@@ -1,0 +1,85 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Container.puml
+
+'LAYOUT_LEFT_RIGHT
+LAYOUT_WITH_LEGEND
+
+title Component Diagram for Advanced Reporting FE
+
+System_Ext(febreck, "Edudoc FE", "The custom application UI built on the Edudoc platform.")
+
+
+System_Boundary(SB1, "Reporting Package"){
+    System(fe, "Reporting FE", "Angular 4, Bootstrap 3.5")
+    
+    Container_Boundary(C1, "Reporting Module"){ 
+        Container(fe, "Advanced Reporting UI", "Angular 4", "Package that handles front end views and logic.")
+        Container_Boundary(C2, "Reporting Services"){ 
+            Container(at, "Aggregate Types", "MetaItem", "Provides aggregate CRUD operations.")
+            Container(datapoint, "Datapoints", "Class", "Returns the datapoints, flattens the data and generates dummy display data.")
+            Container(dataset, "Datasets", "MetaItem", "Provides dataset CRUD operations.")
+            Container(export, "Export", "Class",  "Converts an array of data to a csv and flushes the file.")
+            Container(share, "Access Shares", "Class",  "Provides access shares CRUD operations.")
+            Container(agg, "Aggregates", "Class",  "Provides aggregate CRUD operations.")
+            Container(column, "Columns", "Class",  "Provides column CRUD operations.  Sorts the report columns and emits delete events.")
+            Container(group, "Groups", "Class",  "Provides groups CRUD operations.")
+            Container(report, "Reporting", "Class",  "Triggers the export.  Handles rendering, copying, emailing and archiving report methods.")
+        }
+         Container_Boundary(C3, "Reporting Components"){ 
+            Container(my, "My Reports", "List", "Displays the search logic for Reports.")
+            Container(compshares, "Access Shares", "Modal", "Displays the share report modal window.")
+            Container(compagg, "Aggregates", "Component", "Displays the component that configures report aggregates.")
+            Container(compbasic, "Basic Info", "Form", "Form for creating / editing Report data.")
+            Container(compcolumn, "Columns", "Component", "Displays the report datasets and example grid.")
+            Container(compdetail, "Detail", "Component", "Container component for all the components that make up the configuration screen.")
+            Container(compfilter, "Filters", "Component",  "Displays the component that configures report filters.")
+            Container(compgroup, "Groups", "Component",  "Displays the component that configures report groups.")
+            Container(comphead, "Header", "Component", "Container component for the header and report shares.")
+            Container(comprender, "Renderer", "Component", "Renders / formats report for viewing.  Allows for the user to share, copy and group the report.")
+            Container(compsort, "Sorting", "Component",  "Displays the component that configures report sorting.")
+            Container(compDynamicConfig, "Dynamic Config", "Class",  "The rendering engine for the report info dynamic form.")
+        }
+         Container_Boundary(C4, "Resolvers / Routes"){ 
+            Container(userresolve, "Current User Resolver", "Route Resolver", "Ensures that the current user has a value before resolving a reporting route.")
+            Container(reportauth, "Auth Guard", "Route Guard", "Overrides the Auth Guard logic to pull claims data from the configuration file.")
+            Container(reportroute, "Routing", "Route Definitions", "Defines all reporting route configurations.")
+        }
+        Container_Boundary(C5, "Libraries"){ 
+            Container(libdatapoint, "DataPoints", "Enum", "Exports an enum of data formats.")
+            Container(libaccess, "Access Shares", "Class", "Sorting and accessor methods for user / report share data.")
+            Container(libaggregate, "Aggregates", "Enum", "Exports an enum for data Aggregate Types.")
+            Container(libfilter, "Filters", "Enum/Class", "Exports enums for FilterTypes and ConjunctionTypes.  Also handles accessor and validation methods for filters")
+            Container(libgroup, "Groups", "Enum/Class", "Exports enum for ToggleGroups.  Handles object consctruction for ReportGroupOpion")
+            Container(libreport, "Reports", "Class", "Defines whether or not a user can edit a report and formatting for groups inside the data grid")
+        }
+        Container_Boundary(C6, "Base Classes"){ 
+            Container(basegrid, "Grid", "Class", "Handles all grid based events and methods.")
+            Container(baseReport, "Column Header", "Class", "Handles Save and Deletion methods for column headers.")
+        }
+        Container_Boundary(C7, "Model"){ 
+            Container(modelFormControls, "Form Controls", "Class", "Handles the configurations for reporting dynamic forms/fields.")
+            Container(modelInterfaces, "Interfaces", "Class", "Handles the model definitions.")
+        }
+    }
+   
+}
+
+
+Rel(compdetail, compagg, "Uses")
+Rel(compdetail, compbasic, "Uses")
+Rel(compdetail, compfilter, "Uses")
+Rel(compdetail, compsort, "Uses")
+Rel(compdetail, compgroup, "Uses")
+Rel(compdetail, compcolumn, "Uses")
+Rel(comphead, compshares, "Uses")
+Rel(comprender, compgroup, "Uses")
+Rel(reportroute, reportauth, "Uses")
+' Rel(fe, api, "Uses", "HTTP")
+' Rel(servicelayer, model, "Uses")
+' Rel(api, model, "Uses")
+' Rel(api, nuget, "Uses")
+' Rel(model, nuget, "Uses")
+' Rel(servicelayer, nuget, "Uses")
+' Rel(fe, npm, "Uses")
+
+@enduml

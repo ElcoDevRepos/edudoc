@@ -1,0 +1,35 @@
+<!-- Add New Student Modal -->
+<mt-modal-wrapper [options]="modalOptions">
+    <h4>Add Student to Encounter</h4>
+    <br />
+    <div>
+        <mt-search-bar (onSearch)="newStudentSearch($event)" (ready)="newStudentSearchControlReady($event)"></mt-search-bar>
+        <br />
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <mt-dynamic-field *ngIf="schoolDistrictField" [field]="schoolDistrictField" (valueChanges)="newStudentSchoolDistrictIdFilter = $event; getNonCaseLoadStudents()">
+            </mt-dynamic-field>
+        </div>
+    </div>
+    <mt-entity-list
+        *ngIf="nonCaseLoadStudents != null"
+        [entities]="nonCaseLoadStudents"
+        [total]="newStudentTotal"
+        [(currentPage)]="newStudentCurrentPage"
+        (onPageChanged)="getNonCaseLoadStudents()"
+        (onColumnSorted)="newStudentColumnSorted($event)"
+        (itemSelectedEvent)="newStudentSelected($event)"
+        [entityListConfig]="newStudentEntityListConfig"
+    >
+    </mt-entity-list>
+    <button
+        type="button"
+        class="btn btn-danger"
+        mt-doubleClickDisabled
+        (click)="addNewStudent()"
+    >
+        Add New Student To Edu-Doc
+    </button>
+    <button type="button" class="btn btn-default" (click)="closeModal()">Cancel</button>
+</mt-modal-wrapper>

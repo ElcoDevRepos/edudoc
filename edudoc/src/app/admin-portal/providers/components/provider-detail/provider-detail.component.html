@@ -1,0 +1,104 @@
+<div *ngIf="provider && provider.Id > 0">
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <app-provider-basic-info [provider]="provider" [canEdit]="canEdit"></app-provider-basic-info>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <app-add-provider-license
+                            [providerId]="providerId"
+                            [items]="licenses"
+                            [canEdit]="canEdit"
+                        ></app-add-provider-license>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <app-license-ode-list
+                            cardName="ODE CERTIFICATIONS"
+                            entityName="ODE Certification"
+                            [canEdit]="canEdit"
+                            *ngIf="showODEList"
+                            [items]="odes"
+                            [labelGenerator]="odeLabelGenerator"
+                            (onAddItem)="setShowODEList(false)"
+                        ></app-license-ode-list>
+                        <app-add-provider-ode *ngIf="!showODEList" (onClose)="setShowODEList(true)" [providerId]="providerId"></app-add-provider-ode>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <app-do-not-bill-card
+                            [providerId]="providerId"
+                            [providerInactivityDates]="providerInactivityDates"
+                        ></app-do-not-bill-card>
+                    </div>
+                </div>
+                <br />
+                <a routerLink="/providers" class="btn btn-default">Close</a>
+                <button *ngIf="showRevokeAccess" type="button" class="btn btn-flat btn-danger" (click)="revokeAccess()">Revoke Access</button>
+                <button *ngIf="showGrantAccess" type="button" class="btn btn-flat btn-success" (click)="grantAccess()">Grant Access</button>
+                <button type="button" class="btn btn-info" *ngIf="showImpersonationButton && showRevokeAccess" (click)="loginAsProvider($event)">
+                    Impersonate {{ provider.ProviderUser.AuthUser.Username }}
+                </button>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <app-auth-user-password
+                            [AuthUser]="provider.ProviderUser.AuthUser"
+                            [canEdit]="canEdit"
+                            (updateVersion)="updateVersion($event)"
+                        ></app-auth-user-password>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <app-provider-assignment [provider]="provider"></app-provider-assignment>
+                    </div>
+                </div>
+                <br />
+                <div class="row" *ngIf="showRevocationReason">
+                    <div class="col-md-12">
+                        <app-provider-access-revocation
+                            [provider]="provider"
+                            (submitOrCancelClicked)="handleRevokeAccessSubmitOrCancel($event)"
+                        ></app-provider-access-revocation>
+                    </div>
+                </div>
+                <div class="row" *ngIf="provider.Archived">
+                    <div class="col-md-12">
+                        <app-provider-access-log [provider]="provider"></app-provider-access-log>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <app-auth-user-portal-access
+                            [AuthUser]="provider.ProviderUser.AuthUser"
+                            [canEdit]="canEdit"
+                            [userType]="providerUserType"
+                            [showAccessButton]="false"
+                        ></app-auth-user-portal-access>
+                    </div>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="provider && provider.Id === 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-provider-basic-info [provider]="provider" [canEdit]="canEdit"></app-provider-basic-info>
+        </div>
+    </div>
+</div>

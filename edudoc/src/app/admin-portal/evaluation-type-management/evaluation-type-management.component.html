@@ -1,0 +1,38 @@
+<h2 mtSetTitle>Evaluation Types</h2>
+<div class="row">
+    <div class="col-md-8">
+        <div class="miles-card padded">
+            <h4>EVALUATION TYPE MANAGEMENT</h4>
+            <div class="row">
+                <div class="col-md-4 border-right">
+                    <mt-dynamic-field
+                        *ngIf="evaluationTypes && evaluationTypes.length"
+                        [field]="getEvaluationTypeField()"
+                        (valueChanges)="evalTypeSelected($event)"
+                    ></mt-dynamic-field>
+                </div>
+                <div class="col-md-8" *ngIf="diagnosisCodes && selectedEvalType; else placeholder">
+                    <multiselect-table-control
+                        [currentItems]="selectedEvalType.EvaluationTypesDiagnosisCodes"
+                        [allItems]="diagnosisCodes"
+                        [hasSelectAll]="true"
+                        idProperty="DiagnosisCodeId"
+                        itemType="Diagnosis Codes"
+                        (onItemSelected)="saveAssociation($event)"
+                        (onItemRemoved)="archiveAssociation($event)"
+                    >
+                    </multiselect-table-control>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #placeholder>
+    <div style="position: relative;">
+        <div class="col-md-8 text-center">
+            <br />
+            <strong>Select an Evaluation Type</strong>
+        </div>
+    </div>
+</ng-template>

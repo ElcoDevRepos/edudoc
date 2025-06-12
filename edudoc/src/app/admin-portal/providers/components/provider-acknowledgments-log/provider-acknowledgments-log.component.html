@@ -1,0 +1,11 @@
+<div class="miles-card padded">
+    <h4>ACKNOWLEDGEMENTS</h4>
+    <ul class="list-group" *ngIf="acknowledgmentLogs.length > 0">
+        <li *ngFor="let log of acknowledgmentLogs" class="list-group-item" [style.cursor]="'default'">
+            <span [innerHTML]="getLogLabelContents(log)"></span>
+        </li>
+    </ul>
+    <span *ngIf="acknowledgmentLogs.length === 0">
+        <em>Provider has not acknowledged any trainings yet!</em>
+    </span>
+</div>

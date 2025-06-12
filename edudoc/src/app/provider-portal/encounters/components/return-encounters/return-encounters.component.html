@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Return Encounters</h2>
+    </div>
+</div>
+<div class="row" style="padding-bottom: 5px;">
+    <div class="col-md-10">
+        <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+    </div>
+    <br />
+</div>
+<div class="row" style="padding-bottom: 5px;">
+    <div class="col-md-3">
+        <mt-search-filter-daterange
+        [startDate]="startDate" [endDate]="endDate" entity="Encounter Date"
+        (selectionChanged)="dateSelectionChanged($event)"
+        ></mt-search-filter-daterange>
+    </div>
+    <br />
+</div>
+<br />
+<mt-entity-list
+    [entities]="encounters"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    (pageChanged)="getEncounters()"
+    (itemSelectedEvent)="encounterSelected($event)"
+    [entityListConfig]="entityListConfig"
+>
+</mt-entity-list>

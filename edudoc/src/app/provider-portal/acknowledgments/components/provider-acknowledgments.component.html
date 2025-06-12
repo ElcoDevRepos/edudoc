@@ -1,0 +1,14 @@
+<div *ngIf="form">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="miles-form padded">
+                <h3>Provider Acknowledgements</h3>
+                <p>{{ acknowledgmentText }}</p>
+                <form [formGroup]="form" (ngSubmit)="saveAcknowledgments()">
+                    <mt-dynamic-field [form]="form" [field]="acknowledgedCheckbox" (valueChanges)="acknowledged = $event"></mt-dynamic-field>
+                    <button type="submit" class="btn btn-flat btn-success" [disabled]="acknowledged === false">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

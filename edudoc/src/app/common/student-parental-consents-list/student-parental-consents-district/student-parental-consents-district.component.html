@@ -1,0 +1,35 @@
+<h3 mtSetTitle>Student Parental Consents by District</h3>
+
+<!-- Search Bar -->
+<div>
+    <mt-search-bar (searched)="getFilterSearchbar($event)"></mt-search-bar>
+    <br />
+</div>
+
+<!-- Filters -->
+<div class="row">
+    <div class="col-md-3">
+        <label>Consent Status</label><br />
+        <mt-search-filter-select
+            [items]="parentalConsentTypes"
+            entity="Consent Options"
+            [maxToShowInSelectedText]="2"
+        ></mt-search-filter-select>
+    </div>
+    <div class="col-md-2">
+        <button type="button" Class="btn btn-flat btn-success" (click)="applyClicked($event)">
+            Apply
+        </button>
+    </div>
+</div>
+
+<mt-entity-list
+    [entities]="parentalConsents"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    (pageChanged)="getParentalConsents()"
+    [entityListConfig]="entityListConfig"
+    (itemSelectedEvent)="districtSelected($event)"
+    (columnSortedEvent)="columnSorted($event)"
+>
+</mt-entity-list>

@@ -1,0 +1,21 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Context.puml
+
+title System-Landscape-Diagram-for-Edudoc
+
+Person(Users, "Users", "The user that visits the Edudoc website")
+System_Ext(npmpackages, "NPM Packages", "Internally build Front end packages")
+System_Ext(nugetpackages, "Nuget Packages", "Internally build Back end packages")
+
+System_Boundary(SB1, "EdudocCore"){
+	System(EdudocCore, "Edudoc UI", "provides an administrative interface")
+    System(api, "API", ".Net Web API")
+    System(servicelayer, "ServiceLayer", "Service layer for business logic")
+}
+
+Rel(Users, EdudocCore, "peform business actions")
+Rel(api, EdudocCore, "Receive and return front end requests")
+Rel(servicelayer, EdudocCore, "Handle DB operations")
+Rel(npmpackages, EdudocCore, "Provide shared front end logic")
+Rel(nugetpackages, EdudocCore, "Provide shared back end logic")
+@enduml

@@ -1,0 +1,40 @@
+<div
+    class="miles-editable miles-card padded"
+    *ngIf="!isEditing && student.Id > 0"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    (click)="edit()"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4>
+        STUDENT PROFILE
+        <span class="pull-right" *ngIf="canEdit">
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+    <mt-dynamic-view [config]="viewOnly"></mt-dynamic-view>
+    <div style="padding-left: 5px;">
+        <label>SCHOOL DISTRICT: </label>
+        <span>{{ schoolDistrictName }}</span>
+    </div>
+    <div style="padding-left: 5px;">
+        <label>PARENTAL CONSENT: </label>
+        <span>{{ consent }}</span>
+    </div>
+</div>
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4>STUDENT PROFILE</h4>
+    <mt-dynamic-form [config]="formObject" ([isEditing])="(isEditing)" (submitted)="formSubmitted($event)">
+        <div>
+            <label>School District: </label>
+            <span>{{ schoolDistrictName }}</span>
+        </div>
+        <br />
+        <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+            Save
+        </button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </mt-dynamic-form>
+</div>

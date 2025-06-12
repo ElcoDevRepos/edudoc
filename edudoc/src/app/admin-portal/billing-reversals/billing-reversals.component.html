@@ -1,0 +1,143 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Reversals</h2>
+    </div>
+</div>
+
+<!-- Search Bar -->
+<div>
+    <mt-search-bar (searched)="getFilterSearchbar($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+    <br />
+</div>
+
+<!-- Filters -->
+<div class="row">
+    <div class="col-md-2">
+        <label>School Districts</label>
+        <mt-virtual-type-ahead
+            [getItems]="getSchoolDistricts"
+            [placeholder]="'Begin typing...'"
+            (selectionChanged)="getFilterSchoolDistrictSearchbar($event)"
+        > </mt-virtual-type-ahead>
+    </div>
+    <div class="col-md-2">
+        <label>Providers</label>
+        <mt-virtual-type-ahead
+            [getItems]="getProviders"
+            [placeholder]="'Begin typing...'"
+            (selectionChanged)="getFilterProviderSearchbar($event)"
+        > </mt-virtual-type-ahead>
+    </div>
+    <div class="col-md-2">
+        <label>Encounter Date</label><br />
+        <mt-search-filter-daterange [startDate]="startDate" [endDate]="endDate" entity="Date" (selectionChanged)="getFilterDateRange($event)">
+        </mt-search-filter-daterange>
+    </div>
+    <div class="col-md-2">
+        <label>CPT Code (Procedure Code)</label><br />
+        <mt-search-filter-select
+            [items]="cptCodes"
+            entity="CPT Codes"
+            [maxToShowInSelectedText]="1"
+        ></mt-search-filter-select>
+    </div>
+    <div class="col-md-2">
+        <label>Service Areas</label><br />
+        <mt-search-filter-select
+            [items]="serviceCodes"
+            entity="Service Areas"
+            [maxToShowInSelectedText]="1"
+        ></mt-search-filter-select>
+    </div>
+    <div class="col-md-2">
+        <button type="button" Class="btn btn-flat btn-success" (click)="applyClicked($event)">
+            Apply
+        </button>
+    </div>
+</div>
+<br />
+
+<!-- Entity List -->
+<div>
+    <mt-entity-list
+        [entityListConfig]="entityListConfig"
+        [entities]="encounters"
+        [total]="total"
+        [(currentPage)]="currentPage"
+        (pageChanged)="getEncounters()"
+    >
+        <ng-template mtEntityListHeader>
+            <th [style.width]="'25%'">
+                Student Info
+            </th>
+            <th [style.width]="'25%'">
+                Encounter Info
+            </th>
+            <th [style.width]="'35%'">
+                Other
+            </th>
+            <th [style.width]="'15%'" class="text-center">
+                Actions
+            </th>
+        </ng-template>
+        <ng-template mtEntityListItem let-columns="columns" let-entity>
+            <tr [style.cursor]="'default'">
+                <td [style.width]="'25%'">
+                    <label>Name: </label> {{ entity.StudentName }} <br />
+                    <label>District: </label> {{ entity.SchoolDistrict }} <br />
+                    <label>Provider: </label> {{ entity.ProviderName }} <br />
+                    <label>Medicaid #: </label> {{ entity.MedicaidNo }} <br />
+                </td>
+                <td [style.width]="'25%'">
+                    <label>Encounter #: </label> {{ entity.EncounterNumber }} <br />
+                    <label>Claim Id: </label> {{ entity.ClaimId }} <br />
+                    <label>Status: </label> <a (click)="encounterStatusLogSelected(entity)">{{ entity.CurrentStatus }}</a> <br />
+                    <label>Date: </label> {{ entity.EncounterDate | date: 'mediumDate' }} <br />
+                    <label>Start: </label> {{ entity.StartDateTime | date: 'shortTime' }} <br />
+                    <label>End: </label> {{ entity.EndDateTime | date: 'shortTime' }} <br />
+                    <label>Total Minutes: </label> {{ getSessionMinutes(entity) }} minutes<br />
+                </td>
+                <td [style.width]="'35%'">
+                    <label>Service Areas: </label> {{ entity.ServiceArea }} <br />
+                    <label>Reason For Service: </label> {{ entity.ReasonforService }} <br />
+                    <label>CPT Code (Procedure Code): </label> <p>{{ convertCptCodesToCommaSeparatedList(entity.CptCodes) }}</p>
+                </td>
+                <td [style.width]="'15%'" class="text-center">
+                    <button type="button" class="btn btn-success" (mtConfirm)="updateEncounterStatus(entity.EncounterStudentId)" [mtConfirmOptions]="reversalConfirm">
+                        Reverse Encounter
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+    </mt-entity-list>
+</div>
+
+<mt-modal-wrapper *ngIf="showStatusesModal" [options]="modalOptions" (cancelClick)="toggleStatusModal()">
+    <h4>Encounter Status Log</h4>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Encounter Status</th>
+                    <th>Date</th>
+                    <th>Changed By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let status of encounterStudentStatusesForModal">
+                    <td class="text-left">
+                        {{ status.StatusName }}
+                    </td>
+                    <td class="text-left">
+                        {{ status.DateCreated | date: 'mediumDate' }}
+                    </td>
+                    <td class="text-left">
+                        {{ status.CreatedBy }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <button type="button" class="btn btn-default" (click)="toggleStatusModal()">Close</button>
+</mt-modal-wrapper>

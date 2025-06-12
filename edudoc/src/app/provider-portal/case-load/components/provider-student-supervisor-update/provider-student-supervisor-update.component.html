@@ -1,0 +1,23 @@
+<div *ngIf="formCreated">
+    <form [formGroup]="providerStudentSupervisorUpdateForm" (ngSubmit)="formSubmitted(providerStudentSupervisorUpdateForm)">
+        <div class="row">
+            <div class="col-md-3">
+                <mt-dynamic-field [field]="abstractProviderStudentSupervisorControls.SupervisorId" [form]="providerStudentSupervisorUpdateForm"></mt-dynamic-field>
+            </div>
+            <div class="col-md-4">
+                <mt-dynamic-field class="field-margin" [field]="abstractProviderStudentSupervisorControls.EffectiveStartDate" [form]="providerStudentSupervisorUpdateForm"></mt-dynamic-field>
+            </div>
+            <div class="col-md-4">
+                <mt-dynamic-field class="field-margin" [field]="abstractProviderStudentSupervisorControls.EffectiveEndDate" [form]="providerStudentSupervisorUpdateForm"></mt-dynamic-field>
+            </div>
+        </div>
+        <div class="row" style="margin-top:10px;margin-left:10px;">
+            <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+                Save
+            </button>
+            <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>

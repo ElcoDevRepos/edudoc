@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="17.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <n>SQL</n>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{30ab0f33-a1d8-4aa3-8bfc-d600a8a21d04}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureDatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>edudoc.SQL</RootNamespace>
+    <AssemblyName>edudoc.SQL</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+    <DacApplicationName>edudoc</DacApplicationName>
+    <Recovery>SIMPLE</Recovery>
+    <TargetDatabase>edudoc.SQL</TargetDatabase>
+    <TargetFrameworkProfile />
+    <EnableManagedDatabaseExtensions>True</EnableManagedDatabaseExtensions>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SqlTargetName>edudoc</SqlTargetName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">17.0</VisualStudioVersion>
+    <!-- Default to the v17.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">17.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Production|AnyCPU' ">
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SqlTargetName>edudoc.Sql</SqlTargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Testing|AnyCPU' ">
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SqlTargetName>edudoc.Sql</SqlTargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging|AnyCPU' ">
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SqlTargetName>edudoc.Sql</SqlTargetName>
+    <OutputPath>bin\output</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Review|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SqlTargetName>edudoc.Sql</SqlTargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Security|AnyCPU' ">
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SqlTargetName>edudoc.Sql</SqlTargetName>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Tables\" />
+    <Folder Include="Schemas" />
+    <Folder Include="StoredProcedures" />
+    <Folder Include="Functions" />
+    <Folder Include="UserDefinedTypes" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\Addresses.sql" />
+    <Build Include="Tables\AuditLogDetails.sql" />
+    <Build Include="Tables\AuditLogs.sql" />
+    <Build Include="Tables\States.sql" />
+    <Build Include="Tables\AuthTokens.sql" />
+    <Build Include="Tables\AuthClients.sql" />
+    <Build Include="Tables\AuthApplicationTypes.sql" />
+    <Build Include="Tables\AuthUsers.sql" />
+    <Build Include="Tables\Images.sql" />
+    <Build Include="Tables\UserRoles.sql" />
+    <Build Include="Tables\Documents.sql" />
+    <Build Include="Tables\ClaimValues.sql" />
+    <Build Include="Tables\UserRoleClaims.sql" />
+    <Build Include="Tables\ClaimTypes.sql" />
+    <Build Include="Tables\Settings.sql" />
+    <Build Include="Tables\Users.sql" />
+    <Build Include="Tables\UserDocuments.sql" />
+    <Build Include="Tables\UserPhones.sql" />
+    <Build Include="Tables\Notes.sql" />
+    <Build Include="Tables\Countries.sql" />
+    <Build Include="Tables\AuditLogRelationships.sql" />
+    <Build Include="Tables\UserTypes.sql" />
+    <Build Include="Tables\Providers.sql" />
+    <Build Include="Tables\ProviderTitles.sql" />
+    <Build Include="Tables\ProviderEmploymentTypes.sql" />
+    <Build Include="Tables\Esc.sql" />
+    <Build Include="Tables\SchoolDistricts.sql" />
+    <Build Include="Tables\EscSchoolDistricts.sql" />
+    <Build Include="Tables\Schools.sql" />
+    <Build Include="Tables\SchoolDistrictsSchools.sql" />
+    <Build Include="Tables\Contacts.sql" />
+    <Build Include="Tables\SchoolDistrictContacts.sql" />
+    <Build Include="Tables\PhoneTypes.sql" />
+    <Build Include="Tables\ContactPhone.sql" />
+    <Build Include="Tables\ContactRole.sql" />
+    <Build Include="Tables\ProviderEscs.sql" />
+    <Build Include="Tables\ContactStatuses.sql" />
+    <Build Include="Tables\ProviderDoNotBillReasons.sql" />
+    <Build Include="Tables\ProviderLicenses.sql" />
+    <Build Include="Tables\ProviderODECertifications.sql" />
+    <Build Include="Tables\Agencies.sql" />
+    <Build Include="Tables\ProviderAcknowledgmentLogs.sql" />
+    <Build Include="Tables\AgencyTypes.sql" />
+    <Build Include="Tables\Acknowledgements.sql" />
+    <Build Include="Tables\Students.sql" />
+    <Build Include="Tables\StudentParentalConsentTypes.sql" />
+    <Build Include="Tables\SchoolDistrictRosterDocuments.sql" />
+    <Build Include="Tables\SchoolDistrictRosters.sql" />
+    <Build Include="Tables\MergedStudents.sql" />
+    <Build Include="Tables\UserTypesClaimTypes.sql" />
+    <Build Include="Tables\Counties.sql" />
+    <Build Include="Tables\ImpersonationLogs.sql" />
+    <Build Include="Tables\ClearedAuthTokens.sql" />
+    <Build Include="Tables\ConsoleJobLogs.sql" />
+    <Build Include="Tables\ConsoleJobTypes.sql" />
+    <Build Include="Tables\ServiceCodes.sql" />
+    <Build Include="Tables\ServiceTypes.sql" />
+    <Build Include="Tables\EvaluationTypes.sql" />
+    <Build Include="Tables\DiagnosisCodes.sql" />
+    <Build Include="Tables\DiagnosisCodeAssociations.sql" />
+    <Build Include="Tables\EvaluationTypesDiagnosisCodes.sql" />
+    <Build Include="Tables\CPTCodes.sql" />
+    <Build Include="Tables\CPTCodeAssocations.sql" />
+    <Build Include="Tables\EncounterLocations.sql" />
+    <Build Include="Tables\Encounters.sql" />
+    <Build Include="Tables\MessageDocuments.sql" />
+    <Build Include="Tables\MessageLinks.sql" />
+    <Build Include="Tables\Messages.sql" />
+    <Build Include="Tables\Goals.sql" />
+    <Build Include="Tables\GoalServiceCodes.sql" />
+    <Build Include="Tables\MessageFilterTypes.sql" />
+    <Build Include="Tables\ReadMessages.sql" />
+    <Build Include="Tables\CaseLoads.sql" />
+    <Build Include="Tables\StudentTypes.sql" />
+    <Build Include="Tables\CaseLoadGoals.sql" />
+    <Build Include="Tables\CaseLoadCptCodes.sql" />
+    <Build Include="Tables\Methods.sql" />
+    <Build Include="Tables\CaseLoadMethods.sql" />
+    <Build Include="Tables\StudentTherapySchedules.sql" />
+    <Build Include="Tables\EncounterStudents.sql" />
+    <Build Include="Tables\StudentDeviationReasons.sql" />
+    <Build Include="Tables\EncounterStudentGoals.sql" />
+    <Build Include="Tables\EncounterStudentCptCodes.sql" />
+    <Build Include="Tables\StudentTherapies.sql" />
+    <Build Include="Tables\TherapyCaseNotes.sql" />
+    <Build Include="Tables\ProviderStudentSupervisors.sql" />
+    <Build Include="Tables\ESignatureContents.sql" />
+    <Build Include="Tables\StudentParentalConsents.sql" />
+    <Build Include="Tables\SupervisorProviderStudentReferalSignOffs.sql" />
+    <Build Include="Tables\EncounterStatuses.sql" />
+    <Build Include="Tables\EncounterIdentifiers.sql" />
+    <Build Include="Tables\EncounterReturnReasonCategories.sql" />
+    <Build Include="Tables\EncounterReasonForReturn.sql" />
+    <Build Include="Tables\EncounterStudentStatuses.sql" />
+    <Build Include="Tables\BillingSchedule.sql" />
+    <Build Include="Tables\BillingScheduleDistricts.sql" />
+    <Build Include="Tables\BillingScheduleExcludedProviders.sql" />
+    <Build Include="Tables\BillingScheduleExcludedServiceAreas.sql" />
+    <Build Include="Tables\BillingScheduleExcludedCptCodes.sql" />
+    <Build Include="Tables\JobsAudit.sql" />
+    <Build Include="Tables\ServiceUnitRules.sql" />
+    <Build Include="Tables\ServiceUnitTimeSegments.sql" />
+    <Build Include="Tables\EncounterStudentMethods.sql" />
+    <Build Include="Tables\CaseLoadScripts.sql" />
+    <Build Include="Tables\BillingFiles.sql" />
+    <Build Include="Tables\HealthCareClaims.sql" />
+    <Build Include="Tables\EdiMetaDatas.sql" />
+    <Build Include="Tables\ClaimsDistricts.sql" />
+    <Build Include="Tables\ClaimsStudents.sql" />
+    <Build Include="Tables\ClaimsEncounters.sql" />
+    <Build Include="StoredProcedures\SP_Bulk_Insert_ClaimsDistricts.sql" />
+    <Build Include="UserDefinedTypes\ClaimsDistrictData.sql" />
+    <Build Include="UserDefinedTypes\ClaimsStudentData.sql" />
+    <Build Include="StoredProcedures\SP_Bulk_Insert_ClaimsStudents.sql" />
+    <Build Include="UserDefinedTypes\ClaimsEncounterData.sql" />
+    <Build Include="StoredProcedures\SP_Bulk_Insert_ClaimsEncounters.sql" />
+    <Build Include="Tables\EdiFileTypes.sql" />
+    <Build Include="Tables\EdiErrorCodes.sql" />
+    <Build Include="Tables\BillingResponseFiles.sql" />
+    <Build Include="Tables\RosterValidations.sql" />
+    <Build Include="Tables\RosterValidationFiles.sql" />
+    <Build Include="Tables\RosterValidationStudents.sql" />
+    <Build Include="Tables\RosterValidationDistricts.sql" />
+    <Build Include="Tables\RosterValidationResponseFiles.sql" />
+    <Build Include="UserDefinedTypes\RosterValidationStudentData.sql" />
+    <Build Include="UserDefinedTypes\RosterValidationDistrictData.sql" />
+    <Build Include="StoredProcedures\SP_Bulk_Insert_RosterValidationDistricts.sql" />
+    <Build Include="StoredProcedures\SP_Bulk_Insert_RosterValidationStudents.sql" />
+    <Build Include="Tables\DisabilityCodes.sql" />
+    <Build Include="Tables\StudentDisabilityCodes.sql" />
+    <Build Include="Tables\ProgressReports.sql" />
+    <Build Include="Tables\ProviderEscSchoolDistricts.sql" />
+    <Build Include="Tables\StudentDistrictWithdrawals.sql" />
+    <Build Include="Tables\ServiceOutcomes.sql" />
+    <Build Include="Tables\CaseLoadScriptGoals.sql" />
+    <Build Include="Tables\TherapyGroups.sql" />
+    <Build Include="Tables\Migration_ProviderCaseNotesHistory.sql" />
+    <Build Include="Tables\NursingGoalResults.sql" />
+    <Build Include="Tables\NursingGoalResponse.sql" />
+    <Build Include="Tables\BillingFailureReasons.sql" />
+    <Build Include="Tables\BillingFailures.sql" />
+    <Build Include="Tables\DocumentTypes.sql" />
+    <Build Include="Tables\RevokeAccess.sql" />
+    <Build Include="Tables\ProviderStudents.sql" />
+    <Build Include="Tables\ProviderTrainings.sql" />
+    <Build Include="Tables\ProviderInactivityDates.sql" />
+    <Build Include="Tables\NonMspServices.sql" />
+    <Build Include="Tables\ProviderInactivityReasons.sql" />
+    <Build Include="Tables\AdminSchoolDistricts.sql" />
+    <Build Include="Tables\TrainingTypes.sql" />
+    <Build Include="Tables\IEPServices.sql" />
+    <Build Include="Tables\Vouchers.sql" />
+    <Build Include="Tables\BillingScheduleAdminNotifications.sql" />
+    <Build Include="Tables\AnnualEntries.sql" />
+    <Build Include="Tables\AnnualEntryStatuses.sql" />
+    <Build Include="Tables\EdiErrorCodeAdminNotifications.sql" />
+    <Build Include="Tables\ProviderCaseUploads.sql" />
+    <Build Include="Tables\ProviderCaseUploadDocuments.sql" />
+    <Build Include="Tables\SchoolDistrictsAccountAssistants.sql" />
+    <Build Include="Tables\SchoolDistrictsFinancialReps.sql" />
+    <Build Include="Tables\NursingGoalResponseResults.sql" />
+    <Build Include="Tables\SchoolDistrictProviderCaseNotes.sql" />
+    <Build Include="Tables\VoucherBillingResponseFiles.sql" />
+    <Build Include="Tables\VoucherTypes.sql" />
+    <Build Include="Tables\UnmatchedClaimResponses.sql" />
+    <Build Include="Tables\UnmatchedClaimDistricts.sql" />
+    <Build Include="Tables\ActivitySummaries.sql" />
+    <Build Include="Tables\ActivitySummaryDistricts.sql" />
+    <Build Include="Tables\ActivitySummaryServiceAreas.sql" />
+    <Build Include="Tables\ActivitySummaryProviders.sql" />
+    <Build Include="Tables\PendingReferralReportJobRuns.sql" />
+    <Build Include="Tables\PendingReferrals.sql" />
+    <Build Include="Tables\ProviderStudentHistories.sql" />
+    <Build Include="Tables\SchoolDistrictAdmins.sql" />
+    <Build Include="Tables\DistrictProgressReportDates.sql" />
+    <Build Include="Functions\CurrentSchoolYear.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.TableValues.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="SQL.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SQL.Dev.publish.xml" />
+    <None Include="testserver.publish.xml" />
+    <None Include="staging.publish.xml" />
+    <None Include="IncludeDummyData.sql" />
+    <None Include="reviewbranch.publish.xml" />
+    <None Include="production.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="IncludeDummyData">
+      <DefaultValue>False</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+</Project>

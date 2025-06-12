@@ -1,0 +1,36 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Container.puml
+
+LAYOUT_WITH_LEGEND
+LAYOUT_LEFT_RIGHT
+
+
+
+title Container-Diagram-for-Edudoc
+
+Person(Users, "Users", "The user that visits the Edudoc website")
+System_Ext(npmpackages, "NPM Packages", "Internally build Front end packages")
+System_Ext(nugetpackages, "Nuget Packages", "Internally build Back end packages")
+
+System_Boundary(S1, "EdudocCore"){
+    Container_Boundary(C1, "Edudoc"){    
+        Container(EdudocUI, "Edudoc UI", "Angular 4", "provides an administrative interface")
+        Container(api, "Web API", ".Net Framework 4.6.2", ".Net Web API")
+        Container(servicelayer, "Service Layer", ".Net Framework 4.6.2", "Service layer for business logic")
+        Container(modellayer, "Model Layer", ".Net Framework 4.6.2", "Code representation of the database for EntityFramework")
+        Container(newlayer, "New Layer", ".Net Framework 4.6.2", "Code representation of the database for EntityFramework")
+        ContainerDb(EdudocDB, "Edudoc Database", "Microsoft SQL Server", "Stores entities of the system")
+    }
+}
+
+Rel(Users, EdudocUI, "Peform business actions", "HTTPS")
+Rel(EdudocUI, api, "Send front end requests", "HTTPS")
+Rel(api, servicelayer, "Find service method")
+Rel(modellayer, newlayer, "Provide models")
+Rel(newlayer, servicelayer, "Provide models")
+Rel(servicelayer, EdudocDB, "Command/Query DB")
+Rel(npmpackages, EdudocUI, "Provide shared front end logic")
+Rel(nugetpackages, api, "Provide shared API logic")
+Rel(nugetpackages, servicelayer, "Provide shared Service logic")
+Rel(nugetpackages, modellayer, "Provide shared API logic")
+@enduml

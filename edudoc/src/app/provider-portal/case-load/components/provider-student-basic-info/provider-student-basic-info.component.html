@@ -1,0 +1,37 @@
+<div
+    class="miles-card padded"
+    *ngIf="!isEditing && student.Id > 0"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    [style.cursor]="default"
+>
+    <h4>STUDENT: {{ studentName }} - {{ student.StudentCode ? student.StudentCode : 'N/A'}}</h4>
+    <div class="row">
+        <div class="col-md-2" [style.width]="'16%'">
+            <label>Date of Birth: </label>
+        </div>
+        <div class="col-md-1">
+            {{ student.DateOfBirth | date:'shortDate' }}
+        </div>
+        <div class="col-md-3" [style.width]="'20%'">
+            <label>School District: </label>
+        </div>
+        <div>
+            {{ schoolDistrict }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2" [style.width]="'16%'">
+            <label>Grade: </label>
+        </div>
+        <div class="col-md-1">
+            {{ student.Grade }}
+        </div>
+        <div class="col-md-3" [style.width]="'20%'">
+            <label>Current Building: </label>
+        </div>
+        <div>
+            {{ student.School.Name }}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="1189px" preserveAspectRatio="none" style="width:785px;height:1189px;" version="1.1" viewBox="0 0 785 1189" width="785px" zoomAndPan="magnify"><defs/><g><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacingAndGlyphs" textLength="346" x="218.5" y="18.6855">Container-Diagram-for-Advanced Reporting</text><!--cluster SB1--><rect fill="#FFFFFF" height="656" style="stroke: #444444; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;" width="513" x="235.5" y="207.6406"/><text fill="#444444" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="155" x="414.5" y="226.25">Reporting Packages</text><text fill="#444444" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="51" x="466.5" y="242.2227">[System]</text><!--cluster C1--><rect fill="#FFFFFF" height="570" style="stroke: #444444; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;" width="465" x="259.5" y="269.6406"/><text fill="#444444" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="76" x="454" y="288.25">Reporting</text><text fill="#444444" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="63" x="460.5" y="304.2227">[Container]</text><!--entity api--><rect fill="#438DD5" height="108.0469" style="stroke: #3C7FC0; stroke-width: 1.5;" width="186" x="275.5" y="527.1406"/><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="106" x="315.5" y="553.75">Reporting API</text><text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="101" x="318" y="569.7227">[.Net Standard 2.0]</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="370.5" y="586.8926"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="162" x="285.5" y="604.502">Package that handles API</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="81" x="328" y="622.1113">routing logic.</text><!--entity model--><rect fill="#438DD5" height="108.0469" style="stroke: #3C7FC0; stroke-width: 1.5;" width="203" x="353" y="715.6406"/><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="126" x="391.5" y="742.25">Reporting Model</text><text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="101" x="404" y="758.2227">[.Net Standard 2.0]</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="456.5" y="775.3926"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="179" x="363" y="793.002">Package that handles Model</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="81" x="414" y="810.6113">routing logic.</text><!--entity servicelayer--><rect fill="#438DD5" height="108.0469" style="stroke: #3C7FC0; stroke-width: 1.5;" width="212" x="496.5" y="527.1406"/><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="137" x="534" y="553.75">Reporting Service</text><text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="101" x="552" y="569.7227">[.Net Standard 2.0]</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="604.5" y="586.8926"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="188" x="506.5" y="604.502">Package that handles Service</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="81" x="562" y="622.1113">routing logic.</text><!--entity fe--><rect fill="#438DD5" height="108.0469" style="stroke: #3C7FC0; stroke-width: 1.5;" width="218" x="275.5" y="323.6406"/><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="177" x="296" y="350.25">Advanced Reporting UI</text><text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="59" x="355" y="366.2227">[Angular 4]</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="386.5" y="383.3926"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="198" x="285.5" y="401.002">Package that handles front end</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="99" x="335" y="418.6113">views and logic.</text><!--entity breck--><rect fill="#999999" height="113.0781" style="stroke: #8A8A8A; stroke-width: 1.5;" width="220" x="395.5" y="30.6406"/><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="103" x="452" y="57.25">Edudoc</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="117" x="447" y="77.375">Implementation</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="507.5" y="95.4238"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="196" x="405.5" y="113.0332">The custom application built on</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="167" x="422" y="130.6426">the Edudoc platform.</text><!--entity nuget--><rect fill="#999999" height="113.0781" style="stroke: #8A8A8A; stroke-width: 1.5;" width="217" x="346" y="927.6406"/><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="153" x="376" y="954.25">Edudoc Nuget</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="75" x="417" y="974.375">Packages</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="456.5" y="992.4238"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="197" x="356" y="1010.0332">Internally build Nuget packages</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="112" x="398.5" y="1027.6426">for backend logic.</text><!--entity npm--><rect fill="#999999" height="113.0781" style="stroke: #8A8A8A; stroke-width: 1.5;" width="213" x="6" y="524.6406"/><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="143" x="39" y="551.25">Edudoc Npm</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="75" x="75" y="571.375">Packages</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="114.5" y="589.4238"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="189" x="16" y="607.0332">Internally build NPM packages</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="130" x="47.5" y="624.6426">for our UI layer logic.</text><!--link breck to api--><path d="M519.342,143.7836 C533.921,213.7846 549.919,336.3566 511.5,431.6406 C497.276,466.9176 470.218,498.4966 443.433,523.3696 " fill="none" id="breck-api" style="stroke: #666666; stroke-width: 1.0;"/><polygon fill="#666666" points="439.484,526.9896,448.8213,523.8567,443.1698,523.611,443.4155,517.9595,439.484,526.9896" style="stroke: #666666; stroke-width: 1.0;"/><text fill="#666666" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="29" x="539.5" y="375.6357">Uses</text><text fill="#666666" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="37" x="535.5" y="390.9492">[HTTP]</text><!--link breck to fe--><path d="M482.17,143.7666 C461.081,194.0496 430.153,267.7906 408.776,318.7606 " fill="none" id="breck-fe" style="stroke: #666666; stroke-width: 1.0;"/><polygon fill="#666666" points="406.737,323.6206,413.9069,316.8684,408.671,319.0098,406.5296,313.774,406.737,323.6206" style="stroke: #666666; stroke-width: 1.0;"/><text fill="#666666" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="29" x="466.5" y="188.1357">Uses</text><!--link fe to api--><path d="M380.275,431.8456 C378.079,459.5076 375.39,493.3726 373.136,521.7536 " fill="none" id="fe-api" style="stroke: #666666; stroke-width: 1.0;"/><polygon fill="#666666" points="372.721,526.9866,377.4207,518.3314,373.1167,522.0023,369.4458,517.6983,372.721,526.9866" style="stroke: #666666; stroke-width: 1.0;"/><text fill="#666666" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="29" x="382.5" y="476.1357">Uses</text><text fill="#666666" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="37" x="378.5" y="491.4492">[HTTP]</text><!--link servicelayer to model--><path d="M560.287,635.3346 C541.469,659.0486 519.264,687.0296 500.069,711.2176 " fill="none" id="servicelayer-model" style="stroke: #666666; stroke-width: 1.0;"/><polygon fill="#666666" points="496.769,715.3766,505.4969,710.8133,499.8771,711.46,499.2304,705.8403,496.769,715.3766" style="stroke: #666666; stroke-width: 1.0;"/><text fill="#666666" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="29" x="533.5" y="682.1357">Uses</text><!--link api to model--><path d="M393.029,635.3346 C403.874,658.8526 416.654,686.5676 427.744,710.6176 " fill="none" id="api-model" style="stroke: #666666; stroke-width: 1.0;"/><polygon fill="#666666" points="429.938,715.3766,429.8015,705.5287,427.8442,710.8362,422.5367,708.8789,429.938,715.3766" style="stroke: #666666; stroke-width: 1.0;"/><text fill="#666666" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="29" x="415.5" y="682.1357">Uses</text><!--link api to nuget--><path d="M336.531,635.2036 C304.774,695.3396 265.95,794.9516 304.5,871.6406 C314.662,891.8556 330.415,909.3296 347.961,924.0576 " fill="none" id="api-nuget" style="stroke: #666666; stroke-width: 1.0;"/><polygon fill="#666666" points="351.972,927.3516,347.5565,918.548,348.1084,924.1779,342.4785,924.7298,351.972,927.3516" style="stroke: #666666; stroke-width: 1.0;"/><text fill="#666666" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="29" x="305.5" y="775.1357">Uses</text><!--link model to nuget--><path d="M454.5,823.7156 C454.5,853.5806 454.5,890.9986 454.5,922.0776 " fill="none" id="model-nuget" style="stroke: #666666; stroke-width: 1.0;"/><polygon fill="#666666" points="454.5,927.4056,458.5,918.4056,454.5,922.4056,450.5,918.4056,454.5,927.4056" style="stroke: #666666; stroke-width: 1.0;"/><text fill="#666666" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="29" x="455.5" y="894.1357">Uses</text><!--link servicelayer to nuget--><path d="M607.97,635.3596 C611.821,695.8576 610.865,796.0126 573.5,871.6406 C564.02,890.8286 549.763,908.4066 534.376,923.6526 " fill="none" id="servicelayer-nuget" style="stroke: #666666; stroke-width: 1.0;"/><polygon fill="#666666" points="530.442,927.4776,539.6828,924.0706,534.0265,923.9917,534.1053,918.3354,530.442,927.4776" style="stroke: #666666; stroke-width: 1.0;"/><text fill="#666666" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="29" x="608.5" y="775.1357">Uses</text><!--link fe to npm--><path d="M312.679,431.8456 C275.474,459.4086 229.953,493.1306 191.726,521.4496 " fill="none" id="fe-npm" style="stroke: #666666; stroke-width: 1.0;"/><polygon fill="#666666" points="187.577,524.5226,197.1899,522.3797,191.5948,521.5465,192.428,515.9513,187.577,524.5226" style="stroke: #666666; stroke-width: 1.0;"/><text fill="#666666" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="29" x="266.5" y="483.6357">Uses</text><rect fill="#DDDDDD" height="119.6563" rx="5" ry="5" style="stroke: #000000; stroke-width: 1.0;" width="174" x="600" y="1058.6406"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="0" x="662" y="1080.1738"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="33" x="666" y="1080.1738">Type</text><rect fill="#08427B" height="17.6094" style="stroke: none; stroke-width: 1.0;" width="56" x="606" y="1083.25"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="630" y="1097.7832"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="44" x="666" y="1097.7832">person</text><rect fill="#686868" height="17.6094" style="stroke: none; stroke-width: 1.0;" width="56" x="606" y="1100.8594"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="630" y="1115.3926"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="98" x="666" y="1115.3926">external person</text><rect fill="#1168BD" height="17.6094" style="stroke: none; stroke-width: 1.0;" width="56" x="606" y="1118.4688"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="618" y="1133.002"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="44" x="666" y="1133.002">system</text><rect fill="#999999" height="17.6094" style="stroke: none; stroke-width: 1.0;" width="56" x="606" y="1136.0781"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="630" y="1150.6113"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="98" x="666" y="1150.6113">external system</text><rect fill="#438DD5" height="17.6094" style="stroke: none; stroke-width: 1.0;" width="56" x="606" y="1153.6875"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="0" x="618" y="1168.2207"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="59" x="666" y="1168.2207">container</text><line style="stroke: #000000; stroke-width: 1.0;" x1="606" x2="768" y1="1065.6406" y2="1065.6406"/><line style="stroke: #000000; stroke-width: 1.0;" x1="606" x2="768" y1="1083.25" y2="1083.25"/><line style="stroke: #000000; stroke-width: 1.0;" x1="606" x2="768" y1="1100.8594" y2="1100.8594"/><line style="stroke: #000000; stroke-width: 1.0;" x1="606" x2="768" y1="1118.4688" y2="1118.4688"/><line style="stroke: #000000; stroke-width: 1.0;" x1="606" x2="768" y1="1136.0781" y2="1136.0781"/><line style="stroke: #000000; stroke-width: 1.0;" x1="606" x2="768" y1="1153.6875" y2="1153.6875"/><line style="stroke: #000000; stroke-width: 1.0;" x1="606" x2="768" y1="1171.2969" y2="1171.2969"/><line style="stroke: #000000; stroke-width: 1.0;" x1="606" x2="606" y1="1065.6406" y2="1171.2969"/><line style="stroke: #000000; stroke-width: 1.0;" x1="662" x2="662" y1="1065.6406" y2="1171.2969"/><line style="stroke: #000000; stroke-width: 1.0;" x1="768" x2="768" y1="1065.6406" y2="1171.2969"/><!--
+@startuml
+
+
+
+
+
+skinparam defaultTextAlignment center
+
+skinparam wrapWidth 200
+skinparam maxMessageSize 150
+
+skinparam rectangle {
+    StereotypeFontSize 12
+    shadowing false
+}
+
+skinparam database {
+    StereotypeFontSize 12
+    shadowing false
+}
+
+skinparam Arrow {
+    Color #666666
+    FontColor #666666
+    FontSize 12
+}
+
+skinparam rectangle<<boundary>> {
+    Shadowing false
+    StereotypeFontSize 0
+    FontColor #444444
+    BorderColor #444444
+    BorderStyle dashed
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+skinparam rectangle<<person>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #08427B
+    BorderColor #073B6F
+}
+
+skinparam rectangle<<external_person>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #686868
+    BorderColor #8A8A8A
+}
+
+skinparam rectangle<<system>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #1168BD
+    BorderColor #3C7FC0
+}
+
+skinparam rectangle<<external_system>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #999999
+    BorderColor #8A8A8A
+}
+
+skinparam database<<system>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #1168BD
+    BorderColor #3C7FC0
+}
+
+skinparam database<<external_system>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #999999
+    BorderColor #8A8A8A
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+skinparam rectangle<<container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #438DD5
+    BorderColor #3C7FC0
+}
+
+skinparam database<<container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #438DD5
+    BorderColor #3C7FC0
+}
+
+
+
+
+
+
+
+
+hide stereotype
+legend right
+|=              |= Type |
+|<#08427B>      | person |
+|<#686868>      | external person |
+|<#1168BD>   | system |
+|<#999999>      | external system |
+|<#438DD5>   | container |
+endlegend
+
+title Container-Diagram-for-Advanced Reporting
+
+rectangle "==Edudoc Implementation\n\n The custom application built on the Edudoc platform." <<external_system>> as breck
+
+rectangle "==Edudoc Nuget Packages\n\n Internally build Nuget packages for backend logic." <<external_system>> as nuget
+rectangle "==Edudoc Npm Packages\n\n Internally build NPM packages for our UI layer logic." <<external_system>> as npm
+
+rectangle "==Reporting Packages\n<size:12>[System]</size>" <<boundary>> as SB1{
+    rectangle "==Reporting\n<size:12>[Container]</size>" <<boundary>> as C1{ 
+        rectangle "==Reporting API\n//<size:12>[.Net Standard 2.0]</size>//\n\n Package that handles API routing logic." <<container>> as api
+        rectangle "==Reporting Model\n//<size:12>[.Net Standard 2.0]</size>//\n\n Package that handles Model routing logic." <<container>> as model
+        rectangle "==Reporting Service\n//<size:12>[.Net Standard 2.0]</size>//\n\n Package that handles Service routing logic." <<container>> as servicelayer
+        rectangle "==Advanced Reporting UI\n//<size:12>[Angular 4]</size>//\n\n Package that handles front end views and logic." <<container>> as fe
+    }
+}
+
+
+breck - -> api : "===Uses\n//<size:12>[HTTP]</size>//"
+breck - -> fe : "===Uses"
+fe - -> api : "===Uses\n//<size:12>[HTTP]</size>//"
+servicelayer - -> model : "===Uses"
+api - -> model : "===Uses"
+api - -> nuget : "===Uses"
+model - -> nuget : "===Uses"
+servicelayer - -> nuget : "===Uses"
+fe - -> npm : "===Uses"
+
+@enduml
+
+PlantUML version 1.2018.12(Sun Oct 21 06:15:15 EDT 2018)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 1.8.0_201-b09
+Operating System: Windows 10
+OS Version: 10.0
+Default Encoding: Cp1252
+Language: en
+Country: US
+--></g></svg>

@@ -1,0 +1,76 @@
+namespace API.Core.Claims
+{
+    public class ClaimTypes
+    {
+        public const int AppSettings = 1;
+        public const int HPCUserAccess = 2;
+        public const int DistrictUserAccess = 3;
+        public const int ProviderTitles = 4;
+        public const int ProviderGoals = 5;
+        public const int ProviderMethods = 6;
+        public const int CPTCodes = 7;
+        public const int DiagnosisCodes = 8;
+        public const int ApprovedLocation = 9;
+        public const int ContractedAgency = 10;
+        public const int ReturnReasons = 11;
+        public const int Documents = 12;
+        public const int Links = 13;
+        public const int Users = 14;
+        public const int BillingSchedules = 15;
+        public const int ReviewSchedules = 16;
+        public const int ReviewFiles = 17;
+        public const int RejectedEncounters = 18;
+        public const int MessageMaintenance = 19;
+        public const int PublicMessage = 20;
+        public const int ClientMessage = 21;
+        public const int TargetMessage = 22;
+        public const int ProviderAttestations = 23;
+        public const int ProviderAcknowledgements = 24;
+        public const int ESignAuthorization = 25;
+        public const int MedicalReferralAuthorization = 26;
+        public const int SchoolDistrictMaintenance = 27;
+        public const int SchoolDistricts = 28;
+        public const int SchoolDistrictAdministrationUsers = 29;
+        public const int SchoolDistrictManagementInformation = 30;
+        public const int ESCMaintenance = 31;
+        public const int ESCs = 32;
+        public const int ESCAdministrationUsers = 33;
+        public const int ESCManagementInformation = 34;
+        public const int ProviderMaintenance = 35;
+        public const int StudentMaintenance = 36;
+        public const int Encounters = 37;
+        public const int MedMatch = 38;
+        public const int Reports = 39;
+        public const int ReviewParentConsent = 40;
+        public const int DistrictActivitySummaryByServiceArea = 41;
+        public const int ServiceAreaSummaryByProvider = 42;
+        public const int ProviderActivityDetailReport = 43;
+        public const int EncounterReportingByStudent = 44;
+        public const int EncounterReportingByTherapist = 45;
+        public const int Rosters = 46;
+        public const int RosterIssues = 47;
+        public const int RosterUpload = 48;
+        public const int Students = 49;
+        public const int CreateStudent = 50;
+        public const int MergeStudent = 51;
+        public const int ManagedListItems = 52;
+        public const int ReviewStudent = 53;
+        public const int CreateTherapyEncounter = 54;
+        public const int EncountersReadyForYou = 55;
+        public const int CreateEvaluation = 56;
+        public const int PendingEvaluation = 57;
+        public const int Revise = 58;
+        public const int CreateNonMSPService = 59;
+        public const int ReviewEncounters = 60;
+        public const int ScheduleTherapyCalendar = 61;
+        public const int MyCaseload = 62;
+        public const int MissingReferrals = 63;
+        public const int CaseNotesDataBank = 64;
+        public const int ProgressReports = 65;
+        public const int Vouchers = 66;
+        public const int CompletedReferrals = 67;
+        public const int BillingReversals = 68;
+        public const int IneligibleClaims = 69;
+        public const int FiscalRevenue = 70;
+    }
+}

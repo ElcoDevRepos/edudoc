@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>District Management Report</h2>
+    </div>
+</div>
+<div>
+    <mt-search-bar (searched)="search($event)"></mt-search-bar>
+<br>
+</div>
+
+<div class="row">
+    <mt-search-filter-select [items]="iepExpiring" entity="IEP Expiring" (selectionChanged)="filterSelectionChanged()">
+    </mt-search-filter-select>
+    <div class="pull-right">
+        <mt-dynamic-field [field]="getServiceOverTotalMinutesField()" (valueChanges)="serviceOverTotalMinutes = $event; getIepServices()"></mt-dynamic-field>
+    </div>
+</div>
+<br />
+
+<mt-entity-list [entities]="iepServices" [total]="total" [(currentPage)]="currentPage" [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="getIepServices()" (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="entityListConfig">
+</mt-entity-list>

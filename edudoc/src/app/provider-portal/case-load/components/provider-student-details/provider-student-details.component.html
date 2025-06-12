@@ -1,0 +1,90 @@
+<div *ngIf="student && student.Id > 0">
+    <div class="row">
+        <div class="col-md-12">
+            <app-provider-student-basic-info [student]="student" [canEdit]="false"> </app-provider-student-basic-info><br />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <app-mini-dashboard-list
+                *ngIf="showingCaseLoads"
+                [canEdit]="canEdit"
+                [noOfItemsToShow]="caseLoadsToShow"
+                [labelGenerator]="caseLoadLabelGenerator"
+                [totalItems]="caseLoadsCount"
+                [cardName]="caseLoadCardName"
+                [items]="filteredCaseLoads"
+                [canDelete]="true"
+                [hideShowAll]="true"
+                (onAddItem)="addNewCaseLoad()"
+                (onSelectItem)="selectCaseLoad($event)"
+                (onIncludeArchived)="setCaseLoadIncludeArchived($event)"
+                (onDeleteItem)="deleteCaseLoad($event)"
+                (onSeeAll)="seeAllCaseLoads()"
+            >
+            </app-mini-dashboard-list>
+            <br *ngIf="!caseLoadExpanded" />
+            <app-add-case-load
+                *ngIf="!showingCaseLoads"
+                (onClose)="toggleCaseLoadsControl(true)"
+                (onUpdate)="updateCaseloadCount()"
+                [canEdit]="canEdit"
+                [student]="student"
+                [addingNewCaseload]="addingNewCaseload"
+                [encounterId]="encounterId"
+                [caseLoad]="caseLoadSelected"
+                [fromEncounter]="fromEncounter"
+                [encounterServiceTypeId]="encounterServiceTypeId"
+            >
+            </app-add-case-load>
+            <br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <app-case-load-goals *ngIf="caseLoadSelected?.Id > 0 && !showingCaseLoads && isIEP && !isNursingProvider" [caseLoad]="caseLoadSelected" [canEdit]="canEdit">
+            </app-case-load-goals>
+            <app-case-load-scripts *ngIf="caseLoadSelected?.Id > 0 && !showingCaseLoads && isNursingProvider" [caseLoad]="caseLoadSelected" [canEdit]="canEdit">
+            </app-case-load-scripts>
+        </div>
+        <div class="col-md-6">
+            <app-case-load-cpt-codes
+            *ngIf="caseLoadSelected?.Id > 0 && !showingCaseLoads && isIEP && !isNursingProvider"
+            [caseLoad]="caseLoadSelected"
+            [canEdit]="canEdit"
+            >
+            </app-case-load-cpt-codes>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <app-case-load-methods *ngIf="caseLoadSelected?.Id > 0 && !showingCaseLoads && isIEP && isSpeechProvider" [caseLoad]="caseLoadSelected" [canEdit]="canEdit">
+            </app-case-load-methods>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <app-student-therapy
+                *ngIf="caseLoadSelected?.Id > 0 && !showingCaseLoads && showEncounterReadyForYouIfAssistant"
+                [studentId]="id"
+                [caseLoad]="caseLoadSelected"
+                [canEdit]="canEdit"
+                [providerId]="providerId"
+            >
+            </app-student-therapy>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <app-provider-student-supervisor *ngIf="isAssistant && !addingNewCaseload && showAssistantSupervisors" [student]="student"> </app-provider-student-supervisor>
+            <app-provider-student-assistant *ngIf="isSupervisor && !addingNewCaseload && showAssistantSupervisors" [student]="student"> </app-provider-student-assistant>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <app-provider-student-referrals *ngIf="showReferrals" [student]="student"></app-provider-student-referrals>
+        </div>
+    </div>
+    <a [routerLink]="closePath" class="btn btn-default">Close</a>
+</div>

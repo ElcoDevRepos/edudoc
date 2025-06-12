@@ -1,0 +1,8 @@
+<div *ngIf="entity" class="text-center">
+    <button type="button" (click)="toggleModal($event)">
+        <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+    </button>
+</div>
+<mt-modal-wrapper *ngIf="showModal" [options]="modalOptions" (cancelClick)="showModal = false;" (okClick)="buttonClicked()">
+    Are you sure you want to remove this billing schedule?
+</mt-modal-wrapper>

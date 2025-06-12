@@ -1,0 +1,27 @@
+<div class="miles-card padded">
+    <h4 class="heading-with-button">
+        {{ title }}
+        <button class="btn btn-sm btn-primary" (click)="goToAddMode()" *ngIf="!adding" type="button">
+            <i class="fa fa-plus fa-lg" style="cursor: pointer;" aria-hidden="true"></i>
+        </button>
+    </h4>
+    <div *ngIf="!adding">
+        <ul class="list-group" *ngIf="adminSchoolDistricts && adminSchoolDistricts.length">
+            <li class="list-group-item" *ngFor="let asd of adminSchoolDistricts" (click)="navigate(asd, $event)">
+                {{ adminOrSchoolDistrict === schoolDistrictAdminComponentModeEnums.ADMIN ? asd.SchoolDistrict.Name : asd.Admin.Name }}
+                <i class="fa fa-trash fa-lg pull-right" (mtConfirm)="archiveAdminSchoolDistrict(asd, $event)" [mtConfirmOptions]="archiveConfirm"> </i>
+            </li>
+        </ul>
+        <span *ngIf="!adminSchoolDistricts || !adminSchoolDistricts.length">No {{ title }} assigned</span>
+    </div>
+    <div *ngIf="adding && formObject">
+        <mt-dynamic-form [config]="formObject" isEditing="true" (submitted)="formSubmitted($event)">
+            <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+                Save
+            </button>
+            <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+                Cancel
+            </button>
+        </mt-dynamic-form>
+    </div>
+</div>

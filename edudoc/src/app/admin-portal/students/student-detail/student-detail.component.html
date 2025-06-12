@@ -1,0 +1,22 @@
+<div *ngIf="student">
+    <div class="row">
+        <div class="col-md-6">
+            <app-student-basic-info [student]="student" [canEdit]="canEdit"></app-student-basic-info>
+            <br />
+            <app-admin-student-referrals [student]="student"></app-admin-student-referrals>
+        </div>
+        <div class="col-md-6">
+            <app-common-addresses-with-county
+                [canEdit]="canEdit"
+                [requireCounty]="false"
+                [address]="student.Address"
+                [showDelete]="true"
+                (onSave)="saveAddress($event)"
+                (onDelete)="deleteAddress($event)"
+            >
+            </app-common-addresses-with-county>
+        </div>
+    </div>
+    <br />
+    <a routerLink="/students" class="btn btn-default">Close</a>
+</div>

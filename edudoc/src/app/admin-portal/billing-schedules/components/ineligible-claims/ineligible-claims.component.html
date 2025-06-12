@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Ineligible Claims</h2>
+    </div>
+</div>
+<div>
+    <mt-search-bar (searched)="search($event)"></mt-search-bar>
+    <mt-search-filter-select [items]="ediErrorCodes" entity="Edi Error Code" (selectionChanged)="filterSelectionChanged()">
+    </mt-search-filter-select>
+    <mt-search-filter-daterange [startDate]="startDate" [endDate]="endDate" entity="Service Date" (selectionChanged)="dateSelectionChanged($event)">
+    </mt-search-filter-daterange>
+</div>
+
+<mt-entity-list [entities]="claimsEncounters" [total]="total" [(currentPage)]="currentPage" [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="getClaimsEncounters()" (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="entityListConfig">
+</mt-entity-list>
+
+<br />
+<ng-container *ngIf="claimsSummaryLoaded">
+    <div class="col-md-6">
+        <div class="miles-editable miles-card padded">
+            <h4>TOTAL ENCOUNTERS: {{ claimsSummary.TotalIneligibleClaims }}</h4>
+            <div style="display:flex;">
+                <div style="width:50%">
+                    <label>Speech Therapy: </label> {{ claimsSummary.SpeechTherapy }} <br />
+                    <label>Psychology: </label> {{ claimsSummary.Psychology }}<br />
+                    <label>Occupational Therapy: </label> {{ claimsSummary.OccupationalTherapy }}<br />
+                    <label>Physical Therapy: </label> {{ claimsSummary.PhysicalTherapy }}<br />
+                </div>
+                <div style="width:50%">
+                    <label>Nursing: </label> {{ claimsSummary.Nursing }}<br />
+                    <label>Non MSP Service: </label> {{ claimsSummary.NonMSPService }}<br />
+                    <label>Counseling/Social Work: </label> {{ claimsSummary.Counseling }}<br />
+                    <label>Audiology: </label> {{ claimsSummary.Audiology }}<br />
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

@@ -1,0 +1,8 @@
+<div class="miles-card padded">
+    <h4>SCHOOLS</h4>
+    <ul class="list-group">
+        <li *ngFor="let school of schools" class="list-group-item" (click)="navigateToSchoolRoster(school)">
+            {{ school.Name }}
+        </li>
+    </ul>
+</div>

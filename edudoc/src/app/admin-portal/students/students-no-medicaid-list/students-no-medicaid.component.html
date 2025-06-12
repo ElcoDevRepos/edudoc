@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Students Missing Data</h2>
+    </div>
+</div>
+<div>
+    <mt-search-bar (searched)="getFilterSearchbar($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+    <br />
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <label
+            >School Districts
+            <span style="color: red;" *ngIf="schoolDistrictIdFilter === 0">
+                - Select A School District
+            </span>
+        </label>
+        <mt-virtual-type-ahead
+            [getItems]="getSchoolDistricts"
+            [placeholder]="'Begin typing...'"
+            (selectionChanged)="getFilterSchoolDistrictSearchbar($event)">
+        </mt-virtual-type-ahead>
+    </div>
+    <div class="pull-left">
+        <mt-dynamic-field [field]="getNoMedicaidOnlyField()" 
+            (valueChanges)="noMedicaidOnly = $event;"></mt-dynamic-field>
+        <mt-dynamic-field [field]="getNoAddressOnlyField()" 
+            (valueChanges)="noAddressOnly = $event;"></mt-dynamic-field>
+    </div>
+    <div class="col-md-2">
+        <button type="button" Class="btn btn-flat btn-success" (click)="applyClicked($event)">
+            Apply
+        </button>
+    </div>
+</div>
+<br />
+
+<mt-entity-list
+    [entities]="students"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="getStudents()"
+    (itemSelectedEvent)="studentSelected($event)"
+    (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="entityListConfig"
+>
+</mt-entity-list>

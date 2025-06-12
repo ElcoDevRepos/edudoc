@@ -1,0 +1,432 @@
+@using System;
+@model Templator.Models.CompletedActivityParams
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="@Model.ResolveStylesheetPath("Bootstrap.css")" rel="stylesheet" />
+    <link href="@Model.ResolveStylesheetPath("CompletedActivity.css")" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-xs-4">
+            <div>
+                <strong>@Model.data.DistrictName</strong>
+            </div>
+            <div>
+                Provider Activity
+            </div>
+            <br />
+            <br />
+            <div>
+                @Model.data.Date
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div>
+                LOA- Leave of Absence
+            </div>
+            <div>
+                LIC-License issue
+            </div>
+            <div>
+                OTH - Other reason for leave
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div>
+                DEC - Deceased
+            </div>
+            <div>
+                EXT - Exit
+            </div>
+            <div>
+                N/A - New provider not active
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div><strong>Healthcare Process Consulting, Inc.</strong></div>
+            <div>2888 Nationwide Parkway</div>
+            <div>Brunswick, Ohio 44212 </div>
+            <div>(440) 884-3688; or (866) 625-2003</div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="row" style="padding-left: 15px;">
+        <div><strong>District Employees Activity</strong></div>
+    </div>
+
+    @foreach (var serviceArea in Model.data.DistrictData)
+    {
+        <div class="row" style="padding-left: 25px;">
+            <div><strong><u>@serviceArea.ServiceAreaName</u></strong></div>
+        </div>
+        @foreach (var title in serviceArea.TitleData)
+        {
+            <div class="row" style="padding-left: 30px;">
+                <div><strong><u>@title.ProviderTitleName</u></strong></div>
+            </div>
+
+            @foreach (var provider in title.LineData)
+            {
+                <br />
+                <div class="row" style="padding-left: 30px;">
+                    <div><strong>Provider:</strong> @provider.ProviderName</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2">
+                        <br />
+                        <hr>
+                        <div>
+                            T/TH:
+                        </div>
+                        <div>
+                            EVAL:
+                        </div>
+                        @if (serviceArea.ShouldShowPendingCosign)
+                        {
+                            <div>
+                                Pending Co-Sign:
+                            </div>
+                        }
+                        <div>
+                            Inactivity:
+                        </div>
+                        <div>
+                            Total Encounters:
+                        </div>
+                    </div>
+                    <div class="col-xs-10">
+                        <div class="row">
+                            <div class="thirteens">
+                                <div>July</div>
+                                <div>Aug</div>
+                                <div>Sept</div>
+                                <div>Oct</div>
+                                <div>Nov</div>
+                                <div>Dec</div>
+                                <div>Jan</div>
+                                <div>Feb</div>
+                                <div>Mar</div>
+                                <div>Apr</div>
+                                <div>May</div>
+                                <div>Jun</div>
+                                <div>Total</div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="thirteens">
+                                <div>@provider.July.TreatmentTherapyCount</div>
+                                <div>@provider.August.TreatmentTherapyCount</div>
+                                <div>@provider.September.TreatmentTherapyCount</div>
+                                <div>@provider.October.TreatmentTherapyCount</div>
+                                <div>@provider.November.TreatmentTherapyCount</div>
+                                <div>@provider.December.TreatmentTherapyCount</div>
+                                <div>@provider.January.TreatmentTherapyCount</div>
+                                <div>@provider.February.TreatmentTherapyCount</div>
+                                <div>@provider.March.TreatmentTherapyCount</div>
+                                <div>@provider.April.TreatmentTherapyCount</div>
+                                <div>@provider.May.TreatmentTherapyCount</div>
+                                <div>@provider.June.TreatmentTherapyCount</div>
+                                <div class="tableheader">@provider.Total.TreatmentTherapyCount</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="thirteens">
+                                <div>@provider.July.EvalCount</div>
+                                <div>@provider.August.EvalCount</div>
+                                <div>@provider.September.EvalCount</div>
+                                <div>@provider.October.EvalCount</div>
+                                <div>@provider.November.EvalCount</div>
+                                <div>@provider.December.EvalCount</div>
+                                <div>@provider.January.EvalCount</div>
+                                <div>@provider.February.EvalCount</div>
+                                <div>@provider.March.EvalCount</div>
+                                <div>@provider.April.EvalCount</div>
+                                <div>@provider.May.EvalCount</div>
+                                <div>@provider.June.EvalCount</div>
+                                <div class="tableheader">@provider.Total.EvalCount</div>
+                            </div>
+                        </div>
+                        @if(serviceArea.ShouldShowPendingCosign){
+                            <div class="row">
+                                <div class="thirteens">
+                                    <div>@provider.July.PendingCoSignCount</div>
+                                    <div>@provider.August.PendingCoSignCount</div>
+                                    <div>@provider.September.PendingCoSignCount</div>
+                                    <div>@provider.October.PendingCoSignCount</div>
+                                    <div>@provider.November.PendingCoSignCount</div>
+                                    <div>@provider.December.PendingCoSignCount</div>
+                                    <div>@provider.January.PendingCoSignCount</div>
+                                    <div>@provider.February.PendingCoSignCount</div>
+                                    <div>@provider.March.PendingCoSignCount</div>
+                                    <div>@provider.April.PendingCoSignCount</div>
+                                    <div>@provider.May.PendingCoSignCount</div>
+                                    <div>@provider.June.PendingCoSignCount</div>
+                                    <div>@provider.Total.PendingCoSignCount</div>
+                                </div>
+                            </div>
+                        }
+                        <div class="row">
+                            <div class="thirteens">
+                                <div>@provider.July.AbsenceReason</div>
+                                <div>@provider.August.AbsenceReason</div>
+                                <div>@provider.September.AbsenceReason</div>
+                                <div>@provider.October.AbsenceReason</div>
+                                <div>@provider.November.AbsenceReason</div>
+                                <div>@provider.December.AbsenceReason</div>
+                                <div>@provider.January.AbsenceReason</div>
+                                <div>@provider.February.AbsenceReason</div>
+                                <div>@provider.March.AbsenceReason</div>
+                                <div>@provider.April.AbsenceReason</div>
+                                <div>@provider.May.AbsenceReason</div>
+                                <div>@provider.June.AbsenceReason</div>
+                                <div></div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row tableheader">
+                            <div class="thirteens">
+                                <div>@provider.July.TotalCount</div>
+                                <div>@provider.August.TotalCount</div>
+                                <div>@provider.September.TotalCount</div>
+                                <div>@provider.October.TotalCount</div>
+                                <div>@provider.November.TotalCount</div>
+                                <div>@provider.December.TotalCount</div>
+                                <div>@provider.January.TotalCount</div>
+                                <div>@provider.February.TotalCount</div>
+                                <div>@provider.March.TotalCount</div>
+                                <div>@provider.April.TotalCount</div>
+                                <div>@provider.May.TotalCount</div>
+                                <div>@provider.June.TotalCount</div>
+                                <div>@provider.Total.TotalCount</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        }
+        <hr>
+        <div class="row  tableheader">
+            <div class="col-xs-2">
+                <div>
+                    <strong><i>@serviceArea.ServiceAreaName Total Encounters:</i></strong>
+                </div>
+            </div>
+            <div class="col-xs-10">
+                <div class="row">
+                    <div class="thirteens">
+                        <div>@serviceArea.JulyTotal</div>
+                        <div>@serviceArea.AugustTotal</div>
+                        <div>@serviceArea.SeptemberTotal</div>
+                        <div>@serviceArea.OctoberTotal</div>
+                        <div>@serviceArea.NovemberTotal</div>
+                        <div>@serviceArea.DecemberTotal</div>
+                        <div>@serviceArea.JanuaryTotal</div>
+                        <div>@serviceArea.FebruaryTotal</div>
+                        <div>@serviceArea.MarchTotal</div>
+                        <div>@serviceArea.AprilTotal</div>
+                        <div>@serviceArea.MayTotal</div>
+                        <div>@serviceArea.JuneTotal</div>
+                        <div>@serviceArea.CompleteTotal</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    }
+
+    <div class="row" style="padding-left: 15px;">
+        <div><strong>Contracted Services Activity</strong></div>
+    </div>
+
+    @foreach (var serviceArea in Model.data.ContractData)
+    {
+        <div class="row" style="padding-left: 25px;">
+            <div><strong><u>@serviceArea.ServiceAreaName</u></strong></div>
+        </div>
+        @foreach (var title in serviceArea.TitleData)
+        {
+            <div class="row" style="padding-left: 30px;">
+                <div><strong><u>@title.ProviderTitleName</u></strong></div>
+            </div>
+
+            @foreach (var provider in title.LineData)
+            {
+                <br />
+                <div class="row" style="padding-left: 30px;">
+                    <div class="col-xs-4"><strong>Provider:</strong> @provider.ProviderName</div>
+                    <div class="col-xs-4"><strong>Contracted Agency:</strong> @provider.AgencyName</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2">
+                        <br />
+                        <hr>
+                        <div>
+                            T/TH:
+                        </div>
+                        <div>
+                            EVAL:
+                        </div>
+                        @if(serviceArea.ShouldShowPendingCosign){
+                            <div>
+                                Pending Co-Sign:
+                            </div>
+                        }
+                        <div>
+                            Inactivity:
+                        </div>
+                        <div>
+                            Total Encounters:
+                        </div>
+                    </div>
+                    <div class="col-xs-10">
+                        <div class="row">
+                            <div class="thirteens">
+                                <div >July</div>
+                                <div >Aug</div>
+                                <div >Sept</div>
+                                <div >Oct</div>
+                                <div >Nov</div>
+                                <div >Dec</div>
+                                <div >Jan</div>
+                                <div >Feb</div>
+                                <div >Mar</div>
+                                <div >Apr</div>
+                                <div >May</div>
+                                <div >Jun</div>
+                                <div>Total</div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="thirteens">
+                                <div>@provider.July.TreatmentTherapyCount</div>
+                                <div>@provider.August.TreatmentTherapyCount</div>
+                                <div>@provider.September.TreatmentTherapyCount</div>
+                                <div>@provider.October.TreatmentTherapyCount</div>
+                                <div>@provider.November.TreatmentTherapyCount</div>
+                                <div>@provider.December.TreatmentTherapyCount</div>
+                                <div>@provider.January.TreatmentTherapyCount</div>
+                                <div>@provider.February.TreatmentTherapyCount</div>
+                                <div>@provider.March.TreatmentTherapyCount</div>
+                                <div>@provider.April.TreatmentTherapyCount</div>
+                                <div>@provider.May.TreatmentTherapyCount</div>
+                                <div>@provider.June.TreatmentTherapyCount</div>
+                                <div>@provider.Total.TreatmentTherapyCount</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="thirteens">
+                                <div>@provider.July.EvalCount</div>
+                                <div>@provider.August.EvalCount</div>
+                                <div>@provider.September.EvalCount</div>
+                                <div>@provider.October.EvalCount</div>
+                                <div>@provider.November.EvalCount</div>
+                                <div>@provider.December.EvalCount</div>
+                                <div>@provider.January.EvalCount</div>
+                                <div>@provider.February.EvalCount</div>
+                                <div>@provider.March.EvalCount</div>
+                                <div>@provider.April.EvalCount</div>
+                                <div>@provider.May.EvalCount</div>
+                                <div>@provider.June.EvalCount</div>
+                                <div>@provider.Total.EvalCount</div>
+                            </div>
+                        </div>
+                        @if(serviceArea.ShouldShowPendingCosign) {
+                            <div class="row">
+                                <div class="thirteens">
+                                    <div>@provider.July.PendingCoSignCount</div>
+                                    <div>@provider.August.PendingCoSignCount</div>
+                                    <div>@provider.September.PendingCoSignCount</div>
+                                    <div>@provider.October.PendingCoSignCount</div>
+                                    <div>@provider.November.PendingCoSignCount</div>
+                                    <div>@provider.December.PendingCoSignCount</div>
+                                    <div>@provider.January.PendingCoSignCount</div>
+                                    <div>@provider.February.PendingCoSignCount</div>
+                                    <div>@provider.March.PendingCoSignCount</div>
+                                    <div>@provider.April.PendingCoSignCount</div>
+                                    <div>@provider.May.PendingCoSignCount</div>
+                                    <div>@provider.June.PendingCoSignCount</div>
+                                    <div>@provider.Total.PendingCoSignCount</div>
+                                </div>
+                            </div>
+                        }
+                        <div class="row">
+                            <div class="thirteens">
+                                <div>@provider.July.AbsenceReason</div>
+                                <div>@provider.August.AbsenceReason</div>
+                                <div>@provider.September.AbsenceReason</div>
+                                <div>@provider.October.AbsenceReason</div>
+                                <div>@provider.November.AbsenceReason</div>
+                                <div>@provider.December.AbsenceReason</div>
+                                <div>@provider.January.AbsenceReason</div>
+                                <div>@provider.February.AbsenceReason</div>
+                                <div>@provider.March.AbsenceReason</div>
+                                <div>@provider.April.AbsenceReason</div>
+                                <div>@provider.May.AbsenceReason</div>
+                                <div>@provider.June.AbsenceReason</div>
+                                <div></div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row tableheader">
+                            <div class="thirteens">
+                                <div>@provider.July.TotalCount</div>
+                                <div>@provider.August.TotalCount</div>
+                                <div>@provider.September.TotalCount</div>
+                                <div>@provider.October.TotalCount</div>
+                                <div>@provider.November.TotalCount</div>
+                                <div>@provider.December.TotalCount</div>
+                                <div>@provider.January.TotalCount</div>
+                                <div>@provider.February.TotalCount</div>
+                                <div>@provider.March.TotalCount</div>
+                                <div>@provider.April.TotalCount</div>
+                                <div>@provider.May.TotalCount</div>
+                                <div>@provider.June.TotalCount</div>
+                                <div>@provider.Total.TotalCount</div>
+                            </div>
+                        </div>
+                        @*<div class="pull-right">Total Minutes: @provider.TotalEncounters</div>*@
+                    </div>
+                </div>
+
+            }
+        }
+        <hr>
+        <div class="row  tableheader">
+            <div class="col-xs-2">
+                <div>
+                    <strong><i>@serviceArea.ServiceAreaName Total Encounters:</i></strong>
+                </div>
+            </div>
+            <div class="col-xs-10">
+                <div class="row">
+                    <div class="thirteens">
+                        <div>@serviceArea.JulyTotal</div>
+                        <div>@serviceArea.AugustTotal</div>
+                        <div>@serviceArea.SeptemberTotal</div>
+                        <div>@serviceArea.OctoberTotal</div>
+                        <div>@serviceArea.NovemberTotal</div>
+                        <div>@serviceArea.DecemberTotal</div>
+                        <div>@serviceArea.JanuaryTotal</div>
+                        <div>@serviceArea.FebruaryTotal</div>
+                        <div>@serviceArea.MarchTotal</div>
+                        <div>@serviceArea.AprilTotal</div>
+                        <div>@serviceArea.MayTotal</div>
+                        <div>@serviceArea.JuneTotal</div>
+                        <div>@serviceArea.CompleteTotal</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    }
+
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+<div *ngIf="!isCardOpen" class="miles-editable miles-card padded">
+    <h4>
+        PRESCRIPTIONS
+        <i (click)="toggleCardOpen()" style="padding:5px;cursor:pointer;" class="fa fa-chevron-down"></i>
+    </h4>
+</div>
+<div class="miles-editable miles-card padded" *ngIf="!isEditing && isCardOpen">
+    <h4>PRESCRIPTIONS
+        <span>
+            <i *ngIf="isCardOpen" (click)="toggleCardOpen()" style="padding:5px;cursor:pointer;" class="fa fa-chevron-up"></i>
+        </span>
+    </h4>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th *ngIf="!draftMode">
+                        <b>Download</b>
+                    </th>
+                    <th>
+                        <b>NPI</b>
+                    </th>
+                    <th>
+                        <b>Doctor's Name</b>
+                    </th>
+                    <th>
+                        <b>Initiation Date</b>
+                    </th>
+                    <th>
+                        <b>Expiration Date</b>
+                    </th>
+                    <th>
+                        <b>Clone Script</b>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let script of caseLoadScripts; let i = index" (click)="scriptSelected(script)">
+                    <td *ngIf="!draftMode" class="text-center">
+                        <span
+                            class="fa fa-lg fa-download"
+                            (click)="download(i)"
+                        ></span>
+                    </td>
+                    <td>
+                        {{ script.Npi }}
+                    </td>
+                    <td>
+                        {{ doctorNameFormattingFunction(script) }}
+                    </td>
+                    <td>
+                        {{ script.InitiationDate | date: 'mediumDate' }}
+                    </td>
+                    <td>
+                        {{ script.ExpirationDate | date: 'mediumDate' }}
+                    </td>
+                    <td>
+                        <span
+                            class="fa fa-lg fa-plus"
+                            (click)="clone(script)"
+                        ></span>
+                    </td>
+                    <td>
+                        <div *ngIf="script.Archived" class="text-center">
+                            <button type="button" (mtConfirm)="archiveCaseLoadScript(script)" [mtConfirmOptions]="unarchiveConfirm">
+                                <i class="fa fa-undo fa-2x"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="!script.Archived" class="text-center">
+                            <button type="button" (mtConfirm)="archiveCaseLoadScript(script)" [mtConfirmOptions]="archiveConfirm">
+                                <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="noCaseLoadScripts()">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+
+    <div *ngIf="!draftMode" class="pull-right">
+        <mt-dynamic-field [field]="getArchivedField()" (valueChanges)="includeArchived = $event; getCaseLoadScripts()"> </mt-dynamic-field>
+    </div>
+    <br />
+
+    <div [hidden]="!canEdit" class="fab-wrap">
+        <button type="button" class="btn btn-primary btn-fab-md btn-fab-center" (click)="addScript()">
+            <span class="fa fa-plus"></span>
+        </button>
+    </div>
+</div>
+
+<app-add-case-load-script
+    *ngIf="isEditing && isCardOpen"
+    (onClose)="cancelClick()"
+    [caseLoadId]="caseLoad.Id"
+    [caseLoadScript]="selectedScript"
+    [draftMode]="draftMode"
+    (onCaseLoadScriptAdded)="refreshScripts()"
+    (onCaseLoadDraftAdded)="draftAdded($event)"
+    (onCaseLoadDraftUpdated)="draftUpdated($event)"
+></app-add-case-load-script>
+<br />

@@ -1,0 +1,27 @@
+.notes-wrapper {
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 15px;
+}
+
+.inputs-side-by-side {
+    margin: 0.05em 3.2em;
+    display: flex;
+    column-gap: 0.5em;
+
+    .field-row-1 {
+        width: 30%;
+    }
+}
+
+.inputs-side-by-side.encounter-date-time-row {
+    padding-top: 0.5em;
+
+    mt-dynamic-field.encounter-date mt-dynamic-form-input-wrapper > div > span > input.form-control {
+        margin-top: -1.2em !important;
+    }
+}
+
+.row.save-cancel {
+    padding-top: 1em;
+}

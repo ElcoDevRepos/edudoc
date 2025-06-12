@@ -1,0 +1,7 @@
+<mt-entity-list *ngIf="entityListConfig"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    [entities]="encounterStudents"
+    [entityListConfig]="entityListConfig"
+    (itemDeletedEvent)="archiveEncounter($event)"
+></mt-entity-list>

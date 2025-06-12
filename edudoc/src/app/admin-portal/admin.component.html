@@ -1,0 +1,16 @@
+<div
+    class="skin-blue sidebar-mini"
+    [class.sidebar-open]="!sidebarCollapsed && showNav"
+    [class.sidebar-collapse]="sidebarCollapsed || !showNav"
+    [class.sidebar-mini]="showNav"
+>
+<app-header></app-header>
+    <div class="wrapper">
+        <mt-nav></mt-nav>
+        <div class="container-fluid content-wrapper" [style.min-height]="showFooter ? null : '100vh'">
+            <router-outlet></router-outlet>
+            <br />
+        </div>
+        <mt-footer></mt-footer>
+    </div>
+</div>

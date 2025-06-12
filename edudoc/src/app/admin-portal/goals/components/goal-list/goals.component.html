@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Goals</h2>
+    </div>
+    <div class="col-md-12">
+        <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+        <div class="pull-right">
+            <mt-dynamic-field [field]="getArchivedField()" (valueChanges)="includeArchived = $event; search(query)"> </mt-dynamic-field>
+        </div>
+        <mt-search-filter-select [items]="serviceCodes" entity="Service Area" (selectionChanged)="filterSelectionChanged()"> </mt-search-filter-select>
+        <br />
+    </div>
+</div>
+
+<mt-entity-list
+    [entities]="goals"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="getGoals()"
+    (itemSelectedEvent)="goalSelected($event)"
+    (itemDeletedEvent)="archiveGoal($event)"
+    (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="entityListConfig"
+>
+</mt-entity-list>
+
+<div *ngIf="canAddGoal" class="fab-wrap-b-r">
+    <a class="btn btn-primary btn-fab-lg" [routerLink]="['/goals', 'add']">
+        <span class="fa fa-plus"></span>
+    </a>
+</div>

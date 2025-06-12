@@ -1,0 +1,25 @@
+<div
+    class="skin-blue sidebar-mini"
+    [class.sidebar-open]="!sidebarCollapsed && showNav"
+    [class.sidebar-collapse]="sidebarCollapsed || !showNav"
+    [class.sidebar-mini]="showNav"
+>
+<app-header></app-header>
+    <div class="wrapper">
+        <mt-nav></mt-nav>
+        <div class="container-fluid content-wrapper" [style.min-height]="showFooter ? null : '100vh'">
+            <div class="row" *ngIf="isImpersonation">
+                <br />
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-info pull-right btn-danger" (click)="unImpersonate()">Stop Impersonating</button>
+                </div>
+                <br />
+                <br />
+            </div>
+            <router-outlet></router-outlet>
+            <br />
+        </div>
+        <mt-footer></mt-footer>
+    </div>
+</div>

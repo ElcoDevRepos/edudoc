@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-md-5" *ngIf="schools">
+        <div class="miles-form padded">
+            <h4>CASE UPLOAD INFO</h4>
+            <mt-dynamic-form [config]="formObject" (submitted)="formSubmitted($event)">
+                <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+                    Save
+                </button>
+            </mt-dynamic-form>
+        </div>
+    </div>
+
+    <div *ngIf="isMerging && studentsToMerge.length && !allStudentsAreProcessed">
+        <div class="col-md-5">
+            <div *ngFor="let dup of unprocessedStudents; let i = index">
+                <app-provider-case-upload-issues-merge
+                    [hidden]="i !== 0"
+                    [totalConflicts]="unprocessedStudents.length"
+                    [studentToMerge]="dup"
+                    [providerCaseUpload]="providerCaseUpload"
+                    (studentProcessed)="processStudent($event)"
+                >
+                </app-provider-case-upload-issues-merge>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="allStudentsAreProcessed && isMerging" class="col-md-5 text-center">
+        <div class="miles-form padded">
+            <h4>MERGE STUDENT CONFLICTS</h4>
+            <button
+                style="padding: 10px;"
+                mtDisableClickDuringHttpCalls
+                type="button"
+                class="btn btn-lg btn-primary"
+                (click)="completeMerge()"
+            >
+                Complete Merge
+            </button>
+        </div>
+    </div>
+</div>

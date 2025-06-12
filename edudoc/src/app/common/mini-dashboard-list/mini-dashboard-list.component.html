@@ -1,0 +1,50 @@
+<div class="miles-card padded">
+    <h4>
+        {{ cardName }}
+        <span>
+            <div *ngIf="canDelete" class="pull-right">
+                <mt-dynamic-field [field]="getArchivedField()" (valueChanges)="setIncludeArchived()"> </mt-dynamic-field>
+            </div>
+        </span>
+    </h4>
+
+    <ul *ngIf="items?.length" class="list-group">
+        <li
+            *ngFor="let item of items.slice(0, noOfItemsToShow)"
+            (click)="selectItem(item)"
+            class="list-group-item"
+            [ngClass]="{ alternateColorItem: alternateColor }"
+        >
+            <div class="row">
+                <div class="col-md-10" [innerHTML]="getItemName(item)">{{ getItemName(item) }}</div>
+                <div *ngIf="canDelete && !item.Archived" class="col-md-2">
+                    <button class="pull-right" type="button" (mtConfirm)="deleteItem(item)" [mtConfirmOptions]="archiveConfirm">
+                        <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div *ngIf="canDelete && item.Archived" class="col-md-2">
+                    <button class="pull-right" type="button" (mtConfirm)="deleteItem(item)" [mtConfirmOptions]="unarchiveConfirm">
+                        <i class="fa fa-undo fa-2x"></i>
+                    </button>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div *ngIf="!items?.length" class="padded">
+        <i class="pull-right">No {{ cardName }}</i>
+    </div>
+    <div [hidden]="!canEdit" class="fab-wrap">
+        <button type="button" class="btn btn-primary btn-fab-md btn-fab-center" (click)="addItem()">
+            <span class="fa fa-plus"></span>
+        </button>
+    </div>
+    <div class="pull-right max-of-total">
+        <span *ngIf="showTotalCount && showTotal()">{{ noOfItemsToShow < totalItems ? noOfItemsToShow : totalItems }} of {{ totalItems }}</span>
+    </div>
+    <div *ngIf="!hideShowAll" class="show-on-hover">
+        <a (click)="seeAll()" class="btn btn-primary btn-flat see-all"
+            >See All
+            <span *ngIf="showTotalCount" class="badge">{{ totalItems }}</span>
+        </a>
+    </div>
+</div>

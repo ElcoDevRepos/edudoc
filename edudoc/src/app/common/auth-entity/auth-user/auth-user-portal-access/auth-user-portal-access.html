@@ -1,0 +1,68 @@
+<div
+    class="miles-editable miles-card padded"
+    *ngIf="!isEditing"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    (click)="togglePortalAccess()"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4>
+        PORTAL ACCESS
+        <span class="pull-right" *ngIf="canEdit && showPortalAccess">
+            <i class="fa fa-lg fa-edit" (click)="edit()"></i>
+        </span>
+    </h4>
+    <div *ngIf="!showPortalAccess">
+        <i><b>View All</b></i> 
+    </div>
+    <div *ngIf="showPortalAccess" class="table-responsive overflow-y:auto;">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th>
+                        <b>Permission</b>
+                    </th>
+                    <th>
+                        <b>Access Type</b>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="no-pointer" *ngFor="let permission of userRolePermissions">
+                    <td class="ellipsis">
+                        {{ permission.ClaimType?.Name }}
+                    </td>
+                    <td class="ellipsis">
+                        {{ permission.ClaimValue?.Name }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="noPermissions">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+</div>
+<div *ngIf="isEditing && userRole" class="miles-form padded">
+    <h4 class="heading-with-button">
+        PORTAL ACCESS
+        <button type="button" class="btn btn-flat btn-default" (click)="cancel()">
+            Close
+        </button>
+    </h4>
+    <div *ngIf="authUser">
+        <div *ngIf="authUser && showAccessButton">
+            <button class="btn btn-flat pull-right btn-danger" (click)="changeAccess()">
+                {{authUser?.HasAccess ? 'Revoke Access' : 'Grant Access'}}
+            </button>
+            <br />
+        </div>
+    </div>
+    <app-auth-permissions
+        [permissions]="permissions"
+        [canEdit]="canEditPermissions"
+        [claimValues]="claimValues"
+        (onPermissionUpdated)="savePermission($event)"
+    ></app-auth-permissions>
+    <br />
+</div>

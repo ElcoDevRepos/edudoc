@@ -1,0 +1,8 @@
+hr {
+    position: relative;
+    top: 20px;
+    border: none;
+    height: 4px;
+    background: black;
+    padding-bottom: 10px;
+}

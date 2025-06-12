@@ -1,0 +1,61 @@
+@using System;
+@model Templator.Models.ProgressReportParams
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="@Model.ResolveStylesheetPath("Bootstrap.css")" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="text-center"><h3>@Model.district.Name</h3></div>
+    <div class="text-center"><h3>90-Day Progress Reports</h3></div>
+    <div class="text-center"><h3>Reporting Period: @Model.progressReport.StartDate.GetValueOrDefault().ToString("MM/dd/yyyy")-@Model.progressReport.EndDate.GetValueOrDefault().ToString("MM/dd/yyyy")</h3></div>
+    <br />
+
+    <div class="row">
+        <div class="col-xs-4">Student name: @Model.progressReport.Student.FirstName @Model.progressReport.Student.LastName</div>
+        <div class="col-xs-4">Date of Birth: @Model.progressReport.Student.DateOfBirth.ToString("MM/dd/yyyy")</div>
+        <div class="col-xs-4">ID: @Model.progressReport.Student.StudentCode</div>
+    </div>
+    <br />
+
+    <div><strong>Goals:</strong></div>
+    @foreach (var goal in @Model.goals)
+    {
+        <div style="padding-left: 20px;">
+            <div>@goal.Description</div>
+        </div>
+    }
+    <br />
+
+    <div>Has the student made progress towards the MSP goals identified on the student's IEP for this reporting period? <strong><u>@Model.progress</u></strong></div>
+    <br />
+
+    <div>Document progress for student's MSP goals?</div>
+    <div><strong>Notes:</strong> @Model.progressReport.ProgressNotes</div>
+    <br />
+
+    <div>Has there been a change in medical or mental status? <strong><u>@Model.medical</u></strong></div>
+    <div><strong>Notes:</strong> @Model.progressReport.MedicalStatusChangeNotes</div>
+    <br />
+
+    <div>Has there been a change in treatment/care of student? <strong><u>@Model.treatment</u></strong></div>
+    <div><strong>Notes:</strong> @Model.progressReport.TreatmentChangeNotes</div>
+    <br />
+
+    <div class="row">
+        <div class="col-xs-8">Provider's Name & Title: @Model.esignedBy</div>
+        <div class="col-xs-4">Date: @Model.progressReport.DateESigned.GetValueOrDefault().ToString("MM/dd/yyyy")</div>
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="col-xs-8">@Model.supervisorTitleLabel@Model.supervisorEsignedBy</div>
+        <div class="col-xs-4">@Model.supervisorDateLabel@Model.supervisorEsignedByDate</div>
+    </div>
+    <br />
+
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<h3 *ngIf="showHeader">{{header}}</h3>
+
+<div ng2FileDrop class="well drop-zone" [ngClass]="{'drop-zone-hover': dropZoneHovered}" [uploader]="uploader"
+    (fileOver)="dropZoneHovered = $event">
+    Drop files
+</div>
+
+<input *ngIf="multiUpload" type="file" ng2FileSelect class="" [uploader]="uploader" multiple />
+<input *ngIf="!multiUpload" type="file" ng2FileSelect class="" [uploader]="uploader" />
+
+<br />
+
+<table class=" table upload-queue">
+    <thead>
+        <th width="50%">Name</th>
+        <th>Size</th>
+        <th>Actions</th>
+    </thead>
+    <tbody *ngIf="uploadQueue.isEmpty">
+        <tr>
+            <td colspan="4">Nothing to upload</td>
+        </tr>
+    </tbody>
+    <tbody *ngIf="!uploadQueue.isEmpty">
+        <tr *ngFor="let file of uploadQueue.all; let i = index">
+            <td><strong>{{ file.item.name }}</strong></td>
+            <td nowrap>{{ file.item.size / 1024 / 1024 | number:'.2' }} MB</td>
+            <td nowrap>
+                <button type="button" class="btn btn-danger btn-xs" (click)="uploadQueue.remove(i)">
+                    <span class="fa fa-trash"></span> Remove
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

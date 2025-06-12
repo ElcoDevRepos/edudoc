@@ -1,0 +1,44 @@
+<h3 mtSetTitle>School Districts</h3>
+<div class="row">
+    <div class="col-md-12">
+        <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+        <br />
+        <div class="col-md-2">
+            <label>Requires Notes</label><br />
+            <mt-search-filter-daterange
+            [startDate]="startDate" [endDate]="endDate" entity="Date"
+            (selectionChanged)="dateSelectionChanged($event)"
+            ></mt-search-filter-daterange>
+        </div>
+        <div class="col-md-2">
+            <label>Progress Reports Sent</label><br />
+            <mt-search-filter-daterange
+            [startDate]="reportStartDate" [endDate]="reportEndDate" entity="Date"
+            (selectionChanged)="reportDateSelectionChanged($event)"
+            ></mt-search-filter-daterange>
+        </div>
+        <div class="pull-right">
+            <mt-dynamic-field [field]="getArchivedField()" (valueChanges)="includeArchived = $event; search(query)"></mt-dynamic-field>
+        </div>
+        <br />
+    </div>
+</div>
+
+<div>
+    <mt-entity-list
+        [entities]="schoolDistricts"
+        [total]="total"
+        [(currentPage)]="currentPage"
+        (pageChanged)="getSchoolDistricts()"
+        (itemSelectedEvent)="schoolDistrictSelected($event)"
+        (columnSortedEvent)="columnSorted($event)"
+        [entityListConfig]="entityListConfig"
+        (itemDeletedEvent)="archiveDistrict($event)"
+    >
+    </mt-entity-list>
+</div>
+<div *ngIf="canAddSchoolDistrict" class="fab-wrap-b-r">
+    <a class="btn btn-primary btn-fab-lg" [routerLink]="['/school-districts', 'add']">
+        <span class="fa fa-plus"></span>
+    </a>
+</div>

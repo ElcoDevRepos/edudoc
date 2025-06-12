@@ -1,0 +1,36 @@
+<div class="miles-card padded" *ngIf="!isEditing">
+    <h4 class="heading-with-button">
+       SCHOOL DISTRICT ADMINISTRATION USERS
+        <button class="btn btn-sm btn-primary" *ngIf="canEdit" type="button" (click)="addAdmin()">
+            <i class="fa fa-plus fa-lg" style="cursor: pointer;" aria-hidden="true"></i>
+        </button>
+    </h4>
+    <ul class="list-group" *ngIf="districtAdmins && districtAdmins.length">
+        <li class="list-group-item" *ngFor="let admin of districtAdmins">
+            {{ admin.Name }}
+            <i class="fa fa-trash fa-lg pull-right" (mtConfirm)="archiveAdmin(admin)" [mtConfirmOptions]="archiveConfirm"> </i>
+        </li>
+    </ul>
+    <span *ngIf="!districtAdmins?.length">No district admins</span>
+</div>
+
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4>ADD ADMIN ASSIGNMENT</h4>
+    <div *ngIf="!noAdminsAvailable">
+        <form [formGroup]="form" *ngIf="form" (ngSubmit)="onSubmit()">
+            <mt-dynamic-field [field]="userDropdownDynamicControl" [form]="form"></mt-dynamic-field>
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+                Cancel
+            </button>
+        </form>
+    </div>
+    <div *ngIf="noAdminsAvailable">
+        <div>
+            <em>No district admins are available for assignment.</em>
+        </div>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </div>
+</div>

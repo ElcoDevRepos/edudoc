@@ -1,0 +1,75 @@
+<div *ngIf="formLoaded">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="miles-form padded">
+                <h4>STUDENT INFO</h4>
+                <mt-dynamic-form [config]="formObject" ([isEditing])="(isEditing)" (formCreated)="formGroup = $event">
+                </mt-dynamic-form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="miles-form padded">
+                <h4>ADDRESS</h4>
+                <div *ngIf="!isAddingAddress" class="fab-wrap">
+                    <button class="btn btn-primary btn-fab-md btn-fab-center" type="button" (click)="addAddress()">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                </div>
+                <div *ngIf="isAddingAddress">
+                    <address-with-county
+                        [addressContainer]="emptyAddressContainer"
+                        [parentForm]="addressForm"
+                        [showIsPrimary]="false"
+                        [requireCounty]="requireCounty"
+                    ></address-with-county>
+                    <button type="button" Class="btn btn-flat btn-default" (click)="cancelAddAddress()">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+
+    <div class="row" *ngIf="formGroup">
+        <div class="col-md-3">
+            <div class="miles-form padded" *ngIf="selectedEsc && schoolDistrictOptions">
+                <div *ngIf="showDistricts">
+                    <h4>DISTRICT</h4>
+                    <mt-dynamic-field *ngIf="schoolDistrictOptions.length" [field]="getSchoolDistrictsField()" (valueChanges)="districtSelected($event)"> </mt-dynamic-field>
+                    <div *ngIf="!schoolDistrictOptions.length">
+                        <h3 style="text-align: center;">No school districts.</h3>
+                    </div>
+                </div>
+                <div *ngIf="selectedDistrict">
+                    <h4>SCHOOL BUILDING</h4>
+                    <mt-dynamic-field *ngIf="selectedDistrict && schoolOptions.length" [field]="getSchoolBuildingsField()" (valueChanges)="schoolSelected($event)"> </mt-dynamic-field>
+                    <div *ngIf="selectedDistrict && !schoolOptions.length">
+                        <h3 style="text-align: center;">No school buildings.</h3>
+                    </div>
+                </div>
+                <mt-dynamic-field *ngIf="selectedDistrict && selectedSchool" [field]="getEnrollmentDateControl()" (valueChanges)="enrollmentDateSelected($event)"> </mt-dynamic-field>
+            </div>
+        </div>
+
+        <div class="col-md-3" *ngIf="escOptions && showEscs">
+            <div class="miles-editable miles-card padded">
+                <h4>ESC/PROGRAM</h4>
+                <mt-dynamic-field [field]="getEscsField()" (valueChanges)="escSelected($event)"> </mt-dynamic-field>
+            </div>
+        </div>
+    </div>
+    <br/>
+
+    <button
+        class="btn btn-flat btn-success"
+        type="button"
+        (click)="saveStudent()"
+        [disabled]="formInvalid"
+    >
+        Save
+    </button>
+    <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+        Cancel
+    </button>
+</div>

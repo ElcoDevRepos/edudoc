@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Encounters Ready For You Schedule</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-2">
+        <mt-search-filter-select [items]="daysOfTheWeek" entity="Weekdays"
+            (selectionChanged)="filterSelectionChanged()"></mt-search-filter-select>
+    </div>
+    <div class="col-md-7">
+    </div>
+    <div class="col-md-3">
+        <button class="btn btn-flat btn-success" (click)="showAddScheduleModal=true;">Create Student Schedule</button>
+    </div>
+</div>
+
+<mt-entity-list
+    [(currentPage)]="currentPage"
+    [entities]="studentTherapySchedules"
+    [entityListConfig]="entityListConfig"
+    [(itemsPerPage)]="itemsPerPage"
+    (onPageChanged)="getStudentTherapySchedules()"
+    (itemSelectedEvent)="goToStudentCaseload($event)"
+    [total]="total"
+></mt-entity-list>
+
+<mt-modal-wrapper *ngIf="showAddScheduleModal" [options]="modalOptions" (cancelClick)="cancel()">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6">
+                <mt-dynamic-field [field]="getStudentsField()" (valueChanges)="getStudentDetails($event)"></mt-dynamic-field>
+            </div>
+        </div>
+        <br />
+        <app-add-student-therapy
+            *ngIf="caseLoadId > 0 && studentTherapies"
+            [encounterLocations]="encounterLocations"
+            [caseLoadId]="caseLoadId"
+            [studentTherapies]="studentTherapies"
+            (onClose)="cancel()"
+            (onStudentTherapyAdded)="showAddScheduleModal=false"
+        ></app-add-student-therapy>
+        <br />
+    </div>
+</mt-modal-wrapper>

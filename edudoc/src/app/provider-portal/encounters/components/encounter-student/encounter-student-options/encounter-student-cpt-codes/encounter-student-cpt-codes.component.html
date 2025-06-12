@@ -1,0 +1,150 @@
+<div *ngIf="isEditingStudent">
+    <div
+        class="miles-editable miles-card padded"
+        *ngIf="!isEditing && isCardOpen"
+        (mouseenter)="isHovered = true"
+        (mouseleave)="isHovered = false"
+        [style.cursor]="canEdit ? 'pointer' : 'default'"
+    >
+        <h4 class="header" *ngIf="isCardOpen">
+            CPT CODES (PROCEDURE CODES)
+            <span class="pull-right" *ngIf="canEdit">
+                <i (click)="edit()" class="fa fa-lg fa-edit"></i>
+            </span>
+        </h4>
+
+        <div class="table-responsive" *ngIf="!noEncounterStudentCptCodes && isCardOpen">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="no-pointer">
+                        <th>
+                            <b>Code</b>
+                        </th>
+                        <th>
+                            <b>Description</b>
+                        </th>
+                        <th>
+                            <b>Time</b>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="no-pointer" *ngFor="let encounterStudentCptCode of encounterStudentCptCodes">
+                        <td class="ellipsis">
+                            {{ encounterStudentCptCode?.CptCode?.Code }}
+                        </td>
+                        <td class="ellipsis">
+                            {{ encounterStudentCptCode?.CptCode?.Description }}
+                        </td>
+                        <td class="ellipsis">
+                            {{ encounterStudentCptCode?.Minutes }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="noEncounterStudentCptCodes">
+            <h3 style="text-align: center;">No data to display.</h3>
+        </div>
+    </div>
+
+    <!-- If Editing CptCodes -->
+    <div *ngIf="isEditing" class="miles-form padded">
+        <h4 class="header">PROCEDURE CODES</h4>
+
+        <!-- Options for adding cptcodes -->
+        <div class="row" *ngIf="cptCodeOptions">
+            <div class="col-md-6">
+                <mt-multiselect
+                class="cpt-codes-select"
+                    [items]="cptCodeOptions"
+                    [showSelectAllButtons]="true"
+                    [maxToShowInSelectedText]="1"
+                    [autoClose]="true"
+                    [filterMode]="false"
+                    entity="Procedure Codes"
+                    placeholder="Select Codes"
+                ></mt-multiselect>
+            </div>
+        </div>
+        <br />
+        <ng-container *ngIf="getSelectedCptCodes().length">
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="button" Class="btn btn-flat btn-success" (click)="addCptCodes()">
+                        Add Codes
+                    </button>
+                </div>
+            </div>
+            <br />
+        </ng-container>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="no-pointer">
+                        <th>
+                            <b>Code</b>
+                        </th>
+                        <th>
+                            <b>Description</b>
+                        </th>
+                        <th>
+                            <b>Time</b>
+                        </th>
+                        <th class="text-center">
+                            <b>Remove</b>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="encounterStudentCptCodes">
+                    <tr class="no-pointer" *ngFor="let encounterStudentCptCode of encounterStudentCptCodes">
+                        <td class="ellipsis">
+                            {{ encounterStudentCptCode?.CptCode?.Code }}
+                        </td>
+                        <td class="ellipsis">
+                            {{ encounterStudentCptCode?.CptCode?.Description }}
+                        </td>
+                        <td class="ellipsis">
+                            <app-encounter-student-cpt-codes-time-cell
+                                [encounterStudentCptCode]="encounterStudentCptCode"
+                            ></app-encounter-student-cpt-codes-time-cell>
+                        </td>
+                        <td class="ellipsis">
+                            <div *ngIf="encounterStudentCptCode.Archived" class="text-center">
+                                <button
+                                    type="button"
+                                    (mtConfirm)="archiveEncounterStudentCptCode(encounterStudentCptCode)"
+                                    [mtConfirmOptions]="unarchiveConfirm"
+                                >
+                                    <i class="fa fa-undo fa-2x"></i>
+                                </button>
+                            </div>
+                            <div *ngIf="!encounterStudentCptCode.Archived" class="text-center">
+                                <button type="button" (click)="archiveEncounterStudentCptCode(encounterStudentCptCode)">
+                                    <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="noEncounterStudentCptCodes">
+            <h3 style="text-align: center;">No data to display.</h3>
+        </div>
+
+        <!-- Lock in editing mode for new EncounterCptCode -->
+        <div *ngIf="!isAdding">
+            <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+                Close
+            </button>
+            <!-- Show Archived Checkbox -->
+            <div *ngIf="encounterStudent.Id > 0" class="pull-right">
+                <mt-dynamic-field [field]="getArchivedField()" (valueChanges)="includeArchived = $event; getEncounterStudentCptCodes()"></mt-dynamic-field>
+            </div>
+        </div>
+    </div>
+</div>
+<br *ngIf="isCardOpen" />

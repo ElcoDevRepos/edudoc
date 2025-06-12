@@ -1,0 +1,74 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>90 Day Progress Reports</h2>
+    </div>
+</div>
+
+<!-- Search Bar -->
+<div>
+    <mt-dynamic-field *ngIf="fieldFlag" [field]="pendingOrCompletedField" (valueChanges)="onPendingOrCompletedSelected($event)" />
+    <mt-dynamic-field *ngIf="fieldFlag && studentField" [field]="studentField" (valueChanges)="onStudentSelected($event)" />
+    <button class="btn" (click)="clearSelection()">Clear Selection</button>
+    <br />
+    <br />
+</div>
+
+<mt-entity-list
+    [entities]="studentsWithProgressReport"
+    [total]="total"
+    [itemsPerPage]="itemsPerPage"
+    [(currentPage)]="currentPage"
+    (pageChanged)="getProgressReports()"
+    [entityListConfig]="entityListConfig"
+>
+    <ng-template mtEntityListHeader>
+        <th [style.width]="'15%'">Student</th>
+        <th [style.width]="'15%'">Q1</th>
+        <th [style.width]="'15%'">Q2</th>
+        <th [style.width]="'15%'">Q3</th>
+        <th [style.width]="'15%'">Q4</th>
+        <th *ngIf="pendingOrCompleted == PendingOrCompletedEnum.Completed" [style.width]="'20%'">Previous Reports</th>
+        <th *ngIf="pendingOrCompleted == PendingOrCompletedEnum.Pending" [style.width]="'20%'"></th>
+    </ng-template>
+    <ng-template mtEntityListItem let-columns="columns" let-entity>
+        <tr [style.cursor]="'default'">
+            <td [style.width]="'15%'">{{ entity.LastName }}, {{ entity.FirstName }}</td>
+            <!-- First Quarter-->
+            <ng-template *ngTemplateOutlet="quarter; context: { entity: entity, quarter: QuarterEnum.First }" />
+            <!-- Second Quarter-->
+            <ng-template *ngTemplateOutlet="quarter; context: { entity: entity, quarter: QuarterEnum.Second }" />
+            <!-- Third Quarter-->
+            <ng-template *ngTemplateOutlet="quarter; context: { entity: entity, quarter: QuarterEnum.Third }" />
+            <!-- Fourth Quarter-->
+            <ng-template *ngTemplateOutlet="quarter; context: { entity: entity, quarter: QuarterEnum.Fourth }" />
+            <!-- previous reports-->
+            <td *ngIf="pendingOrCompleted === PendingOrCompletedEnum.Completed" [style.width]="'20%'">
+                <mt-dynamic-field
+                    *ngIf="entity.PreviousProgressReports.length"
+                    [field]="getPreviousReportsDropdown(entity.PreviousProgressReports)"
+                    (valueChanges)="progressReportSelectedById(entity.StudentId, $event)"
+                ></mt-dynamic-field>
+                <ng-container *ngIf="!entity.PreviousProgressReports.length">No Previous Reports</ng-container>
+            </td>
+            <td *ngIf="pendingOrCompleted === PendingOrCompletedEnum.Pending" [style.width]="'20%'"></td>
+        </tr>
+    </ng-template>
+</mt-entity-list>
+
+<!-- Single Quarter Cell -->
+<ng-template #quarter let-entity="entity" let-quarter="quarter">
+    <td [style.width]="'15%'" *ngIf="entity.UnnecessaryQuarters[quarter]; else necessary" class="unnecessary">No Encounters</td>
+    <ng-template #necessary>
+        <td *ngIf="pendingOrCompleted == PendingOrCompletedEnum.Pending" [style.width]="'15%'">
+            <p *ngIf="entity.CompletedQuarters[quarter]; else add">Completed</p>
+            <ng-template #add>
+                <a (click)="progressReportSelected(entity.StudentId, quarter, entity.SupervisorId)" style="cursor: pointer"> Add </a> </ng-template
+            ><br />
+        </td>
+        <td *ngIf="pendingOrCompleted == PendingOrCompletedEnum.Completed" [style.width]="'15%'">
+            <a (click)="progressReportSelected(entity.StudentId, quarter, entity.SupervisorId)" style="cursor: pointer">
+                {{ getProgressReportsString(entity, quarter) }} </a
+            ><br />
+        </td>
+    </ng-template>
+</ng-template>

@@ -1,0 +1,7 @@
+CREATE TABLE [dbo].[Notes]
+(
+	[Id] INT NOT NULL  IDENTITY, 
+    [Title] VARCHAR(100) NOT NULL DEFAULT '', 
+    [NoteText] VARCHAR(5000) NOT NULL DEFAULT '', 
+    CONSTRAINT [PK_Notes] PRIMARY KEY ([Id])
+)

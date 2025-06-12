@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 [mtSetTitle]="headerObservable">
+            <mt-route-back-button />
+            {{header}}
+        </h2>
+    </div>
+</div>
+<div>
+    <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+    <br />
+</div>
+<div>
+    <mt-search-filter-select [items]="schoolDistrictSearchFilterItems" entity="School District"
+        (selectionChanged)="getUsers()"> </mt-search-filter-select>
+    <div class="pull-right">
+        <mt-dynamic-field [field]="getArchivedField()" (valueChanges)="includeArchived = $event; search(query)">
+        </mt-dynamic-field>
+    </div>
+</div>
+
+<mt-entity-list [entities]="users" [total]="total" [(currentPage)]="currentPage" (pageChanged)="getUsers()"
+    (itemSelectedEvent)="userSelected($event)" (columnSortedEvent)="columnSorted($event)"
+    (itemDeletedEvent)="userDeleted($event)" [entityListConfig]="entityListConfig">
+</mt-entity-list>
+
+<div *ngIf="canAddUser" class="fab-wrap-b-r">
+    <a class="btn btn-primary btn-fab-lg" [routerLink]="[pathRoot, 'add']">
+        <span class="fa fa-plus"></span>
+    </a>
+</div>

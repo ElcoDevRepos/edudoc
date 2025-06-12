@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-md-12">
+        <div *ngIf="encounter && encounter.Id > 0">
+            <div class="row">
+                <div class="col-md-12">
+                    <app-encounter-basic-info
+                        [encounter]="encounter"
+                        [individualEncounterId]="encounterStudentId"
+                        [reasonForServiceOptions]="reasonForServiceOptions"
+                        [canEdit]="canEdit"
+                        [caseLoadOnly]="caseLoadOnly"
+                        [addStudentId]="addStudentId"
+                        (update)="getEncounter()"
+                    ></app-encounter-basic-info
+                    ><br />
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<mt-modal-wrapper *ngIf="showModal" [options]="modalOptions" (cancelClick)="cancelCreate()">
+    <div *ngIf="!selectedServiceTypeId || !requiresEvalType">
+        <h4>SELECT A SERVICE TYPE</h4>
+        <mt-dynamic-field [field]="getServiceTypeField()" (valueChanges)="handleServiceTypeSelection($event)"></mt-dynamic-field>
+        <br />
+    </div>
+    <mt-dynamic-field *ngIf="requiresEvalType" [field]="getEvaluationTypeField()" (valueChanges)="selectedEvaluationTypeId = $event"></mt-dynamic-field>
+    <br />
+    <button
+        type="button"
+        [disabled]="createDisabled"
+        class="btn btn-success"
+        (click)="createEncounter()"
+    >
+        Create Encounter
+    </button>
+    <button type="button" class="btn btn-default" (click)="cancelCreate()">Cancel</button>
+</mt-modal-wrapper>

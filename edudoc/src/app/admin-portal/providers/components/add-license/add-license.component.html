@@ -1,0 +1,26 @@
+<div *ngIf="!isEditing" class="miles-form padded">
+    <h4>LICENSES</h4>
+    <ul *ngIf="items?.length" class="list-group">
+        <li *ngFor="let item of items" class="list-group-item" (click)="editItem(item)" [style.cursor]="'pointer'">
+            <div [innerHTML]="getItemContents(item)"></div>
+        </li>
+    </ul>
+    <em *ngIf="!items?.length">No Licenses</em>
+    <div [hidden]="!canEdit" class="fab-wrap">
+        <button type="button" class="btn btn-primary btn-fab-md btn-fab-center" (click)="addItem()">
+            <span class="fa fa-plus"></span>
+        </button>
+    </div>
+</div>
+
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4>ADD LICENSE</h4>
+    <mt-dynamic-form [config]="formObject" (formCreated)="formCreated($event)" (submitted)="formSubmitted($event)">
+        <button type="submit" class="btn btn-flat btn-success">
+            Save
+        </button>
+        <button type="button" class="btn btn-flat btn-default" (click)="close()">
+            Cancel
+        </button>
+    </mt-dynamic-form>
+</div>

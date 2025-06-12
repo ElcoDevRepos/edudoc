@@ -1,0 +1,21 @@
+<div *ngIf="diagnosisCode">
+    <div class="row">
+        <div class="col-md-6">
+            <app-diagnosis-code-basic-info
+                [diagnosisCode]="diagnosisCode"
+                [canEdit]="canEdit"
+                *ngIf="diagnosisCode != null"
+            ></app-diagnosis-code-basic-info>
+            <br />
+        </div>
+
+        <div class="col-md-6">
+            <app-diagnosis-associations-list
+                [diagnosisCode]="diagnosisCode"
+                [canEdit]="canEdit"
+                *ngIf="diagnosisCode != null"
+            ></app-diagnosis-associations-list>
+        </div>
+    </div>
+    <a routerLink="/diagnosis-codes" class="btn btn-default">Close</a>
+</div>

@@ -1,0 +1,9 @@
+<div *ngIf="providerCaseUpload">
+    <app-provider-case-upload-issues-basic-info
+        [providerCaseUpload]="providerCaseUpload"
+        [isMerging]="isMerging"
+    ></app-provider-case-upload-issues-basic-info>
+</div>
+<br />
+
+<a routerLink="/school-district-admin/students/case-upload-issues" class="btn btn-default">Close</a>

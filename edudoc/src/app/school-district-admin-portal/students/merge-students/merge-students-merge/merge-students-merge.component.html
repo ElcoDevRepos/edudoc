@@ -1,0 +1,40 @@
+<div class="miles-form padded">
+    <h4>
+        MERGE STUDENTS
+    </h4>
+    <div *ngIf="studentForm">
+        <form [formGroup]="studentForm" (ngSubmit)="merge()">
+                <div>
+                    <span class="control-label">
+                        <span class="dynamic-field-label">
+                            <label>Parental Consent Status</label>
+                        </span>
+                    </span>
+                    {{latestConsentToMerge?.StudentParentalConsentType.Name}}
+                </div>
+                <div>
+                    <span class="control-label">
+                        <span class="dynamic-field-label">
+                            <label>Parental Consent Effective Date</label>
+                        </span>
+                    </span>
+                    {{latestConsentToMerge ? (latestConsentToMerge.ParentalConsentEffectiveDate | date) : ''}}
+                </div>
+            <div *ngFor="let checkbox of formCheckboxes">
+                <div class="row" style="padding-left: 5px;">
+                    <div class="col-md-7">
+                        <label>{{ checkbox.label }}</label>
+                    </div>
+                    <div class="col-md-5 studentField">
+                        {{ checkbox.value }}
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <button type="submit" mtDisableClickDuringHttpCalls class="btn btn-flat btn-success">
+                Merge Student
+            </button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<Project Sdk="MSBuild.Sdk.SqlProj/3.1.2">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <SqlServerVersion>SqlAzure</SqlServerVersion>
+        <RunScriptsFromReferences>True</RunScriptsFromReferences>
+        <RunSqlCodeAnalysis>True</RunSqlCodeAnalysis>
+        <!-- For additional properties that can be set here, please refer to https://github.com/rr-wfm/MSBuild.Sdk.SqlProj#model-properties -->
+    </PropertyGroup>
+
+    <ItemGroup>
+  <SqlCmdVariable Include="IncludeDummyData">
+    <Value>False</Value>
+  </SqlCmdVariable>
+</ItemGroup>
+
+
+    <ItemGroup>
+        <Content Include="../SQL/Schemas/*.sql" />
+        <Content Include="../SQL/Tables/*.sql" />
+        <Content Include="../SQL/UserDefinedTypes/*.sql" />
+        <Content Include="../SQL/StoredProcedures/*.sql" />
+        <Content Include="../SQL/Functions/*.sql" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PostDeploy Include="../SQL/Script.PostDeployment.TableValues.sql" />
+    </ItemGroup>
+
+    <PropertyGroup>
+  <TargetServerName>(localdb)\ProjectsV13</TargetServerName>
+  <TargetDatabaseName>edudoc-temp.SQL</TargetDatabaseName>
+  <IncludeCompositeObjects>True</IncludeCompositeObjects>
+  <BlockOnPossibleDataLoss>False</BlockOnPossibleDataLoss>
+  <DropObjectsNotInSource>True</DropObjectsNotInSource>
+</PropertyGroup>
+
+</Project>

@@ -1,0 +1,58 @@
+<div class="miles-card padded">
+    <h4>REFERRALS</h4>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th>
+                        <b>View Referral</b>
+                    </th>
+                    <th>
+                        <b>Service Area</b>
+                    </th>
+                    <th>
+                        <b>Therapist's Name</b>
+                    </th>
+                    <th>
+                        <b>Effective Date From</b>
+                    </th>
+                    <th>
+                        <b>Effective Date To</b>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let referral of studentReferrals; let i = index">
+                    <td class="text-center">
+                        <span
+                            class="fa fa-fw fa-file"
+                            (click)="viewProviderReferral(i)"
+                        ></span>
+                    </td>
+                    <td>
+                        {{ referral.ServiceCode?.Name }}
+                    </td>
+                    <td>
+                        {{ providerNameFormattingFunction(referral) }}
+                    </td>
+                    <td>
+                        {{ referral.EffectiveDateFrom | date: 'mediumDate' }}
+                    </td>
+                    <td *ngIf="referral.EffectiveDateTo !== null">
+                        {{ referral.EffectiveDateTo | date: 'mediumDate' }}
+                    </td>
+                    <td *ngIf="!referral.EffectiveDateTo">
+                        Active
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div *ngIf="noReferrals">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+
+</div>
+

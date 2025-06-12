@@ -1,0 +1,396 @@
+include:
+    # Uncomment for Azure setup
+    - project: 'milestemplates/gitlab-ci-templates'
+      ref: master
+      file: 'api/.api-cloud-setup.yml'
+    - project: 'milestemplates/gitlab-ci-templates'
+      ref: master
+      file: '.ci-normal-vars.yml'
+    # Uncomment for the frontend
+    - project: 'milestemplates/gitlab-ci-templates'
+      ref: master
+      file: '.ci-frontend.yml'
+    # Uncomment for the backend
+    - project: 'milestemplates/gitlab-ci-templates'
+      ref: master
+      file: '.ci-api.yml'
+    # Uncomment for SQL
+    - project: 'milestemplates/gitlab-ci-templates'
+      ref: master
+      file: '.ci-sql.yml'
+    ## Unit Testing
+    - project: 'milestemplates/gitlab-ci-templates'
+      ref: master
+      file: 'tests/.dotnet-test.yml'
+    ## Acunetix Advance Security Scan
+    - project: 'milestemplates/gitlab-ci-templates'
+      ref: master
+      file: '.ci-acunetix.yml'
+
+parse_connection_string:
+  variables:
+    CNSTRING: $TEST_CNSTRING
+
+change_smtp_host:breckenridge:win2019:
+  variables:
+    API_CONTAINER_NAME: '$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-api-$CI_COMMIT_REF_NAME'
+  tags:
+      - test-api03
+
+restore_smtp_host:breckenridge:win2019:
+  variables:
+    API_CONTAINER_NAME: '$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-api-$CI_COMMIT_REF_NAME'
+  tags:
+      - test-api03
+
+variables:
+    Solution: Edudoc.sln
+    MSBUILDChoice: 'MSBUILD15' # This can be MSBUILD14, MSBUILD15, or MSBUILD16
+    SQLBUILDChoice: 'MSBUILD14' # This can be MSBUILD14, MSBUILD15, or MSBUILD16
+    DB_NAME: 'Edudoc.SQL'
+    DEV_API_PORT: '9508'
+    DEV_HOST_NAME: 'edudoc.testing.milesapp.com'
+    DEV_DB_SERVER_WITHDOMAIN: 'test-sql2016a.miles.office'
+    DEV_DB_SERVER: 'test-sql2016a'
+    STAGING_API_PORT: '9506'
+    STAGING_HOST_NAME: 'edudoc.staging.milesapp.com'
+    PROD_HOST_NAME: 'hpcohio.com'
+    DEFAULTNET45APISERVERTYPE: 'WIN2019'
+    PRODCOREAPISERVERTYPE: 'AZURE'
+    DEV_2019_API_SERVER: '192.168.0.32'
+
+deployapi-staging:core:win2019:
+    tags:
+        - staging-api02
+    variables:
+        DOCKER_MEMORY: 1073741824
+
+.buildjob: &buildjob
+    variables:
+        GIT_STRATEGY: none
+    image: mcr.microsoft.com/dotnet/sdk::8.0-nanoserver-1809
+    script:
+        - echo building...
+        - dotnet restore -s https://vanir.rmm.milesapp.com/repository/milesnuget-public/ -s https://api.nuget.org/v3/index.json -r win-x64 src/${env:JobProjectName}/${env:JobProjectName}.csproj
+        - cd src/${env:JobProjectName}
+        - dotnet build -c production --no-restore -f net8.0 -r win-x64
+        - docker login --username "${env:Docker_User_Name}" --password "${env:Docker_Password}" ${env:CI_REGISTRY}
+        - docker build --pull --build-arg ENVIRONMENT="${env:EnvironmentSetting}" --build-arg CONFIGURATION="${env:ConfigurationType}"  -t "${env:IMAGENAME}" ${env:JobDockerfile} .
+        - docker push "${env:IMAGENAME}"
+        - cd ../../
+
+deployapi-test:core:win2019:
+    tags:
+        - test-api03
+
+#############  New Roster upload Job ################
+build-roster-upload-job-testing:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Testing'
+        EnvironmentSetting: 'Testing'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:testing-roster-upload-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'RosterUploadJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - develop
+
+build-roster-upload-job-staging:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Staging'
+        EnvironmentSetting: 'Staging'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:staging-roster-upload-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'RosterUploadJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - staging
+
+azure-build-deploy-RosterUploadJob:
+   extends: .azure-build-deploy-webjob
+   variables:
+       PROJECT_FILE: 'src/RosterUploadJob/RosterUploadJob.csproj'
+       JOB_TYPE: 'Triggered'
+       JOB_NAME: 'RosterUploadJob'
+
+# build-roster-upload-job-prod:win:
+#     <<: *buildjob
+#     stage: build
+#     variables:
+#         ConfigurationType: 'Production'
+#         EnvironmentSetting: 'Production'
+#         IMAGENAME: '$CI_REGISTRY_IMAGE:master-roster-upload-job'
+#         JobDockerfile: '-fDockerfile'
+#         JobProjectName: 'RosterUploadJob'
+#     tags:
+#         - windocker2019
+#         - win-2019
+#     only:
+#         - master
+
+#############  Billing Schedules Job ################
+build-billing-schedules-job-testing:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Testing'
+        EnvironmentSetting: 'Testing'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:testing-billing-schedules-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'BillingSchedulesJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - develop
+
+build-billing-schedules-job-staging:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Staging'
+        EnvironmentSetting: 'Staging'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:staging-billing-schedules-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'BillingSchedulesJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - staging
+
+azure-build-deploy-BillingSchedulesJob:
+   extends: .azure-build-deploy-webjob
+   variables:
+       PROJECT_FILE: 'src/BillingSchedulesJob/BillingSchedulesJob.csproj'
+       JOB_TYPE: 'Triggered'
+       JOB_NAME: 'BillingSchedulesJob'
+
+#############  Daily Scheduled Therapies Job ################
+build-therapy-schedule-job-testing:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Testing'
+        EnvironmentSetting: 'Testing'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:testing-therapy-schedule-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'TherapySchedulesJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - develop
+
+build-therapy-schedule-job-staging:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Staging'
+        EnvironmentSetting: 'Staging'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:staging-therapy-schedule-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'TherapySchedulesJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - staging
+
+azure-build-deploy-TherapySchedulesJob:
+   extends: .azure-build-deploy-webjob
+   variables:
+       PROJECT_FILE: 'src/TherapySchedulesJob/TherapySchedulesJob.csproj'
+       JOB_TYPE: 'Triggered'
+       JOB_NAME: 'TherapySchedulesJob'
+
+# build-therapy-schedule-job-prod:win:
+#     <<: *buildjob
+#     stage: build
+#     variables:
+#         ConfigurationType: 'Production'
+#         EnvironmentSetting: 'Production'
+#         IMAGENAME: '$CI_REGISTRY_IMAGE:master-therapy-schedule-job'
+#         JobDockerfile: '-fDockerfile'
+#         JobProjectName: 'TherapySchedulesJob'
+#     tags:
+#         - windocker2019
+#         - win-2019
+#     only:
+#         - master
+
+#############  Annual Trainings Job ################
+build-annual-trainings-job-testing:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Testing'
+        EnvironmentSetting: 'Testing'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:testing-annual-trainings-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'AnnualTrainingsJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - develop
+
+build-annual-trainings-job-staging:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Staging'
+        EnvironmentSetting: 'Staging'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:staging-annual-trainings-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'AnnualTrainingsJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - staging
+
+azure-build-deploy-AnnualTrainingsJob:
+   extends: .azure-build-deploy-webjob
+   variables:
+       PROJECT_FILE: 'src/AnnualTrainingsJob/AnnualTrainingsJob.csproj'
+       JOB_TYPE: 'Triggered'
+       JOB_NAME: 'AnnualTrainingsJob'
+
+# build-annual-trainings-job-prod:win:
+#     <<: *buildjob
+#     stage: build
+#     variables:
+#         ConfigurationType: 'Production'
+#         EnvironmentSetting: 'Production'
+#         IMAGENAME: '$CI_REGISTRY_IMAGE:master-annual-trainings-job'
+#         JobDockerfile: '-fDockerfile'
+#         JobProjectName: 'AnnualTrainingsJob'
+#     tags:
+#         - windocker2019
+#         - win-2019
+#     only:
+#         - master
+
+
+### Pending Referrals Job ###
+build-pending-referrals-job-testing:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Testing'
+        EnvironmentSetting: 'Testing'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:testing-pending-referrals-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'PendingReferralsJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - develop
+
+build-pending-referrals-job-staging:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Staging'
+        EnvironmentSetting: 'Staging'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:staging-pending-referrals-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'PendingReferralsJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - staging
+
+azure-build-deploy-PendingReferralsJob:
+   extends: .azure-build-deploy-webjob
+   variables:
+       PROJECT_FILE: 'src/PendingReferralsJob/PendingReferralsJob.csproj'
+       JOB_TYPE: 'Triggered'
+       JOB_NAME: 'PendingReferralsJob'
+
+### Esc Report Job ###
+build-esc-report-job-testing:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Testing'
+        EnvironmentSetting: 'Testing'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:testing-esc-report-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'EscReportJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - develop
+
+build-esc-report-job-staging:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Staging'
+        EnvironmentSetting: 'Staging'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:staging-esc-report-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'EscReportJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - staging
+
+azure-build-deploy-EscReportJob:
+   extends: .azure-build-deploy-webjob
+   variables:
+       PROJECT_FILE: 'src/EscReportJob/EscReportJob.csproj'
+       JOB_TYPE: 'Triggered'
+       JOB_NAME: 'EscReportJob'
+
+#############  Daily Activity Summary Job ################
+build-activity-summary-job-testing:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Testing'
+        EnvironmentSetting: 'Testing'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:testing-activity-summary-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'ActivitySummaryJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - develop
+
+build-activity-summary-job-staging:win:
+    <<: *buildjob
+    stage: build
+    variables:
+        ConfigurationType: 'Staging'
+        EnvironmentSetting: 'Staging'
+        IMAGENAME: '$CI_REGISTRY_IMAGE:staging-activity-summary-job'
+        JobDockerfile: '-fDockerfile'
+        JobProjectName: 'ActivitySummaryJob'
+    tags:
+        - windocker2019
+        - win-2019
+    only:
+        - staging
+
+azure-build-deploy-ActivitySummaryJob:
+   extends: .azure-build-deploy-webjob
+   variables:
+       PROJECT_FILE: 'src/ActivitySummaryJob/ActivitySummaryJob.csproj'
+       JOB_TYPE: 'Triggered'
+       JOB_NAME: 'ActivitySummaryJob'

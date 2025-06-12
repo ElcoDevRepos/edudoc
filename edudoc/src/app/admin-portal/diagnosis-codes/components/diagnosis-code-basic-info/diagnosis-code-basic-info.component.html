@@ -1,0 +1,33 @@
+<div
+    class="miles-editable miles-card padded"
+    *ngIf="!isEditing && diagnosisCode.Id > 0"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    (click)="edit()"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4>
+        DIAGNOSIS CODE INFO
+        <span class="pull-right" *ngIf="canEdit">
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+    <mt-dynamic-view [config]="viewOnly"></mt-dynamic-view>
+</div>
+<div *ngIf="formObject && isEditing" class="miles-form padded">
+    <mt-dynamic-form
+        [config]="formObject"
+        ([isEditing])="(isEditing)"
+        (submitted)="formSubmitted($event)"
+        (formCreated)="formReady.emit($event); formGroup = $event"
+    >
+        <div *ngIf="!isAdding">
+            <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+                Save
+            </button>
+            <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+                Cancel
+            </button>
+        </div>
+    </mt-dynamic-form>
+</div>

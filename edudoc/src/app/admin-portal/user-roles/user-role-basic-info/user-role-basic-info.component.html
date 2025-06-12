@@ -1,0 +1,27 @@
+<div
+    class="miles-editable miles-card padded"
+    *ngIf="!isEditing && userRole.Id > 0"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    (click)="edit()"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4>
+        USER ROLE INFO
+        <span class="pull-right" *ngIf="canEdit">
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+    <mt-dynamic-view [config]="viewOnly"></mt-dynamic-view>
+</div>
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4>USER ROLE INFO</h4>
+    <mt-dynamic-form [config]="formObject" ([isEditing])="(isEditing)" (submitted)="formSubmitted($event)">
+        <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+            Save
+        </button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </mt-dynamic-form>
+</div>

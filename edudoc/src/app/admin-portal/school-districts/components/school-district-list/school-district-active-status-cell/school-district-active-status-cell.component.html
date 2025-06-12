@@ -1,0 +1,10 @@
+<div *ngIf="isActiveStatus" style="display: inline-block; width: 120px;">
+    <button id="schoolDistrictActiveStatusCell" class="btn btn-flat btn-success" (click)="buttonClicked($event)">
+        <span>Active</span>
+    </button>
+</div>
+<div *ngIf="!isActiveStatus" style="display: inline-block; width: 120px;">
+    <button id="schoolDistrictInactiveStatusCell" class="btn btn-flat btn-danger" (click)="buttonClicked($event)">
+        <span>Inactive</span>
+    </button>
+</div>

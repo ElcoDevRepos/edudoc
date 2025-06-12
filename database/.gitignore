@@ -1,0 +1,27 @@
+# SQL Server Database Project ignores
+*.dbmdl
+*.jfm
+*.user
+*.dacpac
+*.sqlproj.user
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+build/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio cache/options
+.vs/
+*.suo
+*.dtbcache
+*.dtbcache.json
+
+# SSDT schema compare
+*.scmp
+
+# Deployment profiles (usually contain sensitive info)
+*.publish.xml
+*.publish.sql 

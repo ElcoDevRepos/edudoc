@@ -1,0 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Http;
+using API.Claims;
+using Service.Audit;
+
+namespace API.Audit
+{
+    [RoutePrefix("api/v1/changeLogs")]
+    [Restrict(ClaimTypes.Audit, ClaimValues.All)]
+    public class AuditController : AuditAbstractController
+    {
+        public AuditController(IAuditService auditService) : base(auditService) {
+        }
+    }
+}

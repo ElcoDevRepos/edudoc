@@ -1,0 +1,31 @@
+<div class="miles-card padded" *ngIf="!isEditing">
+    <h4>
+        DO NOT BILL
+    </h4>
+    <ul class="list-group" *ngIf="providerInactivityDates && providerInactivityDates.length">
+        <li class="list-group-item" (click)="editProviderInactivityDate(pid)" *ngFor="let pid of providerInactivityDates">
+            {{ pid.ProviderDoNotBillReason?.Name }},
+            {{ displayDate(pid.ProviderInactivityStartDate) }} - {{ displayDate(pid.ProviderInactivityEndDate) }}
+            <i class="fa fa-trash fa-lg pull-right" (mtConfirm)="archiveProviderInactivityDate(pid)" [mtConfirmOptions]="archiveConfirm"> </i>
+        </li>
+    </ul>
+    <span *ngIf="!providerInactivityDates || !providerInactivityDates.length"><i>No Inactivity Dates</i></span>
+    <div class="fab-wrap">
+        <button type="button" class="btn btn-primary btn-fab-md btn-fab-center" (click)="addProviderInactivityDate()">
+            <span class="fa fa-plus"></span>
+        </button>
+    </div>
+</div>
+
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4>ADD PROVIDER INACTIVITY DATE</h4>
+    <mt-dynamic-form [config]="formObject" (formCreated)="formCreated($event)" (submitted)="formSubmitted($event)">
+        <button type="submit" class="btn btn-flat btn-success">
+            Save
+        </button>
+        <button type="button" class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </mt-dynamic-form>
+</div>
+<br />

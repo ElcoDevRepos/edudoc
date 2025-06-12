@@ -1,0 +1,19 @@
+<div class="miles-editable miles-card padded" [style.cursor]="canEdit ? 'pointer' : 'default'" (click)="edit()" *ngIf="!isEditing && provider.Id > 0">
+    <h4>PROVIDER INFO</h4>
+    <div style="padding-left: 5px"><label>ID: </label> {{ provider.Id }} <br /></div>
+    <mt-dynamic-view [config]="viewOnly"></mt-dynamic-view>
+    <label style="padding-left: 5px">LAST DOCUMENTATION DATE: </label> {{ displayLastDocumentationDate() }}
+</div>
+<div class="miles-form padded" *ngIf="isEditing">
+    <h4>PROVIDER INFO</h4>
+    <div><label>Id: </label> {{ provider.Id }} <br /></div>
+    <mt-dynamic-form [config]="formObject" (formCreated)="formGroup = $event" ([isEditing])="(isEditing)" (submitted)="formSubmitted($event)">
+        <mt-dynamic-field [field]="getMedicaidApprovalControl()" [form]="formGroup" [overrideForm]="true"> </mt-dynamic-field>
+        <ng-container *ngIf="provider.Id">
+            <label>Last Documentation Date: </label> {{ displayLastDocumentationDate() }}
+            <br />
+        </ng-container>
+        <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">Save</button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">Cancel</button>
+    </mt-dynamic-form>
+</div>

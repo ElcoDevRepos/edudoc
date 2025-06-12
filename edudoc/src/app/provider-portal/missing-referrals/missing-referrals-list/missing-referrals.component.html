@@ -1,0 +1,26 @@
+<h3 mtSetTitle>Create Referrals Not on Caseload</h3>
+<div class="row">
+    <div class="col-md-2">
+        <mt-dynamic-field *ngIf="providerField" [field]="providerField" (valueChanges)="setProviderIdFilter($event)">
+        </mt-dynamic-field>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <p style="font-size: 14px;line-height:1.42;color:#333;"><b>Search Students</b></p>
+        <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+    </div>
+    <br />
+</div>
+<br />
+
+<mt-entity-list
+    [entities]="providerStudents"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    (pageChanged)="getStudents()"
+    (columnSortedEvent)="columnSorted($event)"
+    (itemSelectedEvent)="studentSelected($event)"
+    [entityListConfig]="entityListConfig"
+>
+</mt-entity-list>

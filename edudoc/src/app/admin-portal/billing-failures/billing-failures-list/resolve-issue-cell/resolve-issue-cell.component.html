@@ -1,0 +1,9 @@
+<div *ngIf="entity" style="display: inline-block; width: 120px;">
+    <div *ngIf="!entity.IssueResolved" class="btn-group-vertical">
+        <!-- resolve button -->
+        <button type="button" class="btn btn-flat btn-success" (click)="resolveIssue($event)" title="Resolve">
+            <i class="fa fa-lg fa-check-circle"></i>
+            Resolve
+        </button>
+    </div>
+</div>

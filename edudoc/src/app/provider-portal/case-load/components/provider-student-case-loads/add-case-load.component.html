@@ -1,0 +1,65 @@
+<div
+    class="miles-editable miles-card padded"
+    *ngIf="!isEditing && caseLoad.Id > 0"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    (click)="edit()"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4>
+        PLAN TYPE INFO
+        <span class="pull-right" *ngIf="canEdit">
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+    <div style="padding-left: 5px;">
+        <label>PLAN TYPE: </label>
+        <span>{{ caseLoad.StudentType ? caseLoad.StudentType.Name : '' }}</span>
+    </div>
+    <div *ngIf="isBillable" style="padding-left: 5px;">
+        <label>ICD-10 CODE: </label>
+        <span>{{ caseLoad.DiagnosisCode ? caseLoad.DiagnosisCode.Code : 'None Selected' }}</span>
+    </div>
+    <div *ngIf="caseLoad.IepStartDate || caseLoad.IepEndDate" style="padding-left: 5px;">
+        <label>IEP DATE: </label>
+        <span>{{ caseLoad.IepStartDate ? (caseLoad.IepStartDate | date: 'shortDate') : 'None' }} - {{ caseLoad.IepEndDate ? (caseLoad.IepEndDate | date: 'shortDate') : 'None' }}</span>
+    </div>
+    <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+        Cancel
+    </button>
+</div>
+
+<div class="miles-form padded" *ngIf="formObject && isEditing">
+    <h4>SELECT PLAN TYPE</h4>
+    <mt-dynamic-form
+        (formCreated)="formCreated($event)"
+        [config]="formObject"
+        [removeControlsOnDestroy]="false"
+        (submitted)="formSubmitted($event)"
+    >
+        <div *ngIf="addingBillable && !isNursingProvider">
+            <app-case-load-goals [caseLoad]="caseLoad" [canEdit]="true" [isAdding]="true"></app-case-load-goals>
+            <br>
+        </div>
+        <div *ngIf="addingBillable && isSpeechProvider">
+            <app-case-load-methods [caseLoad]="caseLoad" [canEdit]="true" [isAdding]="true"></app-case-load-methods>
+            <br>
+        </div>
+        <div *ngIf="addingBillable && !isNursingProvider">
+            <app-case-load-cpt-codes [caseLoad]="caseLoad" [canEdit]="true" [isAdding]="true"></app-case-load-cpt-codes>
+            <br>
+        </div>
+        <div *ngIf="addingBillable && isNursingProvider">
+            <app-case-load-scripts [caseLoad]="caseLoad" [canEdit]="true" [draftMode]="true" (draftScriptsChanged)="scriptsChanged($event)" (editing)="scriptsEditing = $event"></app-case-load-scripts>
+            <br>
+        </div>
+        <div *ngIf="!subMenuEditing">
+            <button type="submit" Class="btn btn-flat btn-success">
+                Save
+            </button>
+            <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+                Cancel
+            </button>
+        </div>
+    </mt-dynamic-form>
+</div>

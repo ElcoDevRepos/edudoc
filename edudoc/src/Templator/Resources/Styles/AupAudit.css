@@ -1,0 +1,61 @@
+.audit-table {
+    width: 100%;
+}
+.body {
+    background-color: #f9f9f9;
+    border-top-color: #888;
+    border-top-width: thin;
+    border-top-style: solid;
+    page-break-inside: avoid;
+    padding:10px;
+}
+
+.body:nth-of-type(even) {
+    background-color: #ececec;
+}
+
+.headers {
+    background-color: #ccc;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.provider-signature {
+    border-bottom: 1px solid currentColor; /* Or whatever color you want */
+    text-decoration: none;
+}
+
+.row {
+    height: 100%;
+    min-height: 0;
+}
+
+.space-above {
+    margin-top: 15px;
+}
+
+.big-row {
+    max-height: 1000px;
+    overflow: hidden;
+}
+
+.invoice-date {
+    width: 200px;
+    text-align: center;
+}
+
+.single-page {
+    page-break-after: always;
+}
+
+.dotted-line-header {
+    border-top-width: 1px;
+    border-top-style: dotted;
+    border-top-color: #eee;
+}
+
+.dotted-line-body {
+    border-top-width: 1px;
+    border-top-style: dotted;
+    border-top-color: #ccc;
+}

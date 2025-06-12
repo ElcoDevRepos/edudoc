@@ -1,0 +1,68 @@
+<div class="miles-card padded">
+    <h4 class="heading-with-button">
+        {{ schoolDistrict.Name }}
+        <button class="btn btn-sm btn-primary" *ngIf="isDistrictAdmin" type="button" (click)="toggleModal()">
+            Change School District
+        </button>
+    </h4>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <span [innerHTML]="getUserLabel('HPC Account Manager', schoolDistrict.AccountManager)"></span>
+            <br />
+            <div *ngIf="schoolDistrict.AccountManager">
+                <label>EMAIL: </label> {{ schoolDistrict.AccountManager.Email }}
+                <br />
+                <label>PHONE: </label> {{ getUserPhone(schoolDistrict.AccountManager) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <span [innerHTML]="getUserLabel('Treasurer', schoolDistrict.Treasurer)"></span>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <span [innerHTML]="getAccountAssistants(schoolDistrict.SchoolDistrictsAccountAssistants)"></span>
+            <br />
+            <div *ngIf="schoolDistrict.AccountAssistant">
+                <label>EMAIL: </label> {{ schoolDistrict.AccountAssistant.Email }}
+                <br />
+                <label>PHONE: </label> {{ getUserPhone(schoolDistrict.AccountAssistant) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <span [innerHTML]="getUserLabel('Special Education Contact', schoolDistrict.SpecialEducationDirector)"></span>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <span [innerHTML]="getFinancialReps(schoolDistrict.SchoolDistrictsFinancialReps)"></span>
+        </div>
+    </div>
+</div>
+
+
+
+<mt-modal-wrapper *ngIf="showAddSchoolDistrictModal" [options]="modalOptions">
+    <h4>VIEW ANOTHER DISTRICT</h4>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <mt-dynamic-field *ngIf="schoolDistrictField" 
+                [field]="schoolDistrictField" 
+                (valueChanges)="getNonDistrictAdminDistricts($event)">
+            </mt-dynamic-field>
+        </div>
+    </div>
+    <button
+        type="button"
+        class="btn btn-primary"
+        mtDisableClickDuringHttpCalls
+        (click)="addNewDistrict()"
+    >
+        Change School District
+    </button>
+    <button type="button" class="btn btn-default" (click)="toggleModal()">Cancel</button>
+</mt-modal-wrapper>

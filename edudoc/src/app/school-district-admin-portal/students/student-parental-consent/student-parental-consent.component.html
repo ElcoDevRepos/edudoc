@@ -1,0 +1,33 @@
+<div class="miles-card padded" *ngIf="isEditing">
+    <h4>
+        ADD PARENTAL CONSENT
+    </h4>
+    <mt-dynamic-form
+        [config]="formObject"
+        ([isEditing])="(isEditing)"
+        (submitted)="formSubmitted($event)"
+        (formCreated)="subscribeToControl($event)"
+    >
+        <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+            Save
+        </button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="isEditing = false">
+            Cancel
+        </button>
+    </mt-dynamic-form>
+</div>
+<app-mini-dashboard-list
+    *ngIf="!isEditing"
+    [canEdit]="true"
+    [noOfItemsToShow]="10"
+    [labelGenerator]="labelGenerator"
+    [alternateColor]="true"
+    [totalItems]="parentalConsents.length"
+    [cardName]="'PARENTAL CONSENT HISTORY'"
+    [items]="parentalConsents"
+    [forceShowAll]="false"
+    [hideShowAll]="true"
+    (onAddItem)="setConfig()"
+    (onSelectItem)="consentForUpdate = $event; setConfig()"
+>
+</app-mini-dashboard-list>

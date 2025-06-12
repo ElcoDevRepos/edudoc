@@ -1,0 +1,19 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../../out-tsc/spec",
+        "baseUrl": "./",
+        "module": "commonjs",
+        "paths": {
+            "@model/*": ["model/*"],
+            "@common/*": ["common/*"],
+            "@admin/*": ["admin-portal/*"],
+            "@school-district-admin/*": ["school-district-admin-portal/*"],
+            "@provider/*": ["provider-portal/*"]
+        },
+        "types": ["jasmine", "node"],
+        "experimentalDecorators": true
+    },
+    "files": ["test.ts", "polyfills.ts"],
+    "include": ["**/*.spec.ts", "**/*.d.ts"]
+}

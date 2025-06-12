@@ -1,0 +1,149 @@
+<h2 mtSetTitle>EDI Response Error Codes</h2>
+<div class="row" style="padding-top: 15px">
+    <div class="col-md-4">
+        <app-mini-dashboard-list
+            [canDelete]="false"
+            [canEdit]="canEdit"
+            [labelGenerator]="entityLabelGenerator"
+            [totalItems]="adminInclusions.length"
+            [cardName]="cardName"
+            [items]="adminInclusions"
+            [forceShowAll]="false"
+            [hideShowAll]="true"
+            (onAddItem)="addNewAdminNotificationInclusion()"
+        >
+        </app-mini-dashboard-list>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-10">
+        <div class="miles-card padded">
+            <h4>EDI RESPONSE ERROR CODE MANAGEMENT</h4>
+            <div class="row">
+                <div class="col-md-4 border-right">
+                    <mt-dynamic-field
+                        *ngIf="ediResponseTypes && ediResponseTypes.length"
+                        [field]="getEdiResponseTypesField()"
+                        (valueChanges)="responseTypeSelected($event)"
+                    ></mt-dynamic-field>
+                </div>
+                <div class="col-md-4" *ngIf="selectedResponseTypeId; else placeholder">
+                    <form [formGroup]="form">
+                        <mt-dynamic-field [form]="form" [field]="errorCodeField"></mt-dynamic-field>
+                        <mt-dynamic-field [form]="form" [field]="errorDescriptionField"></mt-dynamic-field>
+                    </form>
+                    <button
+                        type="submit"
+                        (click)="saveErrorCode()"
+                        class="btn btn-flat btn-success"
+                    >
+                        Save
+                    </button>
+                    <button type="button" Class="btn btn-flat btn-default" (click)="clearForm()">
+                        Cancel
+                    </button>
+                </div>
+                <div class="col-md-4" *ngIf="selectedResponseTypeId">
+                    <label>Selected Error Codes</label>
+                    <ul class="list-group" *ngIf="selectedErrorCodes.length">
+                        <li class="list-group-item text-left" *ngFor="let errorCode of selectedErrorCodes" style="cursor: pointer;" (click)="selectErrorCode(errorCode)">
+                            <strong *ngIf="!errorCode.Name.length">{{ errorCode.ErrorCode }} - Unknown Error Code</strong>
+                            <strong *ngIf="errorCode.Name.length">{{ errorCode.ErrorCode }} - {{ errorCode.Name }}</strong>
+                            <span (click)="archiveErrorCode(errorCode.Id)" class="pull-right">
+                                <i class="fa fa-times fa-lg" style="cursor: pointer;" aria-hidden="true"></i>
+                            </span>
+                        </li>
+                    </ul>
+                    <div *ngIf="!selectedErrorCodes.length">
+                        <strong>No error codes selected</strong>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #placeholder>
+    <div style="position: relative;">
+        <div class="col-md-8 text-center">
+            <br />
+            <strong>Select an EDI Response Type</strong>
+        </div>
+    </div>
+</ng-template>
+
+<mt-modal-wrapper *ngIf="showModal" [options]="modalOptions" (cancelClick)="toggleModal()">
+    <div class="row">
+
+        <div class="col-md-6" *ngIf="modalOptionEntitiesFiltered">
+            <div
+                class="miles-card padded"
+                (mouseenter)="isHovered = true"
+                (mouseleave)="isHovered = false"
+            >
+                <h4>ADD {{ modalEntityName }}</h4>
+                <mt-dynamic-field [field]="getSearchField()" (controlCreated)="searchOptionsControl = $event" (valueChanges)="filterModal($event, true)"></mt-dynamic-field>
+        
+                <div class="table-responsive overflow-y:auto;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="no-pointer">
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="no-pointer" *ngFor="let entity of modalOptionEntitiesFiltered" (click)="saveEntity(entity)">
+                                <td class="ellipsis">
+                                    {{ entity.Name }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div *ngIf="noEntityOptions">
+                    <h3 style="text-align: center;">No data to display.</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" *ngIf="modalSelectedEntitiesFiltered">
+            <div
+                class="miles-card padded"
+                (mouseenter)="isHovered = true"
+                (mouseleave)="isHovered = false"
+            >
+                <h4>REMOVE {{ modalEntityName }}</h4>
+                <mt-dynamic-field [field]="getSearchField()" (controlCreated)="searchSelectionsControl = $event" (valueChanges)="filterModal($event, false)"></mt-dynamic-field>
+        
+                <div class="table-responsive overflow-y:auto;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="no-pointer">
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="no-pointer" *ngFor="let entity of modalSelectedEntitiesFiltered" (click)="deleteEntity(entity)">
+                                <td class="ellipsis">
+                                    {{ entity.Name }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        
+                <div *ngIf="noEntitySelections">
+                    <h3 style="text-align: center;">No data to display.</h3>
+                </div>
+            </div>
+        </div>
+        <br />
+    </div>
+    <button type="button" class="btn btn-default" (click)="toggleModal()">Close</button>
+</mt-modal-wrapper>

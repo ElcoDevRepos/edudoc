@@ -1,0 +1,12 @@
+<div class="row">
+    <div class="col-md-6">
+        <br />
+        <div class="miles-card padded">
+            <h4>ADD NEW PROVIDER TRAINING</h4>
+            <mt-dynamic-field [field]="getLinkDocumentField()" (valueChanges)="showLinks = $event;"> </mt-dynamic-field>
+        </div>
+        <br />
+    </div>
+</div>
+<app-message-link-detail *ngIf="showLinks" [isProviderTraining]="true"></app-message-link-detail>
+<app-message-document-detail *ngIf="!showLinks" [isProviderTraining]="true"></app-message-document-detail>

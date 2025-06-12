@@ -1,0 +1,35 @@
+<div *ngIf="myProfile" class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>My Profile</h2>
+    </div>
+</div>
+<div *ngIf="user && user.Id > 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-provider-user-basic-info [user]="user" [canEdit]="canEdit"></app-provider-user-basic-info>
+            <br />
+            <app-provider-user-ORP *ngIf="canBeORP" [canEdit]="canEdit"></app-provider-user-ORP>
+            <br />
+            <app-auth-user-password [AuthUser]="user.AuthUser" [canEdit]="canEdit" (updateVersion)="updateVersion($event)"></app-auth-user-password>
+        </div>
+        <div class="col-md-6">
+            <div class="miles-editable miles-card padded"
+                (mouseenter)="isHovered = true"
+                (mouseleave)="isHovered = false"
+                (click)="showSchoolDistricts()"
+                [style.cursor]="'pointer'"
+            >
+                <h4>SCHOOL DISTRICT(S)</h4>
+                <div *ngIf="showSchoolDistrict || districts.length <= 1">
+                    <span *ngIf="districts.length == 0">No districts assigned</span>
+                    <ul class="list-group">
+                        <li class="list-group-item" *ngFor="let district of districts">{{ district.Name }}</li>
+                    </ul>
+                </div>
+                <div *ngIf="!showSchoolDistrict && districts.length > 1">
+                    <i><b>View All</b></i>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

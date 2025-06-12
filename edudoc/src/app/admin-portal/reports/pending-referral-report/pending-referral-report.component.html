@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Pending Referrals Report</h2>
+    </div>
+</div>
+
+<div>
+    <mt-search-bar (searched)="getFilterSearchbar($event)"></mt-search-bar>
+    <br />
+</div>
+
+<div class="row">
+    <div class="col-md-2">
+        <label>School Districts</label>
+        <mt-virtual-type-ahead
+            [getItems]="getSchoolDistricts"
+            [placeholder]="'Begin typing...'"
+            (selectionChanged)="getFilterSchoolDistrictSearchbar($event)"
+        > </mt-virtual-type-ahead>
+    </div>
+    <div class="col-md-3">
+        <mt-search-filter-select
+            [items]="providerTitleSearchFilterItems" 
+            entity="Provider Title" 
+            [maxToShowInSelectedText]="1"
+        ></mt-search-filter-select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <label>Providers</label>
+        <mt-virtual-type-ahead
+            [getItems]="getProviders"
+            [placeholder]="'Begin typing...'"
+            (selectionChanged)="getFilterProviderSearchbar($event)"
+        > </mt-virtual-type-ahead>
+    </div>
+    <div class="col-md-2">
+        <button type="button" Class="btn btn-flat btn-success" (click)="applyClicked($event)">
+            Apply
+        </button>
+    </div>
+</div>
+
+<div>
+    <mt-entity-list
+        [entities]="pendingReferrals"
+        [total]="total"
+        [(currentPage)]="currentPage"
+        (pageChanged)="getPendingReferrals()"
+        [entityListConfig]="entityListConfig"
+    ></mt-entity-list>
+</div>

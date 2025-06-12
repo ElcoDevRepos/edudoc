@@ -1,0 +1,5 @@
+ServiceLogId|ProviderFirstName|ProviderLastName|ProviderId|School|StudentId|LogDate|EntryDescription|EntryComments|TimeIn|TimeOut|DirectTime|DiagnosisCode1|DiagnosisCode2|ServiceTypeCode|ProcedureCode
+SL001|Jane|Smith|PROV001|Sample Elementary|STU001|05/15/2023|Initial assessment session|Student showed good progress|09:00|10:00|60|F84.0|F81.2|03|99213
+SL002|Jane|Smith|PROV001|Sample Elementary|STU002|05/15/2023|Group therapy session|Student participated well|09:00|10:00|60|F84.0||03|99213
+SL003|Jane|Smith|PROV001|Sample Elementary|STU003|05/16/2023|Follow-up session|Continued progress noted|10:30|11:30|60|F84.0||03|99213
+SL004|Jane|Smith|PROV001|Sample Elementary|STU001|05/17/2023|Progress evaluation|Meeting IEP goals|13:00|14:00|60|F84.0||03|99213 

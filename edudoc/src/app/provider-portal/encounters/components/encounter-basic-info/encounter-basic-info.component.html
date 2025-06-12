@@ -1,0 +1,286 @@
+<!-- TOP -->
+<div class="row">
+    <!-- Encounter Info Card -->
+    <div class="col-md-12 miles-card padded">
+        <!--Encounter date/ time etc.-->
+        <div *ngIf="isEditingEncounterInfo" class="col-md-6 encounter-basic-info">
+            <div class="row">
+                <span *ngIf="!isNewEncounter && encounter.EncounterStudents.length" class="pull-right encounter-basic-info edit-icon">
+                    <i (click)="updateAllEncounters(); isEditingEncounterInfo = false" class="fa fa-lg fa-check"></i>&nbsp;
+                    <i (click)="isEditingEncounterInfo = false" class="fa fa-lg fa-ban"></i>
+                </span>
+                <label>Service Type:</label><span>{{ isTreatmentServiceType ? 'Treatment/Therapy' : 'Non-MSP Service' }}</span>
+            </div>
+            <div class="row">
+                <div class="inline-block">
+                    <label>Encounter Date:</label>
+                    <mt-dynamic-field
+                        class="encounter-date-field"
+                        [field]="getEncounterDateControl()"
+                        (valueChanges)="handleDateSelection($event)"
+                    ></mt-dynamic-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="inputs-side-by-side">
+                    <div class="inline-block">
+                        <label class="time-label">Start Time:</label>
+                        <mt-dynamic-field
+                            class="time-field"
+                            [field]="getEncounterStartTimeControl()"
+                            (valueChanges)="encounter.EncounterStartTime = $event"
+                        ></mt-dynamic-field>
+                    </div>
+                    <div class="inline-block">
+                        <label class="time-label">End Time:</label>
+                        <mt-dynamic-field
+                            class="time-field end-time"
+                            [field]="getEncounterEndTimeControl()"
+                            (valueChanges)="encounter.EncounterEndTime = $event"
+                        ></mt-dynamic-field>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="inputs-side-by-side encounter-group">
+                    <div class="inline-block">
+                        <label>Additional Students:</label>
+                        <mt-dynamic-field
+                            class="group-field"
+                            [field]="getAdditionalStudentsControl()"
+                            (valueChanges)="updateAdditionalStudents($event)"
+                        ></mt-dynamic-field>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="inputs-side-by-side">
+                    <label>Encounter Location:</label>
+                    <mt-dynamic-field
+                        class="location-field"
+                        *ngIf="encounterLocation && encounterLocations && encounterLocations.length"
+                        [field]="getEncounterLocationControl()"
+                        (valueChanges)="handleLocationSelection($event)"
+                    ></mt-dynamic-field>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!isEditingEncounterInfo" class="col-md-6 encounter-basic-info">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Service Type:</label>
+                </div>
+                <div class="col-md-4">
+                    <span>{{ isTreatmentServiceType ? ' Treatment/Therapy' : ' Non-MSP Service' }}</span>
+                </div>
+                <div class="col-md-5">
+                    <span
+                        class="pull-right encounter-basic-info edit-icon"
+                        (click)="isEditingEncounterInfo = true"
+                        *ngIf="!isNewEncounter && !isEditingEncounterInfo"
+                    >
+                        <i class="fa fa-lg fa-edit"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Encounter Date:</label>
+                </div>
+                <div class="col-md-5">
+                    <span>{{ encounter.EncounterDate | date : 'shortDate' }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Start Time:</label>
+                </div>
+                <div class="col-md-2">
+                    <span>{{ getTimeAsDate(encounter.EncounterStartTime) | date : 'h:mm a' }}</span>
+                </div>
+                <div class="col-md-6">
+                    <label>End Time:</label>&nbsp;&nbsp;<span>{{ getTimeAsDate(encounter.EncounterEndTime) | date : 'h:mm a' }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Is Group:</label>
+                </div>
+                <div class="col-md-2">
+                    <span>{{ encounter.IsGroup ? 'Group' : 'Individual' }}</span>
+                </div>
+                <div class="col-md-6">
+                    <label>Additional Students:</label>&nbsp;&nbsp;<span>{{ encounter.AdditionalStudents }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Encounter Location:</label>&nbsp;&nbsp;<span>{{ encounterLocation ? encounterLocation.Name : '' }}</span>
+                </div>
+            </div>
+        </div>
+        <!--Add students-->
+        <div class="col-md-6 encounter-basic-info-student">
+            <div class="row">
+                <div class="student-field">
+                    <label>Add Student(s):</label>
+                    <ng-select
+                        class="selection-box"
+                        [multiple]="true"
+                        [(ngModel)]="selectedStudentIds"
+                        [placeholder]="'Select students...'"
+                        [closeOnSelect]="false"
+                    >
+                        <ng-option *ngFor="let item of fullStudentOptions" [value]="item.Id">{{ item.Name }}</ng-option>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="student-field">
+                    <button class="btn btn-sm btn-primary" type="button" (click)="switchSelectionType()">
+                        {{ selectionType }}
+                    </button>
+                    <button class="btn btn-sm btn-primary" type="button" (click)="toggleAddCaseLoadModal()" [disabled]="!schoolDistricts.length">
+                        <i class="fa fa-plus fa-lg" style="cursor: pointer" aria-hidden="true"></i>
+                        Add New Student to Edu-Doc
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <button *ngIf="canAddStudent" class="btn btn-sm btn-primary" type="button" (click)="updateEncounter()">Add Student(s)</button>
+            </div>
+        </div>
+    </div>
+    <!-- END: Encounter Info Card -->
+</div>
+<!-- END: TOP -->
+<br />
+
+<!-- Existing EncounterStudents -->
+<ng-container *ngIf="existingStudentGroup && existingStudentGroup.length > 0">
+    <ng-container *ngFor="let studentGroup of existingStudentGroup; index as groupi">
+        <div class="row">
+            <!-- LEFT: Odd Count-->
+            <div class="col-md-12">
+                <app-encounter-student
+                    [encounter]="encounter"
+                    [encounterStudentsCount]="validStudents"
+                    [encounterStudent]="studentGroup[0].EncounterStudent"
+                    (studentFormForMassSave)="studentGroup[0].CreatedForm = $event"
+                    (notesControlForMassSave)="studentGroup[0].NotesControl = $event"
+                    (formFactoryForMassSave)="studentGroup[0].FormFactory = $event"
+                    [studentDeviationReasons]="studentDeviationReasons"
+                    [encounterLocations]="encounterLocations"
+                    [encounterStatuses]="encounterStatuses"
+                    [reasonForServiceOptions]="reasonForServiceOptions"
+                    [(selectedReasonForService)]="selectedReasonForService"
+                    [canDelete]="!individualEncounter"
+                    [canEdit]="canEdit"
+                    [startTime]="startTime"
+                    [endTime]="endTime"
+                    (onDelete)="deleteStudentForm(groupi * 2, true)"
+                    [mostRecentlyAdded]="mostRecentlyAdded(studentGroup[0].EncounterStudent.StudentId)"
+                >
+                </app-encounter-student>
+            </div>
+        </div>
+        <br />
+
+        <!-- RIGHT: Even Count-->
+        <div *ngIf="studentGroup[1]" class="row">
+            <div class="col-md-12">
+                <app-encounter-student
+                    [encounter]="encounter"
+                    [encounterStudentsCount]="validStudents"
+                    [encounterStudent]="studentGroup[1].EncounterStudent"
+                    (studentFormForMassSave)="studentGroup[1].CreatedForm = $event"
+                    (notesControlForMassSave)="studentGroup[1].NotesControl = $event"
+                    (formFactoryForMassSave)="studentGroup[1].FormFactory = $event"
+                    [studentDeviationReasons]="studentDeviationReasons"
+                    [encounterLocations]="encounterLocations"
+                    [encounterStatuses]="encounterStatuses"
+                    [reasonForServiceOptions]="reasonForServiceOptions"
+                    [canDelete]="!individualEncounter"
+                    [canEdit]="canEdit"
+                    [startTime]="startTime"
+                    [endTime]="endTime"
+                    (onDelete)="deleteStudentForm(groupi * 2 + 1, true)"
+                    [mostRecentlyAdded]="mostRecentlyAdded(studentGroup[1].EncounterStudent.StudentId)"
+                >
+                </app-encounter-student>
+            </div>
+        </div>
+        <br />
+    </ng-container>
+</ng-container>
+
+<!-- Group Actions -->
+<div *ngIf="showActions" class="row">
+    <div class="col-md-6">
+        <div *ngIf="encounter.Id > 0 && this.encounterStudents && !individualEncounter && canEdit" class="miles-form padded">
+            <h4 class="heading-with-button">ACTIONS</h4>
+            <button *ngIf="groupCanBeSigned()" type="button" class="btn btn-small btn-info btn-flat" (click)="saveAllEncounters(true)">
+                E-sign/Complete
+            </button>
+            <button
+                *ngIf="!groupCanBeSigned()"
+                type="button"
+                class="btn btn-small btn-danger btn-flat"
+                title="Must Save All Encounters First"
+                [disabled]="true"
+            >
+                E-sign/Complete
+            </button>
+            <button type="button" class="btn btn-small btn-info btn-flat" (click)="saveAllEncounters()" [disabled]="!formsToSave">
+                Save as Pending
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Add New Student Modal -->
+<mt-modal-wrapper *ngIf="showAddCaseloadModal" [options]="modalOptions">
+    <h4>Add Student to Encounter</h4>
+    <br />
+    <div>
+        <mt-search-bar (searched)="newStudentSearch($event)" (ready)="newStudentSearchControlReady($event)"></mt-search-bar>
+        <br />
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <mt-dynamic-field
+                *ngIf="schoolDistrictField"
+                [field]="schoolDistrictField"
+                (valueChanges)="newStudentSchoolDistrictIdFilter = $event; getNonCaseLoadStudents()"
+            >
+            </mt-dynamic-field>
+        </div>
+    </div>
+    <mt-entity-list
+        *ngIf="nonCaseLoadStudents != null"
+        [entities]="nonCaseLoadStudents"
+        [total]="newStudentTotal"
+        [(currentPage)]="newStudentCurrentPage"
+        (pageChanged)="getNonCaseLoadStudents()"
+        (columnSortedEvent)="newStudentColumnSorted($event)"
+        (itemSelectedEvent)="newStudentSelected($event)"
+        [entityListConfig]="newStudentEntityListConfig"
+    >
+    </mt-entity-list>
+    <button type="button" class="btn btn-danger" mtDisableClickDuringHttpCalls (click)="addNewStudent()">Add New Student To Edu-Doc</button>
+    <button type="button" class="btn btn-default" (click)="toggleAddCaseLoadModal()">Cancel</button>
+</mt-modal-wrapper>
+
+<mt-modal-wrapper *ngIf="showNoServicePlanModal" [options]="modalOptions" (cancelClick)="toggleShowCaseLoadModal()">
+    <h4>Encounter date is outside of current IEP dates identified in the Edu-doc.</h4>
+    <br />
+    <button type="button" class="btn btn-default" (click)="toggleShowNoServicePlanModal()">Close</button>
+</mt-modal-wrapper>
+
+<!-- Encounter Overlap Modal -->
+<mt-modal-wrapper *ngIf="showOverlapModal" [options]="modalOptions" (cancelClick)="toggleOverlapModal()">
+    <h4>Encounter Overlap</h4>
+    <div>{{ overlapModalMessage }}</div>
+    <button type="button" class="btn btn-success" (click)="proceedWithOverlap()">Yes</button>
+    <button type="button" class="btn btn-default" (click)="toggleOverlapModal()">No</button>
+</mt-modal-wrapper>

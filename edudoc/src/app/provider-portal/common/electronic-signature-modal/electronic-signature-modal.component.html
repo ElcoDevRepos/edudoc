@@ -1,0 +1,12 @@
+<mt-modal-wrapper [options]="modalOptions" (cancelClick)="cancel()">
+    <h4>{{ signatureContent.Name.toUpperCase() }}</h4>
+    <div class="col-md-12 text-left">
+        {{ signatureContent.Content }}
+    </div>
+    <mt-dynamic-field style="font-size: 85%;" *ngIf="showDateControl" [field]="getEffectiveStartDateControl()" (controlCreated)="effectiveDateControl = $event"></mt-dynamic-field>
+    <br /><br />
+    <button type="button" class="btn btn-success" (click)="sign()">
+        Sign
+    </button>
+    <button type="button" class="btn btn-default" (click)="cancel()">Close</button>
+</mt-modal-wrapper>

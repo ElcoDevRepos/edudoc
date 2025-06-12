@@ -1,0 +1,190 @@
+<h3 mtSetTitle>My Caseload</h3>
+<div class="row">
+    <div class="col-md-3">
+        <mt-dynamic-field *ngIf="schoolDistrictField" [field]="schoolDistrictField" (valueChanges)="schoolDistrictIdFilter = $event; newStudentSchoolDistrictIdFilter = $event; setSchoolDistrictIdFilter($event)">
+        </mt-dynamic-field>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <p style="font-size: 14px;line-height:1.42;color:#333;"><b>Search Students</b></p>
+        <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+    </div>
+    <div class="col-md-6">
+        <div *ngIf="canAddStudent">
+            <a
+                class="btn btn-primary btn-lg btn-nohover btn-flat add-student-caseload"
+                (click)="toggleModal()"
+                data-toggle="tooltip"
+                [title]="buttonTitle"
+            >
+                <span>
+                    Add Student to Caseload
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-6">
+                <!--Incomplete Referrals Only-->
+                <mt-dynamic-field *ngIf="canBeORP" [field]="getReferralsField()" (valueChanges)="referralsOnly = $event;currentPage = 1;search(query)"></mt-dynamic-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <!--No Assistants Assigned-->
+                <mt-dynamic-field 
+                    *ngIf="showSupervisorFilters && !showAssistantField" 
+                    [field]="getNoAssistantsOnlyField()" 
+                    (valueChanges)="noAssistantSelected($event);"
+                ></mt-dynamic-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <!--Assistant Assignment-->
+                <mt-dynamic-field 
+                    *ngIf="showSupervisorFilters && !noAssistantsOnly"
+                    [field]="getAssistantAssignmentField()" 
+                    (valueChanges)="showAssistantSelected($event);"
+                ></mt-dynamic-field>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="col-md-4 bulk-assign">
+            <mt-dynamic-field
+                *ngIf="supervisorOptionsField && isAssistant && !isAudioProvider && !isSpeechProvider"
+                [field]="supervisorOptionsField"
+                (valueChanges)="supervisorSelectValueChanges($event)"
+                (controlCreated)="supervisorSelectControl = $event"
+            >
+            </mt-dynamic-field>
+            <mt-dynamic-field
+                *ngIf="assistantOptionsField && isSupervisor && !isAudioProvider && !isSpeechProvider"
+                [field]="assistantOptionsField"
+                (valueChanges)="assistantSelectValueChanges($event)"
+                (controlCreated)="assistantSelectControl = $event"
+            >
+            </mt-dynamic-field>
+        </div>
+    
+        <div class="col-md-5">
+            <mt-dynamic-field *ngIf="selectedSupervisorId" [field]="bulkAssignmentStartDateField" (valueChanges)="bulkAssignmentStartDate = $event">
+            </mt-dynamic-field>
+            <mt-dynamic-field *ngIf="selectedAssistantId" [field]="bulkAssignmentStartDateField" (valueChanges)="bulkAssignmentStartDate = $event">
+            </mt-dynamic-field>
+        </div>
+    
+        <div class="col-md-3">
+            <button
+                type="button"
+                Class="btn btn-flat btn-success pull-left"
+                style="margin-top: 24px;"
+                (click)="assignSupervisor()"
+                *ngIf="selectedSupervisorId && selectedStudents.length && bulkAssignmentStartDate"
+            >
+                Assign
+            </button>
+            <button
+                type="button"
+                Class="btn btn-flat btn-success pull-left"
+                style="margin-top: 24px;"
+                (click)="assignAssistant()"
+                *ngIf="selectedAssistantId && selectedStudents.length && bulkAssignmentStartDate"
+            >
+                Assign
+            </button>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <!--Assistant Dropdown-->
+        <mt-dynamic-field
+            *ngIf="showAssistantField"
+            [field]="getAssistantDropdown()"
+            (valueChanges)="assistantSelected($event)"
+        ></mt-dynamic-field>
+    </div>
+    <button
+        type="button"
+        Class="btn btn-flat btn-success pull-right"
+        style="margin: 0px 20px 0px 0px;"
+        (click)="export()"
+    >
+        Export Caseload
+    </button>
+</div>
+<br />
+
+<mt-virtual-scroll-entity-list
+    *ngIf="showList"
+    [entityListConfig]="entityListConfig"
+    [entities]="providerStudents"
+    [total]="total"
+    (columnSortedEvent)="columnSorted($event)"
+    (itemSelectedEvent)="studentSelected($event)"
+    (itemDeletedEvent)="archiveCaseLoad($event)"
+    (selectionChangedEvent)="onSelectionChanged($event)"
+    (getMore)="getMore()"
+>
+</mt-virtual-scroll-entity-list>
+
+<!-- Remove Case Load Modal -->
+<mt-modal-wrapper *ngIf="showRemoveCaseloadModal" [options]="modalOptions" (cancelClick)="toggleRemoveCaseloadModal()">
+    <div>Warning: Removing this student will remove them from your schedule. Do you want to proceed?</div>
+    <br />
+    <button
+        type="button"
+        class="btn btn-danger"
+        (click)="removeStudentFromCaseload()">Remove</button>
+    <button type="button" class="btn btn-default" (click)="cancelRemoveCaseloadModal()">Cancel</button>
+</mt-modal-wrapper>
+
+<mt-modal-wrapper *ngIf="showAddCaseloadModal" [options]="modalOptions">
+    <h4>ADD STUDENT TO CASELOAD</h4>
+    <br />
+    <div class="row">
+        <div style="text-align:left;" class="col-md-6">
+            <label>Last Name</label>
+            <mt-search-bar (searched)="newStudentLastNameSearch($event)" (ready)="newStudentLastNameSearchControlReady($event)"></mt-search-bar>
+        </div>
+        <div style="text-align:left;" class="col-md-6">
+            <label>First Name</label><br/>
+            <mt-search-bar (searched)="newStudentFirstNameSearch($event)" (ready)="newStudentFirstNameSearchControlReady($event)"></mt-search-bar>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            <mt-dynamic-field *ngIf="schoolDistrictField" [field]="schoolDistrictField" (valueChanges)="newStudentSchoolDistrictIdFilter = $event; getNonCaseLoadStudents()">
+            </mt-dynamic-field>
+        </div>
+    </div>
+    <mt-entity-list
+        *ngIf="nonCaseLoadStudents != null"
+        [entities]="nonCaseLoadStudents"
+        [total]="newStudentTotal"
+        [(currentPage)]="newStudentCurrentPage"
+        (pageChanged)="getNonCaseLoadStudents()"
+        (columnSortedEvent)="newStudentColumnSorted($event)"
+        (itemSelectedEvent)="newStudentSelected($event)"
+        [entityListConfig]="newStudentEntityListConfig"
+    >
+    </mt-entity-list>
+    <button
+        type="button"
+        class="btn btn-primary"
+        mtDisableClickDuringHttpCalls
+        (click)="addNewStudent()"
+    >
+        Add Student to EduDoc
+    </button>
+    <button type="button" class="btn btn-default" (click)="toggleModal()">Cancel</button>
+</mt-modal-wrapper>

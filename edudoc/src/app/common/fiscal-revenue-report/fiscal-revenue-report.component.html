@@ -1,0 +1,363 @@
+<h3 mtSetTitle>FISCAL REVENUE REPORT</h3>
+
+<div class="miles-card padded">
+    <h4>FISCAL REVENUE REPORT</h4>
+
+    <!-- Filters -->
+    <div class="row">
+        <div class="col-md-2">
+            <label>School Districts</label>
+            <mt-virtual-type-ahead
+                [getItems]="getSchoolDistricts"
+                [placeholder]="'Begin typing...'"
+                (selectionChanged)="handleDistrictSelection($event)"
+            > </mt-virtual-type-ahead>
+        </div>
+        <div class="col-md-2">
+            <mt-dynamic-field
+            [field]="getFiscalYearField()"
+            (valueChanges)="handleFiscalYearSelection($event)"
+        ></mt-dynamic-field>
+        </div>
+    </div>
+    <br />
+
+    <!-- Buttons -->
+    <div class="row">
+        <div class="col-md-4">
+            <button type="button" class="btn btn-info" (click)="getFiscalRevenueReport()">Get Fiscal Revenue Report</button>
+        </div>
+    </div>
+</div>
+<br />
+<div *ngIf="fiscalRevenueData && selectedSchoolDistrict" class="miles-card padded">
+    <div class="row">
+        <div class="col-xs-9">
+            <div>
+                <strong>{{selectedSchoolDistrict?.Name}}</strong>
+            </div>
+            <br />
+            <div>
+                FISCAL ANNUAL REVENUE {{fiscalYear}}
+            </div>
+            <br />
+            <div>
+                {{currentDate}}
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div><strong>Healthcare Process Consulting, Inc.</strong></div>
+            <div>2888 Nationwide Parkway</div>
+            <div>Brunswick, Ohio 44212 </div>
+            <div>(440) 884-3688; or (866) 625-2003</div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-9">
+            <div>
+                CURRENT FISCAL YEAR TO DATE REIMBURSEMENT
+            </div>
+            <div>
+                Direct Services
+            </div>
+            <div>
+                MSP Settlement(s)
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div>
+                {{fiscalRevenueData.CurrentYearReimbursement}}
+            </div>
+            <div>
+                {{fiscalRevenueData.DirectServices}}
+            </div>
+            <div>
+                {{fiscalRevenueData.MSPSettlements}}
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row reportHeader">
+        <br />
+        <div class="col-xs-6">
+            <div>
+                <strong>Current Fiscal Year to date breakdown by service dates</strong>
+            </div>
+            <br />
+            <div class="indentLeft">
+                <strong>Service Area</strong>
+            </div>
+        </div>
+        <div class="col-xs-2">
+
+        </div>
+        <div class="col-xs-2">
+            <br />
+            <br />
+            <div>
+               <strong>{{fiscalYear}}</strong>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <br />
+            <br />
+            <div>
+                <strong>{{fiscalYear - 1}}</strong>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <br />
+        <div *ngFor="let report of fiscalRevenueData.FiscalRevenuePerServiceCodeData">
+        <div class="col-xs-6">
+            <div>
+                {{findServiceCodeName(report.ServiceCodeId)}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2">
+            <div>
+                {{report.Total}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2">
+            <div>
+                {{report.SelectedYearTotal}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2">
+            <div>
+                {{report.PriorYearTotal}}
+            </div>
+            <br />
+        </div>
+    </div>
+    </div>
+    <hr>
+    <div class="row">
+        <br />
+        <div class="col-xs-6">
+            <div class="floatRight">
+                <strong>Totals:</strong>
+            </div>
+        </div>
+        <div>
+            <div class="col-xs-2">
+                <div>
+                    {{fiscalRevenueData.FiscalRevenuePerYearDataTotals.Total}}
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div>
+                    {{fiscalRevenueData.FiscalRevenuePerYearDataTotals.SelectedYearTotal}}
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div>
+                    {{fiscalRevenueData.FiscalRevenuePerYearDataTotals.PriorYearTotal}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row reportHeader">
+        <br />
+        <div class="col-xs-6">
+            <div>
+                <strong>Historical Comparison Revenue by Service Area/Service date</strong>
+            </div>
+            <br />
+            <div class="indentLeft">
+                <strong>Service Area</strong>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <br />
+            <br />
+            <div>
+               <strong>{{fiscalYear}}</strong>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <br />
+            <br />
+            <div>
+               <strong>{{fiscalYear - 1}}</strong>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <br />
+            <br />
+            <div>
+                <strong>{{fiscalYear - 2}}</strong>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <br />
+        <div *ngFor="let report of fiscalRevenueData.HistoricalComparisonData">
+        <div class="col-xs-6">
+            <div>
+                {{findServiceCodeName(report.ServiceCodeId)}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2">
+            <div>
+                {{report.CurrentYearTotal}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2">
+            <div>
+                {{report.PreviousYearTotal}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2">
+            <div>
+                {{report.TwoYearsPriorTotal}}
+            </div>
+            <br />
+        </div>
+    </div>
+    </div>
+    <hr>
+    <div class="row">
+        <br />
+        <div class="col-xs-6">
+            <div class="floatRight">
+                <strong>Totals:</strong>
+            </div>
+        </div>
+        <div>
+            <div class="col-xs-2">
+                <div>
+                    {{fiscalRevenueData.HistoricalComparisonDataTotals.CurrentYearTotal}}
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div>
+                    {{fiscalRevenueData.HistoricalComparisonDataTotals.PreviousYearTotal}}
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div>
+                    {{fiscalRevenueData.HistoricalComparisonDataTotals.TwoYearsPriorTotal}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row reportHeader">
+        <br />
+        <div class="col-xs-12">
+            <div>
+                <strong>Cost Report</strong>
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2">
+            <br />
+            <div>
+               <strong>Year</strong>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <br />
+            <div>
+               <strong>Status</strong>
+            </div>
+            <br />
+            <br />
+        </div>
+        <div class="col-xs-2">
+            <br />
+            <div>
+                <strong>Allowable<br />Costs</strong>
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2">
+            <br />
+            <div>
+               <strong>Interim<br />Payments</strong>
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2">
+            <br />
+            <div>
+                <strong>Estimated<br />Settlement<br />Amount</strong>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <br />
+        <div *ngFor="let report of fiscalRevenueData.AnnualEntriesData">
+        <div class="col-xs-2">
+            <div>
+                {{report.Year}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-4">
+            <div>
+                {{report.Status}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2">
+            <div>
+                {{report.AllowableCosts}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2">
+            <div>
+                {{report.InterimPayments}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2">
+            <div>
+                {{report.SettlementAmount}}
+            </div>
+            <br />
+        </div>
+    </div>
+    </div>
+    <hr>
+    <div class="row">
+        <br />
+        <div class="col-xs-6">
+            <div class="floatRight">
+                <strong>Totals:</strong>
+            </div>
+        </div>
+        <div>
+            <div class="col-xs-2">
+                <div>
+                    {{fiscalRevenueData.AnnualEntriesDataTotals.AllowableCosts}}
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div>
+                    {{fiscalRevenueData.AnnualEntriesDataTotals.InterimPayments}}
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div>
+                    {{fiscalRevenueData.AnnualEntriesDataTotals.SettlementAmount}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+</div>

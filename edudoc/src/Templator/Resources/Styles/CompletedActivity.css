@@ -1,0 +1,12 @@
+.tableheader {
+    background-color: rgb(173, 216, 230) !important;
+}
+
+body {
+    font-family: Arial !important;
+}
+
+.thirteens > * {
+    float: left;
+    width: 7.69%;
+}

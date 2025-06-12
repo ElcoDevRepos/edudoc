@@ -1,0 +1,189 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Encounters AUP Audit</h2>
+    </div>
+</div>
+<!-- Search Bar -->
+<div>
+    <mt-search-bar (searched)="getFilterSearchbar($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+</div>
+<!-- Encounter Number Search Bar -->
+<div>
+    <label>Search Encounter Numbers</label>
+    <mt-search-bar (searched)="getFilterEncounterNumbersSearchbar($event)" (ready)="encounterSearchControlReady($event)"></mt-search-bar>
+</div>
+<!-- Claim Number Search Bar -->
+<div>
+    <label>Search Claim Numbers</label>
+    <mt-search-bar (searched)="getFilterClaimNumbersSearchbar($event)" (ready)="claimNumberSearchControlReady($event)"></mt-search-bar>
+</div>
+
+<!-- Filters -->
+<div class="row">
+    <div class="col-md-6" *ngIf="isAdmin">
+        <label>School Districts</label>
+        <mt-virtual-type-ahead
+            [getItems]="getSchoolDistricts"
+            [placeholder]="'Begin typing...'"
+            (selectionChanged)="getFilterSchoolDistrictSearchbar($event)"
+        >
+        </mt-virtual-type-ahead>
+    </div>
+    <div class="col-md-6">
+        <label>Providers</label>
+        <mt-virtual-type-ahead [getItems]="getProviders" [placeholder]="'Begin typing...'" (selectionChanged)="getFilterProviderSearchbar($event)">
+        </mt-virtual-type-ahead>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <label>Encounter Date</label><br />
+        <mt-search-filter-daterange [startDate]="startDate" [endDate]="endDate" entity="Date" (selectionChanged)="getFilterDateRange($event)">
+        </mt-search-filter-daterange>
+    </div>
+    <div class="col-md-3">
+        <label>CPT Code (Procedure Code)</label><br />
+        <mt-search-filter-select [items]="cptCodes" entity="CPT Codes" [maxToShowInSelectedText]="1"></mt-search-filter-select>
+    </div>
+    <div class="col-md-3">
+        <label>Service Areas</label><br />
+        <mt-search-filter-select [items]="serviceCodes" entity="Service Areas" [maxToShowInSelectedText]="1"></mt-search-filter-select>
+    </div>
+    <div class="col-md-3">
+        <label>Status</label><br />
+        <mt-search-filter-select [items]="statuses" entity="Status" [maxToShowInSelectedText]="1"></mt-search-filter-select>
+    </div>
+</div>
+<br/>
+<div class="row search-controls">
+    <div class="col-md-2">
+        <button type="button" class="btn btn-flat btn-success width-100" (click)="applyClicked($event)">Apply</button>
+    </div>
+    <div class="col-md-2">
+        <label for="items-per-page">Items per page</label>
+        <select class="form-control" id="items-per-page" [ngModel]="itemsPerPage" (ngModelChange)="updateItemsPerPage($event)">
+            <option value="10">10</option>
+            <option value="40">40</option>
+        </select>
+    </div>
+</div>
+<br />
+
+<!-- Entity List -->
+<div class="row">
+    <div class="col-md-8">
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th colspan="2">Location</th>
+                    <th colspan="2">Service Type</th>
+                    <th colspan="6">Reason for Service</th>
+                    <th colspan="2">EDI Claim #</th>
+                </tr>
+                <tr>
+                    <th colspan="2">Date</th>
+                    <th colspan="1">Start</th>
+                    <th colspan="1">Stop</th>
+                    <th colspan="2">Minutes</th>
+                    <th colspan="2">IEP Group #</th>
+                    <th colspan="2">Total Group #</th>
+                    <th colspan="2">ESignature</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let encounter of encounters" (click)="encounterSelected(encounter)">
+                <tr>
+                    <td colspan="6"><strong>Student Name:</strong> {{ encounter.StudentName }}</td>
+                    <td colspan="6"><strong>Student ID:</strong> {{ encounter.StudentId }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">{{ encounter.Location }}</td>
+                    <td colspan="2">{{ encounter.ServiceType }}</td>
+                    <td colspan="6">{{ encounter.ReasonForService }}</td>
+                    <td colspan="2">{{ encounter.ClaimId }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">{{ encounter.EncounterDate | date : 'mediumDate' }}</td>
+                    <td colspan="1">{{ encounter.StartDateTime | date : 'shortTime' }}</td>
+                    <td colspan="1">{{ encounter.EndDateTime | date : 'shortTime' }}</td>
+                    <td colspan="2">{{ getSessionMinutes(encounter) }}</td>
+                    <td colspan="2">{{ encounter.NumStudentsInEncounter - encounter.NumNonIEPStudents }}</td>
+                    <td colspan="2">{{ encounter.NumStudentsInEncounter }}</td>
+                    <td colspan="2">{{ encounter.DateESigned | date : 'mediumDate' }}</td>
+                </tr>
+                <!-- Goals -->
+                <tr>
+                    <td colspan="12">
+                        <strong>Goals:</strong>
+                        <ul>
+                            <li *ngFor="let goal of encounter.Goals">
+                                {{ goal.Description }}
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <!-- Methods -->
+                <tr>
+                    <td colspan="12">
+                        <strong>Methods:</strong>
+
+                        <ul>
+                            <li *ngFor="let method of encounter.Methods">
+                                {{ method.Name }}
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <!-- Codes -->
+                <tr>
+                    <td colspan="12">
+                        <strong>Procedure Codes:</strong>
+                        <ul>
+                            <li *ngFor="let code of encounter.CptCodes">
+                                <td>
+                                    <strong>{{ code.CptCode.Code }}</strong> {{ code.CptCode.Description }}
+                                </td>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <mt-entity-list-pagination [total]="total" [itemsPerPage]="itemsPerPage" [(currentPage)]="currentPage" (pageChange)="getEncounters()" />
+    </div>
+
+    <!--AUP Audit List-->
+    <div class="col-md-4">
+        <app-aup-audit *ngIf="schoolDistrictIdFilter" [allEncounters]="encounters" [(encounters)]="selectedEncounters"></app-aup-audit>
+        <h3 *ngIf="!schoolDistrictIdFilter">Select a school district to export a report</h3>
+    </div>
+</div>
+
+<mt-modal-wrapper *ngIf="showStatusesModal" [options]="modalOptions" (cancelClick)="toggleStatusModal()">
+    <h4>Encounter Status Log</h4>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Encounter Status</th>
+                    <th>Date</th>
+                    <th>Changed By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let status of encounterStudentStatusesForModal">
+                    <td class="text-left">
+                        {{ status.StatusName }}
+                    </td>
+                    <td class="text-left">
+                        {{ status.DateCreated | date : 'mediumDate' }}
+                    </td>
+                    <td class="text-left">
+                        {{ status.CreatedBy }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <button type="button" class="btn btn-default" (click)="toggleStatusModal()">Close</button>
+</mt-modal-wrapper>

@@ -1,0 +1,126 @@
+<div
+    class="miles-editable miles-card padded"
+    *ngIf="!isEditing && isCardOpen"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4 class="header" *ngIf="isCardOpen">
+        METHODS
+        <span class="pull-right" *ngIf="canEdit">
+            <i (click)="edit()" class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+
+    <div class="table-responsive" *ngIf="!noEncounterStudentMethods && isCardOpen">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th>
+                        <b>Name</b>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="no-pointer" *ngFor="let encounterStudentMethod of encounterStudentMethods">
+                    <td class="ellipsis">
+                        {{ encounterStudentMethod?.Method?.Name }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="noEncounterStudentMethods">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+</div>
+
+<!-- If Editing Methods -->
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4 class="header">METHODS</h4>
+
+    <!-- Options for adding methods -->
+    <div class="row" *ngIf="methodOptions">
+        <div class="col-md-6">
+            <mt-multiselect
+                [items]="methodOptions"
+                [showSelectAllButtons]="true"
+                [maxToShowInSelectedText]="1"
+                [autoClose]="true"
+                [filterMode]="false"
+                entity="Methods"
+                *ngIf="methodOptions"
+            ></mt-multiselect>
+        </div>
+    </div>
+    <br />
+    <ng-container *ngIf="getSelectedMethods().length">
+        <div class="row">
+            <div class="col-md-6">
+                <button type="button" Class="btn btn-flat btn-success" (click)="addMethods()">
+                    Add Methods
+                </button>
+            </div>
+        </div>
+        <br />
+    </ng-container>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th>
+                        <b>Name</b>
+                    </th>
+                    <th class="text-center">
+                        <b>Remove</b>
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngIf="encounterStudentMethods">
+                <tr class="no-pointer" *ngFor="let encounterStudentMethod of encounterStudentMethods">
+                    <td class="ellipsis">
+                        {{ encounterStudentMethod?.Method?.Name }}
+                    </td>
+                    <td class="ellipsis">
+                        <div *ngIf="encounterStudentMethod.Archived" class="text-center">
+                            <button
+                                type="button"
+                                (mtConfirm)="archiveEncounterStudentMethod(encounterStudentMethod)"
+                                [mtConfirmOptions]="unarchiveConfirm"
+                            >
+                                <i class="fa fa-undo fa-2x"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="!encounterStudentMethod.Archived" class="text-center">
+                            <button
+                                type="button"
+                                (mtConfirm)="archiveEncounterStudentMethod(encounterStudentMethod)"
+                                [mtConfirmOptions]="archiveConfirm"
+                            >
+                                <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="noEncounterStudentMethods">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+
+    <!-- Lock in editing mode for new EncounterStudentMethod -->
+    <div *ngIf="!isAdding">
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Close
+        </button>
+        <!-- Show Archived Checkbox -->
+        <div *ngIf="encounterStudent.Id > 0" class="pull-right">
+            <mt-dynamic-field [field]="getArchivedField()" (valueChanges)="includeArchived = $event; getEncounterStudentMethods()"></mt-dynamic-field>
+        </div>
+    </div>
+</div>
+<br *ngIf="isCardOpen"/>

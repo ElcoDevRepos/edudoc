@@ -1,0 +1,68 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>
+            <mt-route-back-button></mt-route-back-button>
+            {{ serviceArea }} Summary Report By Provider
+        </h2>
+    </div>
+</div>
+<router-outlet></router-outlet>
+
+<div class="row" *ngIf="totalsLoaded">
+    <div class="col-md-12">
+        <div class="miles-editable miles-card padded">
+            <h4>
+                ACTIVITY SUMMARY TOTALS
+            </h4>
+
+            <label>Referrals Pending: </label> {{ openPendingReferrals }} <br />
+            <label>Encounters Returned: </label> {{ openReturnedEncounters }} <br />
+            <label>Pending Supervisor Co-Signature: </label> {{ openEncountersReadyForFinalESign }} <br />
+            <ng-container *ngIf="!isAdmin"><label>Encounters Ready For Scheduling: </label> {{ openScheduledEncounters }} <br /></ng-container>
+            <ng-container *ngIf="isAdmin"><label>Pending Evaluations: </label> {{ pendingEvaluations }} <br /></ng-container>
+        </div>
+    </div>
+</div>
+<br />
+
+<!-- Filters -->
+<div class="row">
+    <div class="col-md-2">
+        <mt-dynamic-field [field]="getCompletedField()" (valueChanges)="completed = $event; getSummaries()"></mt-dynamic-field>
+    </div>
+</div>
+<br />
+
+<div *ngIf="!completed">
+    <mt-entity-list
+        [entities]="summaries"
+        [total]="total"
+        [(currentPage)]="currentPage"
+        (pageChanged)="getSummaries()"
+        (itemSelectedEvent)="summarySelected($event)"
+        [entityListConfig]="openEntityListConfig"
+    >
+    </mt-entity-list>
+</div>
+
+<div *ngIf="completed">
+    <div class="row">
+        <div class="col-md-2">
+            <mt-search-filter-daterange
+            [startDate]="startDate" [endDate]="endDate" entity="Completed Report by Provider"
+            (selectionChanged)="dateSelectionChanged($event)"
+            ></mt-search-filter-daterange>
+        </div>
+    </div>
+    <br />
+
+    <mt-entity-list
+        [entities]="completedSummaries"
+        [total]="total"
+        [(currentPage)]="currentPage"
+        (itemSelectedEvent)="summarySelected($event)"
+        [entityListConfig]="completedEntityListConfig"
+    >
+    </mt-entity-list>
+</div>
+

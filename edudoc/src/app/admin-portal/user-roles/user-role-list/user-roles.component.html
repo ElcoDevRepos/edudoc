@@ -1,0 +1,57 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>User Roles</h2>
+    </div>
+</div>
+<div>
+    <div class="input-group">
+        <input type="text" [formControl]="searchControl" class="form-control" placeholder="Search" />
+        <span class="input-group-btn">
+            <button type="button" (click)="clearSearch()" class="btn btn-default btn-nohover btn-flat">
+                <i class="fa"></i>
+                <i class="fa fa-remove" aria-hidden="true"></i>
+                <i class="fa"></i>
+            </button>
+        </span>
+    </div>
+</div>
+<div>
+    <mt-search-filter-select [items]="userTypeSearchFilterItems" entity="Role Type" (selectionChanged)="getUserRoles()"> </mt-search-filter-select>
+</div>
+<br />
+<div class="table-responsive">
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr class="no-pointer">
+                <th>
+                    <b>Role Name</b>
+                </th>
+                <th>
+                    <b>Description</b>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let role of userRoles" [routerLink]="['/roles', role.Id]">
+                <td class="ellipsis">
+                    {{ role.Name }}
+                </td>
+                <td class="ellipsis">
+                    {{ role.Description }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div *ngIf="pagingNeeded()">
+    <ngb-pagination
+        [collectionSize]="total"
+        [(page)]="currentPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        (pageChange)="getUserRoles()"
+    ></ngb-pagination>
+</div>
+<div *ngIf="noRoles()">
+    <h3 style="text-align: center;">No data to display.</h3>
+</div>

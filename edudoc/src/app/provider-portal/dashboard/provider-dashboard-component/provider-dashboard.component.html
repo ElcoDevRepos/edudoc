@@ -1,0 +1,20 @@
+<h3 mtSetTitle>Dashboard</h3>
+<div *ngIf="bannerLoaded" class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info widget miles-card">
+            <div class="panel-heading clearfix">
+                {{ districtBanner }}
+                <div class="resize-block-element pull-right"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <app-provider-messages-widget></app-provider-messages-widget>
+        <app-documents-links-widget *ngIf="documentLinks" [documentLinks]="documentLinks"></app-documents-links-widget>
+    </div>
+    <div class="col-md-6">
+        <app-to-do-list-widget [providerId]="providerId" [isSupervisor]="isSupervisor"></app-to-do-list-widget>
+    </div>
+</div>

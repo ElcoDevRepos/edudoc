@@ -1,0 +1,11 @@
+<div *ngIf="encounterStudentCptCode.Minutes != null && !isEditing" (click)="edit()" title="Edit Comment">
+    {{ encounterStudentCptCode.Minutes }}
+</div>
+<div *ngIf="encounterStudentCptCode.Minutes == null && !isEditing" (click)="edit()" title="Edit ">
+    <i class="fa fa-lg fa-plus-circle"></i>
+</div>
+<ng-container *ngIf="isEditing">
+    <input type="number" #timeInput [(ngModel)]="time" name="time" class="form-control" autofocus />
+    <button (click)="save()" class="btn btn-success btn-xs">Save</button>
+    <button (click)="cancel()" class="btn btn-default btn-xs">Cancel</button>
+</ng-container>

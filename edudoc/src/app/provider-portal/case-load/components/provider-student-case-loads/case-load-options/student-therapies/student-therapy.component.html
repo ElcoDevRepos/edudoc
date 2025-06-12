@@ -1,0 +1,96 @@
+<div *ngIf="!isCardOpen" class="miles-editable miles-card padded">
+    <h4>
+        STUDENT SCHEDULE
+        <i (click)="toggleCardOpen()" style="padding:5px;cursor:pointer;" class="fa fa-chevron-down"></i>
+    </h4>
+</div>
+<div class="miles-editable miles-card padded" *ngIf="!adding && isCardOpen">
+    <h4>STUDENT SCHEDULE
+        <span>
+            <i *ngIf="isCardOpen" (click)="toggleCardOpen()" style="padding:5px;cursor:pointer;" class="fa fa-chevron-up"></i>
+        </span>
+    </h4>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th>
+                        <b>Location</b>
+                    </th>
+                    <th>
+                        <b>Name</b>
+                    </th>
+                    <th>
+                        <b>Start Date</b>
+                    </th>
+                    <th>
+                        <b>End Date</b>
+                    </th>
+                    <th>
+                        <b>Days of Week</b>
+                    </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let therapy of studentTherapies">
+                    <td (click)="goToSchedules(therapy)">
+                        {{ therapy.EncounterLocation?.Name }}
+                    </td>
+                    <td (click)="goToSchedules(therapy)">
+                        {{ getTherapyName(therapy) }}
+                    </td>
+                    <td (click)="goToSchedules(therapy)">
+                        {{ therapy.StartDate | date: 'short' }}
+                    </td>
+                    <td (click)="goToSchedules(therapy)">
+                        {{ therapy.EndDate | date: 'short' }}
+                    </td>
+                    <td (click)="goToSchedules(therapy)">
+                        {{ weekdayFormattingFunction(therapy) }}
+                    </td>
+                    <td>
+                        <div *ngIf="canEdit" class="text-center">
+                            <button type="button" (click)="editStudentTherapy(therapy)">
+                                <i class="fa fa-edit fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="therapy.Archived" class="text-center">
+                            <button type="button" (mtConfirm)="archiveStudentTherapy(therapy)" [mtConfirmOptions]="unarchiveConfirm">
+                                <i class="fa fa-undo fa-2x"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="!therapy.Archived" class="text-center">
+                            <button type="button" (mtConfirm)="archiveStudentTherapy(therapy)" [mtConfirmOptions]="archiveConfirm">
+                                <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="!studentTherapies?.length">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+    <div [hidden]="!canEdit" class="fab-wrap">
+        <button type="button" class="btn btn-primary btn-fab-md btn-fab-center" (click)="adding = true">
+            <span class="fa fa-plus"></span>
+        </button>
+    </div>
+</div>
+
+<app-add-student-therapy
+    *ngIf="adding && isCardOpen"
+    (onClose)="adding = false; studentTherapyForArchival = undefined"
+    [encounterLocations]="encounterLocations"
+    [caseLoadId]="caseLoad.Id"
+    [studentTherapyForArchival]="studentTherapyForArchival"
+    (onStudentTherapyAdded)="refreshStudentTherapies()"
+    [studentTherapies]="studentTherapies"
+></app-add-student-therapy>
+<br />

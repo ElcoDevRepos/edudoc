@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Summary of Outstanding Documentation</h2>
+    </div>
+    <div class="col-md-5">
+        <button 
+            class="btn btn-sm btn-success" 
+            style="margin: 15px 0; float: right;" 
+            [disabled]="updating"
+            (click)="updateTables()">
+            Refresh
+        </button>
+    </div>
+</div>
+<div *ngIf="summaries && summaries.length" class="row padded" style="float: right;">
+    Last Refreshed: {{ summaries[0].DateCreated | date: 'medium': 'UTC' }}
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="miles-editable miles-card padded">
+            <h4>
+                ACTIVITY SUMMARY TOTALS
+            </h4>
+
+            <label>Referrals Pending: </label> {{ totalsLoaded ? summaryTotal.ReferralsPending : 'Loading...' }} <br />
+            <label>Encounters Returned: </label> {{ totalsLoaded ? summaryTotal.EncountersReturned : 'Loading...' }} <br />
+            <label>Pending Supervisor Co-Signature: </label> {{ totalsLoaded ? summaryTotal.PendingSupervisorCoSign : 'Loading...' }} <br />
+            <label>Pending Evaluations: </label> {{ totalsLoaded ? summaryTotal.PendingEvaluations : 'Loading...' }} <br />
+        </div>
+    </div>
+</div>
+<br />
+<mt-entity-list
+    [entities]="summaries"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    (itemSelectedEvent)="districtSelected($event)"
+    (pageChanged)="getSummaries()"
+    [entityListConfig]="entityListConfig"
+>
+</mt-entity-list>

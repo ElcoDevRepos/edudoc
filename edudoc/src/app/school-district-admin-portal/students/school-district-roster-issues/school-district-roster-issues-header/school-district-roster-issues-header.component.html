@@ -1,0 +1,12 @@
+<div>
+    <div class="row">
+        <div class="col-md-7">
+            <h2>
+                <h2 *ngIf="header$" [mtSetTitle]="header$">
+                    <mt-route-back-button />
+                </h2>
+            </h2>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

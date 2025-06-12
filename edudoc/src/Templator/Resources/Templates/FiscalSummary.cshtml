@@ -1,0 +1,292 @@
+@using System;
+@model Templator.Models.FiscalSummaryParams
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="@Model.ResolveStylesheetPath("Bootstrap.css")" rel="stylesheet" />
+    <link href="@Model.ResolveStylesheetPath("FiscalReports.css")" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-xs-6">
+            <div>
+                <strong>@Model.data.DistrictName</strong>
+            </div>
+            <div>
+                SUMMARY REPORT
+            </div>
+            <br />
+            <br />
+            <div>
+                @Model.data.FiscalYear
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div><strong>Healthcare Process Consulting, Inc.</strong></div>
+            <div>2888 Nationwide Parkway</div>
+            <div>Brunswick, Ohio 44212 </div>
+            <div>(440) 884-3688; or (866) 625-2003</div>
+        </div>
+    </div>
+     <hr>
+    <div class="row">
+        <hr>
+        <div class="col-xs-12">
+            <div>
+                <strong>Potential Reimbursement to District</strong>
+            </div>
+        </div>
+        </div>
+    <div class="row tableheader">
+        <br />
+        <div class="col-xs-4">
+            <div>
+                <strong><small><br />Reason</small></strong>
+            </div>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong><small>Total<br />Encounters</small></strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong><small>Dollar<br />Amount</small></strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong style="font-size:11px;">Occupational<br />Therapy</strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong style="font-size:11px;">Physical<br />Therapy</strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong><small><br />Speech</small></strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong><small><br />Psychology</small></strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong><small><br />Counseling</small></strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong><small><br />Nursing</small></strong>
+        </div>
+    </div>
+    <hr>
+        <br />
+        @foreach (var report in Model.data.ReimbursementReasonData)
+        {
+        <div class="row">
+        <div class="col-xs-4">
+            <div>
+                @report.ReimbursementReason
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                @report.Count
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                @report.DollarAmount
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                @report.OccupationalTherapy
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                @report.PhysicalTherapy
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                @report.Speech
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                @report.Psychology
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                @report.Counseling
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                @report.Nursing
+            </div>
+            <br />
+        </div>
+    </div>
+    }
+    <hr>
+        <br />
+         <div class="row">
+        <div class="col-xs-4">
+            <div class="indentLeft">
+                <strong>Totals:</strong>
+            </div>
+        </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    @Model.data.ReimbursementReasonDataTotals.Count
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    @Model.data.ReimbursementReasonDataTotals.DollarAmount
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    @Model.data.ReimbursementReasonDataTotals.OccupationalTherapy
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    @Model.data.ReimbursementReasonDataTotals.PhysicalTherapy
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    @Model.data.ReimbursementReasonDataTotals.Speech
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    @Model.data.ReimbursementReasonDataTotals.Psychology
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    @Model.data.ReimbursementReasonDataTotals.Counseling
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    @Model.data.ReimbursementReasonDataTotals.Nursing
+                </div>
+            </div>
+            </div>
+    <hr>
+    <div class="row">
+        <br />
+        <div class="col-xs-4">
+            <div class="indentLeft">
+                <strong>Less Average<br /> Applicable FFP 40%:</strong>
+            </div>
+        </div>
+        <div>
+            <div class="col-xs-1">
+                <div>
+
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <br />
+                <div>
+                    @Model.data.LessAverageApplicableFFP
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <hr>
+        <div class="col-xs-9">
+            <div>
+                <strong>Historical Comparison of Documented Encounters</strong>
+            </div>
+        </div>
+    </div>
+    <div class="row tableheader">
+        <br />
+        <div class="col-xs-3">
+            <div>
+                <strong><small><br />Service Area</small></strong>
+            </div>
+        </div>
+        <div class="col-xs-2 centerText">
+            <strong><small>@Model.data.FiscalYear<br />Encounters</small></strong>
+        </div>
+        <div class="col-xs-2 centerText">
+            <strong><small>@Model.data.PrevYear<br />Encounters</small></strong>
+        </div>
+        <div class="col-xs-2 centerText">
+            <strong><small>@Model.data.TwoYearsPrior<br />Encounters</small></strong>
+        </div>
+    </div>
+    <hr>
+        <br />
+        @foreach (var report in Model.data.ServiceCodeData)
+        {
+         <div class="row">
+        <div class="col-xs-3">
+            <div>
+                @report.ServiceCodeName
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2 floatRight">
+            <div>
+                @report.CurrentYearTotal
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2 floatRight">
+            <div>
+                @report.PreviousYearTotal
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2 floatRight">
+            <div>
+                @report.TwoYearsPriorTotal
+            </div>
+            <br />
+        </div>
+    </div>
+        }
+    <hr>
+        <br />
+         <div class="row">
+        <div class="col-xs-3">
+            <div class="indentLeft">
+                <strong>Totals:</strong>
+            </div>
+        </div>
+        <div class="col-xs-2 floatRight">
+                <div>
+                    @Model.data.HistoricalComparisonCurrentYearTotal
+                </div>
+        </div>
+        <div class="col-xs-2 floatRight">
+                <div>
+                    @Model.data.HistoricalComparisonPreviousYearTotal
+                </div>
+        </div>
+        <div class="col-xs-2 floatRight">
+                <div>
+                    @Model.data.HistoricalComparisonTwoYearsPriorTotal
+                </div>
+        </div>
+        </div>
+    <hr>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+.list-controls {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+}
+
+.list-nav-controls {
+    display: flex;
+    column-gap: 5px;
+    grid-column: 1 / 10;
+}
+
+.sort-controls {
+    display: flex;
+    .sort-button {
+        width: 34px;
+        height: 34px;
+        padding: 0px;
+    }
+    margin: 20px 0;
+}
+
+
+.export-button {
+    grid-column: span 1 / span 1;
+    height: 34px;
+    align-self: flex-end;
+    background-color: #ccc;
+}

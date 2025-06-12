@@ -1,0 +1,28 @@
+<div *ngIf="responseUploaded" style="display: inline-block; width: 120px;">
+    {{ uploadedDate | date: 'mediumDate' }} 
+</div>
+<div *ngIf="!responseUploaded">
+    <button type="button" (click)="toggleModal()" class="btn btn-flat btn-success">
+        Upload
+    </button>
+</div>
+
+<mt-modal-wrapper *ngIf="showUploadModal" [options]="modalOptions">
+    <h4>Upload Billing Response File</h4>
+    <br />
+    <mt-document
+        [allowedMimeType]="allowedMimeType"
+        [maxFileSize]="maxFileSize"
+        (addingFileFailed)="onWhenAddingFileFailed($event)"
+        (afterAddingFile)="onUploadFile($event)"
+    ></mt-document>
+    <button
+        type="button"
+        class="btn btn-danger"
+        mtDisableClickDuringHttpCalls
+        (click)="uploadFile()"
+    >
+        Save
+    </button>
+    <button type="button" class="btn btn-default" (click)="toggleModal()">Cancel</button>
+</mt-modal-wrapper>

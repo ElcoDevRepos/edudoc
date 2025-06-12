@@ -1,0 +1,23 @@
+<div *ngIf="student">
+    <app-merge-students-basic-info
+        [student]="student"
+        [isMerging]="isMerging"
+    ></app-merge-students-basic-info>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-6">
+        <app-common-addresses-with-county
+            *ngIf="student"
+            [canEdit]="canEdit"
+            [requireCounty]="false"
+            [address]="student.Address"
+            (onSave)="saveAddress($event)"
+            (onDelete)="deleteAddress($event)"
+        >
+        </app-common-addresses-with-county>
+    </div>
+</div>
+<br />
+
+<a routerLink="/school-district-admin/students/merge" class="btn btn-default">Close</a>

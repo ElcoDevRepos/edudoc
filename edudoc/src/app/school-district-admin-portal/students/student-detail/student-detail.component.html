@@ -1,0 +1,39 @@
+<div *ngIf="student && student.Id > 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-student-basic-info [student]="student" [canEdit]="canEdit"></app-student-basic-info>
+            <br />
+            <student-parental-consent [studentId]="student.Id" [parentalConsents]="student.StudentParentalConsents"></student-parental-consent>
+            <br />
+        </div>
+        <div class="col-md-6">
+            <app-common-addresses-with-county
+                [canEdit]="canEdit"
+                [requireCounty]="false"
+                [address]="student.Address"
+                (onSave)="saveAddress($event)"
+                (onDelete)="deleteAddress($event)"
+            >
+            </app-common-addresses-with-county>
+            <br />
+            <app-district-admin-student-referrals [student]="student"></app-district-admin-student-referrals>
+            <br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <app-student-iep-services *ngIf="iepService" [iepService]="iepService" [canEdit]="canEdit"></app-student-iep-services>
+            <br />
+        </div>
+    </div>
+    <br />
+    <a [routerLink]="closePath" class="btn btn-default">Close</a>
+</div>
+
+<div *ngIf="student && student.Id === 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-student-basic-info [student]="student" [canEdit]="canEdit"></app-student-basic-info>
+        </div>
+    </div>
+</div>

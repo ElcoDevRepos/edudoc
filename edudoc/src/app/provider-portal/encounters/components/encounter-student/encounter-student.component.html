@@ -1,0 +1,126 @@
+<div
+    [ngClass]="canEdit ? 'miles-editable miles-card padded' : 'miles-card padded'"
+    *ngIf="!isEditing && configLoaded"
+    (click)="edit()"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4 *ngIf="studentName">
+        {{ studentName }} <span *ngIf="studentDob">{{ studentDob | date: 'shortDate'}}</span> {{ studentCode }}
+        <span class="pull-right" *ngIf="canEdit" >
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+    <div class="row">
+        <div class="col-md-5">
+            <mt-dynamic-view [config]="viewOnly"></mt-dynamic-view>
+        </div>
+        <div class="col-md-7">
+            <label>Case Notes </label><span>{{ getCaseNotes() }}</span><br/>
+            <ng-container *ngIf="!hasDeviationReason">
+                <label>CPT Codes </label><span> {{ cptCodes }}</span><br/>
+                <label>Goals </label><span> {{ goals }}</span><br/>
+                <ng-container *ngIf="isSpeechProvider || isAudioProvider">
+                    <label>Methods </label><span> {{ methods }}</span>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isEditing && configLoaded" class="miles-form padded">
+    <h4 *ngIf="studentName">
+        {{ studentName }} <span *ngIf="studentDob">{{ studentDob | date: 'shortDate'}}</span> {{ studentCode }}
+        <span class="pull-right">
+            <i style="cursor:pointer;" (click)="cancelClick()" class="fa fa-lg fa-chevron-up"></i>
+        </span>
+    </h4>
+    <div *ngIf="isReturned">
+        <label>Returned By: </label> {{ returnedBy }} <br />
+        <label>Reason For Return: </label> <div style="white-space: pre-line;"> {{ encounterStudent.ReasonForReturn }} </div>
+    </div>
+    <mt-dynamic-form
+        [config]="formObject"
+        [form]="studentForm"
+        (formCreated)="formCreated($event)"
+        ([isEditing])="(isEditing)"
+        (submitted)="formSubmitted($event)"
+    >
+    <div class="row">
+        <div [ngClass]="['encounter-student-component-cards', (isSpeechProvider || isAudioProvider) ? 'col-md-8' : 'col-md-6']">
+            <div [ngClass]="(isSpeechProvider || isAudioProvider) ? 'col-md-4' : 'col-md-6'">
+                <app-encounter-student-goals
+                    *ngIf="studentId && !hasDeviationReason"
+                    [encounter]="encounter"
+                    [encounterStudent]="encounterStudent"
+                    [providerServiceCode]="providerServiceCode"
+                    [canEdit]="true"
+                    [isNursingProvider]="isNursingProvider"
+                    [encounterStudentGoals]="encounterStudentGoals"
+                    (encounterStudentGoalsChange)="encounterStudentGoals=$event"
+                >
+                </app-encounter-student-goals>
+            </div>
+            <div [ngClass]="(isSpeechProvider || isAudioProvider) ? 'col-md-4' : 'col-md-6'">
+                <app-encounter-student-cpt-codes
+                    *ngIf="studentId && !hasDeviationReason"
+                    [isEditingStudent]="isEditing"
+                    [encounter]="encounter"
+                    [encounterStudent]="encounterStudent"
+                    [studentForm]="studentFormForSave"
+                    [canEdit]="true"
+                    [isNursingProvider]="isNursingProvider"
+                    [encounterStudentCptCodes]="encounterStudentCptCodes"
+                    (encounterStudentCptCodesChange)="encounterStudentCptCodes=$event"
+                >
+                </app-encounter-student-cpt-codes>
+            </div>
+            <div *ngIf="studentId && !hasDeviationReason && (isSpeechProvider || isAudioProvider)" class="col-md-4">
+                <app-encounter-student-methods
+                    [encounter]="encounter"
+                    [encounterStudent]="encounterStudent"
+                    [providerServiceCode]="providerServiceCode"
+                    [canEdit]="true"
+                    (methodsUpdated)="methodsUpdate($event)"
+                ></app-encounter-student-methods>
+            </div>
+        </div>
+        <div [ngClass]="(isSpeechProvider || isAudioProvider) ? 'col-md-4' : 'col-md-6'">
+            <div [ngClass]="['notes-wrapper', (isSpeechProvider || isAudioProvider) ? 'small-textarea' : 'large-textarea']">
+                <mt-dynamic-field
+                    [field]="getStoredNotesControl()"
+                    *ngIf="showNotes"
+                    (valueChanges)="setNotesValue($event)"
+                    (controlCreated)="storedNotesControl = $event"
+                >
+                </mt-dynamic-field>
+                <div class="select-button-flex-container">
+                    <mt-dynamic-field [field]="notesField" [form]="studentForm" (controlCreated)="notesControlCreated($event)" (valueChanges)="typedCaseNotes($event)"></mt-dynamic-field>
+                    <button type="button" class="btn btn-sm btn-primary" (click)="saveNotes()">Store Notes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <button
+            *ngIf="encounter?.Id > 0"
+            type="submit"
+            Class="btn btn-flat btn-success"
+        >
+            Save
+        </button>
+        <button *ngIf="encounterStudent?.Id > 0" type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+        <button *ngIf="canDelete" type="button" Class="btn btn-flat btn-danger" (mtConfirm)="removeStudent()">
+            Delete
+        </button>
+        <button
+            *ngIf="canEdit && canBeSigned"
+            type="button"
+            class="btn btn-small btn-info btn-flat pull-right"
+            (click)="signButtonClicked()"
+        >
+            {{ encounterStudent.DateESigned ? 'Re-Sign' : 'Sign' }}
+        </button>
+    </mt-dynamic-form>
+</div>

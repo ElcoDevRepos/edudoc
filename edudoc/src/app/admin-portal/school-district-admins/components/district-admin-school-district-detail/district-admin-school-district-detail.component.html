@@ -1,0 +1,20 @@
+<br />
+<div class="row">
+    <div class="col-md-6">
+        <app-district-admin-school-district-basic-info [schoolDistrict]="schoolDistrict" *ngIf="schoolDistrict">
+        </app-district-admin-school-district-basic-info>
+        <br />
+        <app-overridden-common-documents
+            *ngIf="showDocumentsCard"
+            [allowedMimeType]="allowedRosterDocumentTypes"
+            [canEdit]="canUpload"
+            [schoolDistrictRosterService]="schoolDistrictRosterService"
+            headerTitle="Rosters"
+        ></app-overridden-common-documents>
+        <br />
+        <button type="button" class="btn btn-flat btn-success pull-right" (click)="downloadSampleRoster()">Download Sample Roster</button>
+    </div>
+    <div class="col-md-6" *ngIf="schoolDistrict">
+        <app-district-admin-schools [districtId]="schoolDistrict.Id"></app-district-admin-schools>
+    </div>
+</div>

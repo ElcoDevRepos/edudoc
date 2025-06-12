@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-md-6">
+        <app-diagnosis-code-basic-info
+            [diagnosisCode]="diagnosisCode"
+            (formReady)="diagnosisCodeAddForm = $event"
+            [canEdit]="canEdit"
+            [isAdding]="true"
+            *ngIf="diagnosisCode != null"
+        >
+        </app-diagnosis-code-basic-info>
+        <br />
+        <button
+            type="button"
+            mtDisableClickDuringHttpCalls
+            Class="btn btn-flat btn-success"
+            (click)="formSubmitted()"
+        >
+            Save
+        </button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </div>
+
+    <div class="col-md-6">
+        <app-diagnosis-associations-list
+            [diagnosisCode]="diagnosisCode"
+            [canEdit]="canEdit"
+            [isAdding]="true"
+            *ngIf="diagnosisCode != null"
+        ></app-diagnosis-associations-list>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+<div class="miles-card padded" *ngIf="!isEditing">
+    <h4>ASSIGNMENTS</h4>
+    <!--If no assignments, display span with warning and button to edit-->
+    <div *ngIf="escAssignments?.length === 0">
+        <em>Provider has no assignments yet!</em>
+    </div>
+    <div>
+        <ul *ngIf="escAssignments?.length > 0" class="list-group">
+            <li *ngFor="let assignment of escAssignments" class="list-group-item" (click)="editAssignmentClick(assignment)" 
+                style="padding:20px 15px;">
+                <i class="fa fa-lg fa-edit pull-right"></i>
+                <span [innerHTML]="getAssignmentLabelContents(assignment)"></span>
+                <button class="btn btn-flat btn-danger pull-right provider-delete" (click)="archiveAssignment($event, assignment)"
+                    style="margin:2px 0px;">Remove</button>
+            </li>
+        </ul>
+    </div>
+    <br />
+    <button type="button" class="btn btn-flat btn-success" (click)="createClick()">Manage Assignments</button>
+</div>
+<div class="miles-card padded" *ngIf="isEditing">
+    <h4>{{ selectedEscAssignment?.Id === 0 ? 'CREATE' : 'UPDATE' }} ASSIGNMENT</h4>
+    <div *ngIf="selectedEscAssignment?.Id === 0">
+        <form [formGroup]="form" *ngIf="form">
+            <mt-dynamic-field [field]="escDropdown" [form]="form" (controlCreated)="handleEscDropdownCreated($event)"></mt-dynamic-field>
+            <div *ngIf="schoolDistrictsDropdownBuilt">
+                <label>Districts</label><br />
+    
+                <mt-search-filter-select
+                    [items]="districts"
+                    entity="Districts"
+                    [maxToShowInSelectedText]="2"
+                    (selectionChanged)="checkDistrictSelections()"
+                ></mt-search-filter-select>
+            </div>
+        </form>
+        <br />
+    </div>
+    <div *ngIf="selectedEscAssignment?.Id > 0">
+        <div *ngIf="selectedEscAssignment.Esc !== null"><label>ESC:</label> {{ selectedEscAssignment.Esc?.Name }}</div>
+        <div *ngIf="!editingDistricts">
+            <label>School Districts:</label> {{ getDistrictNames(selectedEscAssignment) }}
+            <span class="pull-right">
+                <button type="button" (click)="editDistricts(therapy)">
+                    <i class="fa fa-edit" aria-hidden="true"></i>
+                </button>
+            </span>
+        </div>
+        <div *ngIf="schoolDistrictsDropdownBuilt && editingDistricts">
+            <mt-dynamic-field [field]="getDistrictDropdown()" [form]="form"></mt-dynamic-field>
+        </div>
+    </div>
+    <div *ngIf="providerEscFormBuilt">
+        <h4>ASSIGNMENT INFO</h4>
+        <mt-dynamic-form [config]="formObject" (submitted)="providerAssignmentSubmitted($event)">
+            <h4>AGENCY</h4>
+            <div *ngIf="provider.ProviderEmploymentTypeId !== districtEmploymentType">
+                <mt-dynamic-field [field]="agencyTypeDropdown" [form]="form" (controlCreated)="handleAgencyTypeDropdownCreated($event)"></mt-dynamic-field>
+            </div>
+            <div *ngIf="provider.ProviderEmploymentTypeId !== districtEmploymentType && providerAgencyDropdownBuilt">
+                <mt-dynamic-field
+                    [field]="providerAgencyDropdown"
+                    [form]="form"
+                    (controlCreated)="handleProviderAgencyDropdownCreated($event)"
+                ></mt-dynamic-field>
+            </div>
+            <div *ngIf="provider.ProviderEmploymentTypeId === districtEmploymentType">
+                <label>Agency: </label> {{ provider.ProviderUser.LastName }}, {{ provider.ProviderUser.FirstName }}
+            </div>
+            <button type="submit" class="btn btn-flat btn-success">Save</button>
+            <button type="cancel" class="btn btn-flat btn-default" (click)="cancelClick()">Cancel</button>
+        </mt-dynamic-form>
+    </div>
+
+    <button type="cancel" class="btn btn-flat btn-default" (click)="cancelClick()" *ngIf="!providerEscFormBuilt">Cancel</button>
+</div>

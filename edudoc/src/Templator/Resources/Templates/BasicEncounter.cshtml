@@ -1,0 +1,90 @@
+@using System;
+@using Service.Utilities;
+@model Templator.Models.BasicEncounterParams
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="@Model.ResolveStylesheetPath("Bootstrap.css")" rel="stylesheet" />
+    <link href="@Model.ResolveStylesheetPath("BasicEncounter.css")" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-xs-4 pull-left">@CommonFunctions.NowInEasternTime()</div>
+        <div class="col-xs-4">
+            <h1>Encounter (Summary)</h1>
+        </div>
+    </div>
+
+    @foreach (var district in Model.districtData)
+    {
+        <div class="tableheader">
+            <div class="row">
+                <div>Student</div>
+            </div>
+            <div class="row" style="padding-left: 15px;">
+                <div class="col-xs-4">Encounter Number</div>
+                <div class="col-xs-4">Status</div>
+                <div class="col-xs-4">Group Count</div>
+            </div>
+            <div class="row" style="padding-left: 20px;">
+                <div class="col-xs-2">Date</div>
+                <div class="col-xs-2">Service Type</div>
+                <div class="col-xs-2">Start Time</div>
+                <div class="col-xs-2">End Time</div>
+                <div class="col-xs-2">Minutes</div>
+            </div>
+        </div>
+
+        <div><strong>District</strong>: @district.DistrictName</div>
+
+        @foreach (var group in @district.GroupData)
+        {
+            <div><strong>Provider: @group.ProviderName</strong></div>
+            <div style="padding-left: 5px;">@group.StudentInfo </div>
+            <div style="padding-left: 10px;">IEP Starts On: @group.IEPStartDate</div>
+            @foreach (var line in @group.LineData)
+            {
+                <div style="page-break-inside: avoid;">
+                    <div class="row" style="padding-left: 15px;">
+                        <div class="col-xs-2">
+                            <div>@line.EncounterNumber </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div>@(line.IsTelehealth ? "(telehealth)" : "") </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div>@line.Status</div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div>Group: @line.Grouping Additional Students: @line.AdditionalStudents</div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding-left: 20px;">
+                        <div class="col-xs-2">
+                            <div>@line.EncounterDate </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div>@line.ServiceType</div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div>@line.StartTime</div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div>@line.EndTime</div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div>@line.TotalMinutes</div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="pull-right">Total Minutes: @group.TotalMinutes</div>
+            <hr>
+        }
+    }
+</body>
+
+</html>

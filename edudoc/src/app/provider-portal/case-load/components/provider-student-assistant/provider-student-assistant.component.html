@@ -1,0 +1,132 @@
+<div *ngIf="!isCardOpen" class="miles-editable miles-card padded">
+    <h4>
+        ASSISTANT ASSIGNMENTS
+        <i (click)="toggleCardOpen()" style="padding:5px;cursor:pointer;" class="fa fa-chevron-down"></i>
+    </h4>
+</div>
+<div class="miles-editable miles-card padded" *ngIf="!isAdding && isCardOpen" [style.cursor]="pointer">
+    <h4>CURRENT ASSISTANT ASSIGNMENTS
+        <span>
+            <i *ngIf="isCardOpen" (click)="toggleCardOpen()" style="padding:5px;cursor:pointer;" class="fa fa-chevron-up"></i>
+        </span>
+    </h4>
+    <div class="table-responsive" *ngIf="!noCurrentAssistants() && !isEditing">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th>
+                        <b>Name</b>
+                    </th>
+                    <th>
+                        <b>Start Date</b>
+                    </th>
+                    <th>
+                        <b>End Date</b>
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="no-pointer" *ngFor="let assistant of currentAssistants">
+                    <td class="ellipsis">
+                        {{ getAssistantName(assistant) }}
+                    </td>
+                    <td class="ellipsis">
+                        {{ assistant?.EffectiveStartDate | date: 'shortDate' }}
+                    </td>
+                    <td class="ellipsis">
+                        {{ assistant?.EffectiveEndDate | date: 'shortDate' }}
+                    </td>
+                    <td class="ellipsis">
+                        <button type="button" (click)="editAssistantAssignment(assistant)">
+                            <i class="fa fa-edit fa-2x" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                    <td class="ellipsis">
+                        <button type="button" (mtConfirm)="removeAssistantAssignment(assistant)" [mtConfirmOptions]="archiveConfirm">
+                            <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <app-provider-student-assistant-update *ngIf="isEditing"
+        [(isEditing)]="isEditing"
+        [providerStudentSupervisor]="providerStudentSupervisor"
+        (providerStudentSupervisorChange)="currentAssistantChange($event)"
+    ></app-provider-student-assistant-update>
+
+    <div *ngIf="noCurrentAssistants()">
+        <h3 style="text-align: center;">No assistant assigned currently.</h3>
+    </div>
+
+    <h4>PAST ASSISTANT ASSIGNMENTS</h4>
+    <div class="table-responsive" *ngIf="!noProviderStudentSupervisors()">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th>
+                        <b>Name</b>
+                    </th>
+                    <th>
+                        <b>Start Date</b>
+                    </th>
+                    <th>
+                        <b>End Date</b>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="no-pointer" *ngFor="let providerStudentSupervisor of providerStudentSupervisors">
+                    <td class="ellipsis">
+                        {{ getAssistantName(providerStudentSupervisor) }}
+                    </td>
+                    <td class="ellipsis">
+                        {{ providerStudentSupervisor?.EffectiveStartDate | date: 'shortDate' }}
+                    </td>
+                    <td class="ellipsis">
+                        {{ providerStudentSupervisor?.EffectiveEndDate | date: 'shortDate' }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="noProviderStudentSupervisors()">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+
+    <div class="fab-wrap">
+        <button class="btn btn-primary btn-fab-md btn-fab-center" type="button" (click)="addAssistant()">
+            <span class="fa fa-plus"></span>
+        </button>
+    </div>
+</div>
+
+<div *ngIf="isAdding && isCardOpen" class="miles-form padded">
+    <h4>ASSISTANT INFO</h4>
+    <div class="row">
+        <div class="col-md-4">
+            <mt-dynamic-field [field]="getAssistantsField()" (valueChanges)="assistantSelected($event)"> </mt-dynamic-field>
+        </div>
+        <div class="col-md-4">
+            <mt-dynamic-field class="field-margin" [field]="getEffectiveStartDateControl()" (valueChanges)="effectiveStartDateSelected($event)"> </mt-dynamic-field>
+        </div>
+        <div class="col-md-4">
+            <mt-dynamic-field class="field-margin" [field]="getEffectiveEndDateControl()" (valueChanges)="effectiveEndDateSelected($event)"> </mt-dynamic-field>
+        </div>
+    </div>
+    <div class="row" style="margin-top:10px;margin-left:10px;">
+        <button type="button" Class="btn btn-flat btn-success" (click)="saveAssistant()">
+            Save
+        </button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </div>
+</div>
+<br />

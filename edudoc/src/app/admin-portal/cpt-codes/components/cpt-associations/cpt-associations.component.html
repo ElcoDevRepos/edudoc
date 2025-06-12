@@ -1,0 +1,157 @@
+<div class="row">
+    <div class="col-md-6">
+        <div class="miles-form padded" *ngIf="canEdit && bulkAdd">
+            <h4>ADD BULK ASSOCIATIONS</h4>
+            <mt-dynamic-field [field]="getBulkServiceTypeIdsField()" [form]="bulkForm" [overrideForm]="true" (valueChanges)="handleServiceTypeSelection($event)"> </mt-dynamic-field>
+            <mt-dynamic-field [field]="getBulkServiceCodeIdsField()" [form]="bulkForm" [overrideForm]="true"> </mt-dynamic-field>
+            <mt-dynamic-field [field]="getBulkEvaluationTypeIdsField()" (controlCreated)="evalTypeControl = $event" [form]="bulkForm" [overrideForm]="true"> </mt-dynamic-field>
+            <mt-dynamic-field [field]="getBulkProviderTitleIdsField()" [form]="bulkForm" [overrideForm]="true"> </mt-dynamic-field>
+            <mt-dynamic-field [field]="getBulkIsTelehealthsField()" [form]="bulkForm" [overrideForm]="true"> </mt-dynamic-field>
+            <mt-dynamic-field [field]="getBulkIsGroupField()" [form]="bulkForm" [overrideForm]="true"> </mt-dynamic-field>
+            <mt-dynamic-field [field]="getBulkDefaultField()" [form]="bulkForm" [overrideForm]="true"> </mt-dynamic-field>
+            <button
+                type="submit"
+                class="btn btn-flat btn-success"
+                (click)="bulkFormSubmitted()"
+            >
+                Add
+            </button>
+            <button type="button" Class="btn btn-flat btn-default" (click)="clearBulkFields()">
+                Clear
+            </button>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="row">
+    <div class="col-md-10">
+
+        <div
+            class="miles-editable miles-card padded"
+            *ngIf="!isEditing"
+            (mouseenter)="isHovered = true"
+            (mouseleave)="isHovered = false"
+            (click)="edit()"
+            [style.cursor]="canEdit ? 'pointer' : 'default'"
+        >
+            <h4>
+                CPT CODE ASSOCIATIONS
+                <span class="pull-right" *ngIf="canEdit">
+                    <i class="fa fa-lg fa-edit"></i>
+                </span>
+            </h4>
+            <div *ngIf="hasAssociations; else noAssociations">
+                <div class="table-responsive" *ngIf="associationForms && associationForms.length">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Service Type</th>
+                                <th>Service Code</th>
+                                <th>Evaluation Type</th>
+                                <th>Provider Title</th>
+                                <th class="text-center">Is Telehealth</th>
+                                <th class="text-center">Is Group</th>
+                                <th class="text-center">Group Default</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of associationForms; let i = index">
+                                <td>
+                                    {{ metaItemNameFunc('serviceTypes', row.association.ServiceTypeId) }}
+                                </td>
+                                <td>
+                                    {{ metaItemNameFunc('serviceCodes', row.association.ServiceCodeId) }}
+                                </td>
+                                <td>
+                                    {{ metaItemNameFunc('evaluationTypes', row.association.EvaluationTypeId) }}
+                                </td>
+                                <td>
+                                    {{ metaItemNameFunc('providerTitles', row.association.ProviderTitleId) }}
+                                </td>
+                                <td class="text-center">
+                                    {{ row.association.IsTelehealth ? 'Yes' : 'No' }}
+                                </td>
+                                <td class="text-center">
+                                    {{ row.association.IsGroup ? 'Yes' : 'No' }}
+                                </td>
+                                <td class="text-center">
+                                    {{ row.association.Default ? 'Yes' : 'No' }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isEditing" class="miles-form padded">
+            <h4 class="heading-with-button">
+                CPT CODE ASSOCIATIONS
+                <button class="btn btn-sm btn-primary" *ngIf="canEdit" type="button" (click)="addRow()">
+                    <i class="fa fa-plus fa-lg" style="cursor: pointer;" aria-hidden="true"></i>
+                </button>
+            </h4>
+            <div class="table-responsive" *ngIf="associationForms && associationForms.length">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Service Type</th>
+                            <th>Service Code</th>
+                            <th>Evaluation Type</th>
+                            <th>Provider Title</th>
+                            <th class="text-center">Is Telehealth</th>
+                            <th class="text-center">Is Group</th>
+                            <th class="text-center">Group Default</th>
+                            <th class="text-center">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of associationForms; let i = index">
+                            <td>
+                                <mt-dynamic-field [field]="row.controls.ServiceTypeId" [form]="row.form" [overrideForm]="true" (valueChanges)="handleServiceTypeChange($event, row)"> </mt-dynamic-field>
+                            </td>
+                            <td>
+                                <mt-dynamic-field [field]="row.controls.ServiceCodeId" [form]="row.form" [overrideForm]="true"> </mt-dynamic-field>
+                            </td>
+                            <td>
+                                <mt-dynamic-field [field]="row.controls.EvaluationTypeId" [form]="row.form" [overrideForm]="true"> </mt-dynamic-field>
+                            </td>
+                            <td>
+                                <mt-dynamic-field [field]="row.controls.ProviderTitleId" [form]="row.form" [overrideForm]="true"> </mt-dynamic-field>
+                            </td>
+                            <td class="text-center">
+                                <mt-dynamic-field [field]="row.controls.IsTelehealth" [form]="row.form" [overrideForm]="true"> </mt-dynamic-field>
+                            </td>
+                            <td class="text-center">
+                                <mt-dynamic-field [field]="row.controls.IsGroup" [form]="row.form" [overrideForm]="true"> </mt-dynamic-field>
+                            </td>
+                            <td class="text-center">
+                                <mt-dynamic-field [field]="row.controls.Default" [form]="row.form" [overrideForm]="true"> </mt-dynamic-field>
+                            </td>
+                            <td class="text-center">
+                                <mt-dynamic-field [field]="row.controls.Archived" [form]="row.form" [overrideForm]="true" *ngIf="row.association.Id > 0">
+                                </mt-dynamic-field>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button
+                type="submit"
+                mtDisableClickDuringHttpCalls
+                class="btn btn-flat btn-success"
+                (click)="formSubmitted()"
+            >
+                Save
+            </button>
+            <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+                Cancel
+            </button>
+        </div>
+
+        <ng-template #noAssociations>
+            <div class="text-center"><strong>This CPT code does not have any associations</strong></div>
+        </ng-template>
+
+    </div>
+</div>

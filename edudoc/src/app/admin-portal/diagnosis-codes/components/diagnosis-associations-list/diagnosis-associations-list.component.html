@@ -1,0 +1,138 @@
+<div
+    class="miles-editable miles-card padded"
+    *ngIf="!isEditing"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    (click)="edit()"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4>
+        DIAGNOSIS CODE ASSOCIATIONS
+        <span class="pull-right" *ngIf="canEdit">
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th>
+                        <b>Service Code</b>
+                    </th>
+                    <th>
+                        <b>Service Type</b>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="no-pointer" *ngFor="let association of diagnosisCodeAssociations">
+                    <td class="ellipsis">
+                        {{ association.ServiceCode.Name }}
+                    </td>
+                    <td class="ellipsis">
+                        {{ association.ServiceType.Name }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="noAssociations()">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+</div>
+
+<!-- If Editing Associations -->
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4>DIAGNOSIS CODE ASSOCIATIONS</h4>
+
+    <!-- Options for adding associations -->
+    <div class="row" *ngIf="serviceCodes && serviceTypes">
+        <div class="col-md-4">
+            <select [(ngModel)]="selectedServiceType" [ngModelOptions]="{ standalone: true }" class="form-control">
+                <option [ngValue]="none" selected disabled hidden>
+                    Service Type
+                </option>
+                <option *ngFor="let type of serviceTypes" [ngValue]="type"> {{ type.Name }} - {{ type.Code }} </option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button
+                type="button"
+                Class="btn btn-flat btn-success"
+                (click)="addAssociation()"
+                *ngIf="getSelectedServiceCodes().length && selectedServiceType"
+            >
+                Add Association
+            </button>
+        </div>
+    </div>
+    <br />
+    <mt-multiselect
+        [items]="serviceCodes"
+        [showSelectAllButtons]="true"
+        [maxToShowInSelectedText]="3"
+        [autoClose]="true"
+        [filterMode]="false"
+        entity="Service Code"
+        *ngIf="serviceCodes"
+    ></mt-multiselect>
+    <br />
+    <br />
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th>
+                        <b>Service Code</b>
+                    </th>
+                    <th>
+                        <b>Service Type</b>
+                    </th>
+                    <th>
+                        <b>Remove</b>
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngIf="diagnosisCodeAssociations">
+                <tr class="no-pointer" *ngFor="let association of diagnosisCodeAssociations">
+                    <td class="ellipsis">
+                        {{ association.ServiceCode.Name }}
+                    </td>
+                    <td class="ellipsis">
+                        {{ association.ServiceType.Name }}
+                    </td>
+                    <td class="ellipsis">
+                        <div *ngIf="association.Archived" class="text-center">
+                            <button type="button" (mtConfirm)="archiveDiagnosisCodeAssociation(association)" [mtConfirmOptions]="unarchiveConfirm">
+                                <i class="fa fa-undo fa-2x"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="!association.Archived" class="text-center">
+                            <button type="button" (mtConfirm)="archiveDiagnosisCodeAssociation(association)" [mtConfirmOptions]="archiveConfirm">
+                                <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="noAssociations()">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+
+    <!-- Lock in editing mode for new DiagnosisCode -->
+    <div *ngIf="!isAdding">
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Close
+        </button>
+        <!-- Show Archived Checkbox -->
+        <div class="pull-right">
+            <mt-dynamic-field [field]="getArchivedField()" (valueChanges)="includeArchived = $event; getDiagnosisCodeAssociations()"></mt-dynamic-field>
+        </div>
+    </div>
+</div>

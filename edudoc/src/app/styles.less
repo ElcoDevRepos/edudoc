@@ -1,0 +1,514 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'styles/_base';
+@import 'styles/_nav';
+@import 'styles/_buttons';
+@import 'styles/_edudoc';
+@import 'styles/_angular-calendar';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+// TODO CCC: figure out better way to do these styles
+tr.archived {
+    background-color: rgb(255, 192, 203) !important;
+}
+tr.archived > td {
+    background-color: rgb(255, 192, 203) !important;
+}
+
+.dropup .dropdown-menu,
+.navbar-fixed-bottom .dropdown .dropdown-menu {
+    bottom: initial;
+    margin-bottom: initial;
+}
+
+// This adds scrollbar to typeahead control dropdown. Seek better solution using entity-list config
+// ng-component.dropdown-menu {
+//     max-height: 300px !important;
+//     overflow-y: scroll;
+// }
+
+div.document-upload > mt-common-documents >
+div.miles-card > div.fab-wrap > button {
+    visibility: hidden;
+}
+
+mt-common-documents > div.miles-card > div.ng-star-inserted >
+div.row > div.ng-star-inserted > div.col-xs-4 {
+    width: 100%;
+}
+
+div.swal2-content.big-text > #swal2-content > swal-portal > div > mt-dynamic-field > ng-component > mt-dynamic-form-input-wrapper > div > span > textarea {
+    height: 150px !important;
+}
+
+// remove extra padding above titles on all pages for admin portal
+.content-wrapper {
+    padding-top: 0px;
+}
+
+.visually-hidden {
+    display: none;
+}
+
+app-provider-caseloads > mt-entity-list > mt-entity-list-actions > div > div > mt-entity-list-export {
+    display: none !important;
+}
+
+// styling for header to prevent overflow
+mt-nav-header > header > nav > div.navbar-custom-menu {
+    width: 1000px;
+}
+
+mt-nav-header > header > nav > div > mt-header-current-user-details > ul.nav.navbar-nav {
+    float: right;
+}
+
+mt-nav-header > header > nav > div > mt-header-submit-help > div.nav.navbar-nav.submit-help {
+    float: right;
+}
+
+// set revalidation date field in school district profile color
+app-school-district-basic-info > div > mt-dynamic-view > div:nth-child(9) > span  {
+    color: red;
+}
+
+mt-common-phone > div > h4, app-recommended-page-list > div > h4 {
+    text-transform: uppercase;
+}
+
+mt-dynamic-view > div > b {
+    text-transform: uppercase;
+}
+
+i.fa-trash {
+    color: red;
+}
+
+// admin's school district list page's active status cell button
+#schoolDistrictActiveStatusCell:hover span {
+    display: none;
+}
+
+#schoolDistrictActiveStatusCell:hover:before {
+    content: "Deactivate";
+}
+
+#schoolDistrictActiveStatusCell:hover {
+    background-color: #dd4b39;
+    border-color: #dd4b39;
+}
+
+#schoolDistrictInactiveStatusCell:hover span {
+    display: none;
+}
+
+#schoolDistrictInactiveStatusCell:hover:before {
+    content: "Activate";
+}
+
+#schoolDistrictInactiveStatusCell:hover {
+    background-color: green;
+    border-color: green;
+}
+
+/* School District Admin portal, IEP Services card in Review Students */
+// make minutes and date field inputs be in the same line
+app-student-iep-services > div > mt-dynamic-form > form > mt-form-numeric {
+    position: absolute;
+    display: inline;
+}
+
+app-student-iep-services > div > mt-dynamic-form > form > ng-component:nth-child(n+5) > mt-dynamic-form-input-wrapper > div {
+    margin-left: 210px;
+    padding-top: 4px;
+}
+
+// for the first field
+app-student-iep-services > div > mt-dynamic-form > form > mt-form-numeric:nth-child(4) {
+    display: flex;
+}
+
+// put the first 3 date fields horizontally
+app-student-iep-services > div > mt-dynamic-form > form > ng-component:nth-child(-n+3) > mt-dynamic-form-input-wrapper > div {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/*Encounters AUP Audit*/
+// hide entity list config in aup audits card
+app-aup-audit > div > mt-entity-list {
+    display: none !important;
+}
+
+/*Increase font size across all cards*/
+// card headers
+h4 {
+    font-size: 24px;
+}
+
+// card content
+.miles-card, .miles-card b {
+    font-size: 20px;
+    color: black;
+}
+
+// nav panel
+mt-nav-menu-item {
+    font-size: 18px;
+}
+
+// buttons
+.btn {
+    font-size: 18px;
+}
+
+/*Adjustments to CSS to account for larger font size*/
+app-esc-header > app-esc-detail > div > div > div:nth-child(2) > mt-shared-entities > div > div.pull-right.max-of-total {
+    margin: 5px;
+}
+
+li {
+    overflow: auto;
+}
+
+mt-header-current-user-details > ul > li {
+    overflow: visible;
+}
+
+.btn.remove-button {
+    font-size: 14px;
+}
+
+ngb-datepicker-month {
+    font-size: 14px;
+}
+
+button.btn.btn-default.btn-nohover.btn-flat {
+    font-size: 14.5px;
+}
+
+/* Make radio button same color as system colors */
+.btn-primary-inverse.active, .btn-primary-inverse.active:hover, .btn-primary-inverse.focus.active, .btn-primary-inverse.focus.active:hover, .btn-primary-inverse:active:focus, .btn-primary-inverse:active:hover, .btn-primary-inverse:hover:not([disabled]) {
+    color: white;
+    background-color: #007bc1;
+}
+
+/* Highlight nav item when selected */
+ul.treeview-menu > li > mt-nav-menu-item > a:has(.active), ul.sidebar-menu.nav-tree > li > mt-nav-menu-item > a:has(.active) {
+    background-color: #337ab7;
+}
+
+/* Move add button in managed list to top of card */
+mt-meta-item-managed-list > mt-managed-list > div > div > div.fab-wrap.ng-star-inserted > button {
+    top: -13.5px;
+    margin-right: inherit !important;
+}
+
+mt-meta-item-managed-list > mt-managed-list > div > div > button {
+    position: absolute !important;
+    right: 50px !important;
+    top: -12px;
+}
+
+/* Increase size of export button */
+app-missing-referrals > mt-entity-list > mt-entity-list-actions > div > div > mt-entity-list-export > span > button {
+    font-size: 24px !important;
+    bottom: 18px;
+    position: relative;
+}
+
+/*#region Create Treatment/Therapy Encounters*/
+@media (min-width: 1700px) {
+    app-encounter-basic-info {
+        mt-dynamic-field.location-field mt-dynamic-form-select-wrapper
+        {
+            width: 50%;
+            display: block;
+            margin-left: 0.5em;
+        }
+        mt-dynamic-field.location-field  mt- mt-dynamic-form-select-wrapper {
+            position: absolute !important;
+            bottom: -0.6em !important;
+            width: 30% !important;
+            margin-left: 0.4em !important;
+        }
+        mt-multiselect > span > button {
+            background: #007bc1 !important;
+            color: white !important;
+        }
+    }
+}
+@media (min-width: 1250px) and (max-width: 1699px) {
+    app-encounter-basic-info {
+        mt-dynamic-field.location-field mt-dynamic-form-select-wrapper
+        {
+            width: 50%;
+            display: block;
+            margin-left: 0.5em;
+        }
+        mt-dynamic-field.location-field  mt- mt-dynamic-form-select-wrapper {
+            position: absolute !important;
+            bottom: -0.6em !important;
+            width: 30% !important;
+            margin-left: 0.4em !important;
+        }
+        mt-multiselect > span > button {
+            background: #007bc1 !important;
+            color: white !important;
+        }
+    }
+}
+@media (min-width: 0px) and (max-width: 1249px) {
+    app-encounter-basic-info {
+        mt-dynamic-field.location-field mt-dynamic-form-select-wrapper
+        {
+            width: 50%;
+            display: block;
+            margin-left: 0.5em;
+        }
+        mt-dynamic-field.location-field  mt- mt-dynamic-form-select-wrapper {
+            position: absolute !important;
+            bottom: -0.6em !important;
+            width: 30% !important;
+            margin-left: 0.4em !important;
+        }
+        mt-multiselect > span > button {
+            background: #007bc1 !important;
+            color: white !important;
+        }
+    }
+}
+
+/*#endregion */
+
+/*#region Treatment Encounter Student Cards */
+// Monitor screen
+@media (min-width: 1700px) {
+    app-encounter-student {
+        mt-dynamic-form {
+            // date field
+            ng-component:nth-child(2) > mt-dynamic-form-input-wrapper > div {
+                margin-bottom: 4em;
+            }
+            ng-component:nth-child(2) > mt-dynamic-form-input-wrapper > div > span > input.form-control {
+                margin-top: -1.5em;
+            }
+            ng-component:nth-child(3) > mt-dynamic-form-input-wrapper > div,
+            ng-component:nth-child(4) > mt-dynamic-form-input-wrapper > div {
+                margin-bottom: 3.8em;
+            }
+            // start time field
+            ng-component:nth-child(3) mt-dynamic-form-input-wrapper > div > span {
+                margin-top: -1.5em;
+            }
+            // end time field
+            ng-component:nth-child(4) mt-dynamic-form-input-wrapper > div > mt-dynamic-form-label > span {
+                margin-top: 1.5em;
+            }
+            // deviation reasonf ield
+            ng-component:nth-child(5)  mt-dynamic-form-select-wrapper > div {
+                margin-bottom: 4em;
+            }
+            /* Make encounter student card's date, time and deviation reason fields on the same line */
+            ng-component:nth-child(2) > mt-dynamic-form-input-wrapper > div,
+            ng-component:nth-child(3) > mt-dynamic-form-input-wrapper > div,
+            ng-component:nth-child(4) > mt-dynamic-form-input-wrapper > div,
+            ng-component:nth-child(5) >  mt-dynamic-form-select-wrapper > div  {
+                display: inline-block !important;
+            }
+            // decrease font size of data in cpt code/ goal/ methods table in encounter student card
+            div.encounter-student-component-cards div.table-responsive {
+                font-size: 14px;
+            }
+            div.notes-wrapper.small-textarea textarea {
+                width: 200% !important;
+            }
+            div.notes-wrapper.large-textarea textarea {
+                width: 350% !important;
+            }
+            app-encounter-student-cpt-codes, app-encounter-student-goals, app-encounter-student-methods {
+                h4.header {
+                    font-size: 18px;
+                }
+                div.table-responsive table.table.table-striped th b {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+// 13 inch laptop and above
+@media (min-width: 1025px) and (max-width: 1699px) {
+    app-encounter-student {
+        mt-dynamic-form {
+            // date field
+            ng-component:nth-child(2) > mt-dynamic-form-input-wrapper > div {
+                margin-bottom: 4em;
+            }
+            ng-component:nth-child(2) > mt-dynamic-form-input-wrapper > div > span > input.form-control {
+                margin-top: -1.5em;
+            }
+            ng-component:nth-child(3) > mt-dynamic-form-input-wrapper > div,
+            ng-component:nth-child(4) > mt-dynamic-form-input-wrapper > div {
+                margin-bottom: 3.8em;
+            }
+            // start time field
+            ng-component:nth-child(3) mt-dynamic-form-input-wrapper > div > span {
+                margin-top: -1.5em;
+            }
+            // end time field
+            ng-component:nth-child(4) mt-dynamic-form-input-wrapper > div > mt-dynamic-form-label > span {
+                margin-top: 1.5em;
+            }
+            // deviation reasonf ield
+            ng-component:nth-child(5)  mt-dynamic-form-select-wrapper > div {
+                margin-bottom: 4em;
+            }
+            /* Make encounter student card's date, time and deviation reason fields on the same line */
+            ng-component:nth-child(2) > mt-dynamic-form-input-wrapper > div,
+            ng-component:nth-child(3) > mt-dynamic-form-input-wrapper > div,
+            ng-component:nth-child(4) > mt-dynamic-form-input-wrapper > div,
+            ng-component:nth-child(5) >  mt-dynamic-form-select-wrapper > div  {
+                display: inline-block !important;
+            }
+            // decrease font size of data in cpt code/ goal/ methods table in encounter student card
+            div.encounter-student-component-cards div.table-responsive {
+                font-size: 14px;
+            }
+            app-encounter-student-cpt-codes, app-encounter-student-goals, app-encounter-student-methods {
+                h4.header {
+                    font-size: 18px;
+                }
+                div.table-responsive table.table.table-striped th b {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+/*#endregion */
+
+#caseUploadPreview div table tbody tr td {
+    text-align: left;
+}
+
+/* Provider Student Caseload Create Schedule Card*/
+mt-dynamic-field.field-margin > ng-component > mt-dynamic-form-input-wrapper > div > span {
+    margin-top: -1.5em;
+}
+
+/* Hide Shortcuts and Help button from header */
+mt-header-shortcut-help, mt-header-submit-help {
+    visibility: hidden;
+}
+
+/*#region Documentation Calendar*/
+/* Hide title from showing on provider documentation calendar entry, we want that content to be on hover */
+student-therapy-calendar > mwl-calendar-week-view mwl-calendar-event-title > span,
+student-therapy-calendar > mwl-calendar-day-view mwl-calendar-event-title > span {
+    display: none !important;
+}
+
+.calendar-white {
+    color: gray;
+}
+
+.calendar-blue {
+    color: white;
+}
+
+.datepicker-only-month-select {
+    border: 0 !important;
+    .ngb-dp-months {
+        display: none !important;
+    }
+    div.ngb-dp-arrow > button {
+        display: none !important;
+    }
+    div.ngb-dp-header > ngb-datepicker-navigation > ngb-datepicker-navigation-select > select {
+        height: 2.5rem !important;
+    }
+}
+/*#endregion*/
+
+/*#region Evaluations */
+app-evaluation-add-encounter-student {
+    .inputs-side-by-side.encounter-date-time-row {
+        padding-top: 0.5em;
+
+        mt-dynamic-field.encounter-date mt-dynamic-form-input-wrapper {
+            margin-top: -1.2em !important;
+        }
+    }
+}
+
+#swal2-html-container > swal-portal > div > div > div.row.inputs-side-by-side.encounter-date-time-row > mt-dynamic-field > ng-component > mt-dynamic-form-input-wrapper > div > span > div > mt-timepicker > fieldset {
+    margin-top: -1.4em;
+}
+
+#swal2-html-container > swal-portal > div > div > div.row.inputs-side-by-side.encounter-date-time-row > mt-dynamic-field.encounter-date > ng-component > mt-dynamic-form-input-wrapper > div > span > input.form-control {
+    margin-top: -1.2em;
+}
+
+@media (min-width: 1025px) and (max-width: 1699px) {
+    #swal2-html-container {
+        transform: scale(0.75);
+        width: 130%;
+        margin-left: -10em;
+    }
+    app-evaluation-detail {
+        div.evaluation-action-buttons button {
+            transform: scale(0.8);
+        }
+    }
+}
+/*#endregion */
+
+/*#region Evaluation List*/
+app-evaluation-list {
+    .table-responsive {
+        overflow-x: visible;
+    }
+    mt-multiselect > span > button {
+        font-size: 14px !important;
+        margin-top: 0.5em;
+    }
+}
+
+/*#region Add Student Schedule in ERFY Schedules by Day report*/
+#swal2-html-container > swal-portal > div > div > app-add-student-therapy > div > div > div:nth-child(3) {
+    padding-bottom: 1.8em;
+}
+
+#swal2-html-container > swal-portal > div > div > app-add-student-therapy > div > div > div:nth-child(4) > div > div > div {
+    margin-left: 32em;
+}
+
+app-add-student-therapy mt-dynamic-form-input-wrapper mt-timepicker fieldset div.ngb-tp-input-container > input {
+    padding: 0px;
+}
+/*#endregion */
+
+/* Provider Caseloads page */
+app-provider-caseloads > mt-virtual-scroll-entity-list > div.table-responsive > table > thead {
+    top: 0px !important;
+}
+
+@media (min-width: 1250px) and (max-width: 1699px) {
+    body > div.swal2-container.swal2-center.swal2-backdrop-show > div {
+        width: 80% !important;
+    }
+    app-add-student-therapy mt-dynamic-form-input-wrapper mt-timepicker fieldset div.ngb-tp-input-container > input {
+        padding: 0px;
+    }
+}
+
+@media print {
+  #printContainer  {
+    width: 99.9% !important;
+  }
+}
+
+.width-100 {
+    width: 100%;
+}

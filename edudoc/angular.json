@@ -1,0 +1,144 @@
+{
+  "$schema": "./node_modules/@angular-devkit/core/src/workspace/workspace-schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "edudoc": {
+      "root": "",
+      "sourceRoot": "src/app",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/src/app",
+            "index": "./src/app/index.html",
+            "main": "./src/app/main.ts",
+            "tsConfig": "./src/app/tsconfig.app.json",
+            "polyfills": "./src/app/polyfills.ts",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/app/styles"
+              ]
+            },
+            "assets": [
+              "src/app/assets",
+              "src/app/robots.txt",
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+              }
+            ],
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/font-awesome/css/font-awesome.min.css",
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/@mt-ng2/styles/styles.min.css",
+              "src/app/styles.less"
+            ],
+            "scripts": [],
+            "aot": false,
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
+          },
+          "configurations": {
+            "test": {
+              "fileReplacements": [
+                {
+                  "replace": "./src/app/common/environments/environment.ts",
+                  "with": "./src/app/common/environments/environment.testing.ts"
+                }
+              ]
+            },
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "./src/app/common/environments/environment.ts",
+                  "with": "./src/app/common/environments/environment.prod.ts"
+                }
+              ]
+            }
+          },
+          "defaultConfiguration": ""
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "edudoc:build"
+          },
+          "configurations": {
+            "test": {
+              "browserTarget": "edudoc:build:test"
+            },
+            "production": {
+              "browserTarget": "edudoc:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "edudoc:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "./src/app/test.ts",
+            "karmaConfig": "./karma.conf.js",
+            "polyfills": "./src/app/polyfills.ts",
+            "tsConfig": "./src/app/tsconfig.spec.json",
+            "scripts": [],
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/font-awesome/css/font-awesome.min.css",
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/@mt-ng2/styles/styles.min.css",
+              "src/app/styles.less"
+            ],
+            "assets": [
+              "src/app/assets",
+              "src/app/robots.txt"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "spec": false,
+      "prefix": "app",
+      "styleext": "less"
+    },
+    "@schematics/angular:service": {
+      "flat": false,
+      "spec": false
+    },
+    "@schematics/angular:directive": {
+      "prefix": "app"
+    },
+    "@ionic/angular-toolkit:component": {
+      "styleext": "scss"
+    },
+    "@ionic/angular-toolkit:page": {
+      "styleext": "scss"
+    }
+  },
+  "cli": {
+    "analytics": "6ffcafce-7ece-422b-b98a-045f8e4ff5a6"
+  }
+}

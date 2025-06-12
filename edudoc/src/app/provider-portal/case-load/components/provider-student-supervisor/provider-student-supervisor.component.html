@@ -1,0 +1,138 @@
+<div *ngIf="!isCardOpen" class="miles-editable miles-card padded">
+    <h4>
+        SUPERVISOR ASSIGNMENTS
+        <i (click)="toggleCardOpen()" style="padding:5px;cursor:pointer;" class="fa fa-chevron-down"></i>
+    </h4>
+</div>
+<div class="miles-editable miles-card padded" *ngIf="!isAdding && isCardOpen" [style.cursor]="pointer">
+    <div>
+        <h4>CURRENT SUPERVISOR ASSIGNMENTS
+            <span>
+                <i *ngIf="isCardOpen" (click)="toggleCardOpen()" style="padding:5px;cursor:pointer;" class="fa fa-chevron-up"></i>
+            </span>
+        </h4>
+        <div class="table-responsive" *ngIf="!noCurrentSupervisors() && !isEditing">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="no-pointer">
+                        <th>
+                            <b>Name</b>
+                        </th>
+                        <th>
+                            <b>Start Date</b>
+                        </th>
+                        <th>
+                            <b>End Date</b>
+                        </th>
+                        <th>
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="no-pointer" *ngFor="let supervisor of currentSupervisors">
+                        <td class="ellipsis">
+                            {{ getSupervisorName(supervisor) }}
+                        </td>
+                        <td class="ellipsis">
+                            {{ supervisor?.EffectiveStartDate | date: 'shortDate' }}
+                        </td>
+                        <td class="ellipsis">
+                            {{ supervisor?.EffectiveEndDate | date: 'shortDate' }}
+                        </td>
+                        <td class="ellipsis">
+                            <button type="button" (click)="editSupervisorAssignment(supervisor)">
+                                <i class="fa fa-edit fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                        <td class="ellipsis">
+                            <button type="button" (mtConfirm)="removeSupervisorAssignment(supervisor)" [mtConfirmOptions]="archiveConfirm">
+                                <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div *ngIf="noCurrentSupervisors()">
+        <h3 style="text-align: center;">No supervisor assigned currently.</h3>
+    </div>
+
+    <app-provider-student-supervisor-update *ngIf="isEditing"
+        [(isEditing)]="isEditing"
+        [providerStudentSupervisor]="providerStudentSupervisor"
+        (providerStudentSupervisorChange)="currentSupervisorChange($event)"
+    ></app-provider-student-supervisor-update>
+
+    <h4>PAST SUPERVISOR ASSIGNMENTS
+        <span>
+            <i *ngIf="isCardOpen && !(currentSupervisor && currentSupervisor.Id > 0)" (click)="toggleCardOpen()" style="padding:5px;cursor:pointer;" class="fa fa-chevron-up"></i>
+        </span>
+    </h4>
+    <div class="table-responsive" *ngIf="!noPastSupervisors()">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th>
+                        <b>Name</b>
+                    </th>
+                    <th>
+                        <b>Start Date</b>
+                    </th>
+                    <th>
+                        <b>End Date</b>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="no-pointer" *ngFor="let providerStudentSupervisor of pastSupervisors">
+                    <td class="ellipsis">
+                        {{ getSupervisorName(providerStudentSupervisor) }}
+                    </td>
+                    <td class="ellipsis">
+                        {{ providerStudentSupervisor?.EffectiveStartDate | date: 'shortDate' }}
+                    </td>
+                    <td class="ellipsis">
+                        {{ providerStudentSupervisor?.EffectiveEndDate | date: 'shortDate' }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="noPastSupervisors">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+
+    <div class="fab-wrap">
+        <button class="btn btn-primary btn-fab-md btn-fab-center" type="button" (click)="addSupervisor()">
+            <span class="fa fa-plus"></span>
+        </button>
+    </div>
+</div>
+
+<div *ngIf="isAdding && isCardOpen" class="miles-form padded">
+    <h4>SUPERVISOR INFO</h4>
+    <div class="row">
+        <div class="col-md-4">
+            <mt-dynamic-field [field]="getSupervisorsField()" (valueChanges)="supervisorSelected($event)"> </mt-dynamic-field>
+        </div>
+        <div class="col-md-4">
+            <mt-dynamic-field class="field-margin" [field]="getEffectiveStartDateControl()" (valueChanges)="effectiveStartDateSelected($event)"> </mt-dynamic-field>
+        </div>
+        <div class="col-md-4">
+            <mt-dynamic-field class="field-margin" [field]="getEffectiveEndDateControl()" (valueChanges)="effectiveEndDateSelected($event)"> </mt-dynamic-field>
+        </div>
+    </div>
+    <div class="row" style="margin-top:10px;margin-left:10px;">
+        <button type="button" Class="btn btn-flat btn-success" (click)="saveSupervisor()">
+            Save
+        </button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </div>
+</div>
+<br />

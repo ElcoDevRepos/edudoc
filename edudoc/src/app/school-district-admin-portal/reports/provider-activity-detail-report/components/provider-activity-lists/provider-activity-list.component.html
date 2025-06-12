@@ -1,0 +1,25 @@
+<!-- Filters -->
+<div *ngIf="hasFilters" class="row">
+    <div class="col-md-2">
+        <mt-dynamic-field [field]="getStudentField()" (valueChanges)="studentSelected($event)"></mt-dynamic-field>
+    </div>
+    <div *ngIf="hasEncounterDates" class="col-md-2">
+        <label>Encounter Date</label><br />
+        <mt-search-filter-daterange [startDate]="startDate" [endDate]="endDate" entity="Date" (selectionChanged)="dateSelectionChanged($event)">
+        </mt-search-filter-daterange>
+    </div>
+    <div *ngIf="hasServiceTypes" class="col-md-2">
+        <mt-dynamic-field [field]="getTypeOfServiceField()" (valueChanges)="typeOfServiceSelected($event)"></mt-dynamic-field>
+    </div>
+</div>
+<br />
+
+<mt-entity-list
+    [entities]="summaries"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    (pageChanged)="getSummaries()"
+    (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="entityListConfig"
+>
+</mt-entity-list>

@@ -1,0 +1,118 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Documentation Calendar</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h4>{{ viewDate | calendarDate: view + 'ViewTitle':'en':'1':'[0,6]' }}</h4>
+    </div>
+</div>
+
+<!--Calendar Options-->
+<div class="row">
+    <!--Date Options for Week/ Day View-->
+    <div *ngIf="isDayView || isWeekView" class="col-md-4">
+        <div id="flex-container">
+            <div class="flex-item">
+                <div class="btn btn-primary" style="height: 48%;" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="changeWeek()">
+                    <i class="fa fa-chevron-left"></i>
+                </div>
+            </div>
+            <div class="flex-item">
+                <mt-dynamic-field style="position:relative; bottom: 20px;" [field]="getDateField()" (valueChanges)="handleDateSelection($event); changeWeek()"></mt-dynamic-field>
+            </div>
+            <div class="flex-item">
+                <div class="btn btn-primary" style="height: 48%;" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="changeWeek()">
+                    <i class="fa fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--Date Options for Month View-->
+    <div *ngIf="isMonthView" class="col-md-4">
+        <div id="flex-container">
+            <div class="flex-item">
+                <div class="btn btn-primary" [style.height]="'80%'" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="changeWeek()">
+                    <i class="fa fa-chevron-left"></i>
+                </div>
+            </div>
+            <div class="flex-item">
+                <ngb-datepicker 
+                    class="datepicker-only-month-select"
+                    (navigate)="handleMonthSelection($event); changeWeek()" 
+                    [showWeekdays]="false" 
+                ></ngb-datepicker>
+            </div>
+            <div class="flex-item">
+                <div class="btn btn-primary" [style.height]="'80%'" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="changeWeek()">
+                    <i class="fa fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Calendar View Options-->
+    <div class="col-md-4" style="text-align: center;">
+        <div class="btn-group text-center">
+            <div [ngClass]="isDayView ? 'btn btn-primary' : 'btn btn-default'" (click)="setViewDateToday(); changeView(CalendarView.Day);">
+                Day
+            </div>
+            <div [ngClass]="isWeekView ? 'btn btn-primary' : 'btn btn-default'" (click)="changeView(CalendarView.Week)">
+                Week
+            </div>
+            <div [ngClass]="isMonthView ? 'btn btn-primary' : 'btn btn-default'" (click)="changeView(CalendarView.Month)">
+                Month
+            </div>
+        </div>
+    </div>
+
+    <!--Create Encounter Button-->
+    <div class="col-md-4">
+        <button type="button" Class="btn btn-flat btn-success pull-right"  routerLink="/provider/encounters/add">Create Encounter</button>
+    </div>
+</div>
+
+<!--Calendar views-->
+<ng-container *ngIf="isDayView"> 
+    <mwl-calendar-day-view
+        [dayStartHour]="showFullDay ? 0 : 7"
+        [dayEndHour]="showFullDay ? 23 : 18"
+        [hourSegmentHeight]="50"
+        [viewDate]="viewDate"
+        [events]="scheduledTherapies"
+        [refresh]="refresh"
+        (eventClicked)="goToEncounter($event)"
+    ></mwl-calendar-day-view>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            <button type="button" Class="btn btn-flat btn-default" (click)="showFullDayView()">
+                {{ showFullDay ? 'Show Working Hours' : 'Show Full Day' }}</button>
+        </div>
+    </div>
+</ng-container>
+
+<mwl-calendar-week-view
+    *ngIf="isWeekView"
+    [dayStartHour]="7"
+    [weekStartsOn]="1"
+    [excludeDays]="[0, 6]"
+    [dayEndHour]="20"
+    [viewDate]="viewDate"
+    [events]="scheduledTherapies"
+    [hourSegmentHeight]="50"
+    [refresh]="refresh"
+    (eventClicked)="goToEncounter($event)"
+></mwl-calendar-week-view>
+
+<mwl-calendar-month-view
+    *ngIf="isMonthView"
+    [viewDate]="viewDate"
+    [events]="scheduledTherapies"
+    [refresh]="refresh"
+    (dayClicked)="setViewDate($event); changeView(CalendarView.Day)"
+    (eventClicked)="goToEncounter($event)"
+></mwl-calendar-month-view>

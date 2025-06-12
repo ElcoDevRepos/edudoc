@@ -1,0 +1,150 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2>Audit Encounters</h2>
+    </div>
+</div>
+<br />
+<div>
+    <mt-entity-list
+        [entityListConfig]="entityListConfig"
+        [entities]="claims"
+        [total]="total"
+        [(currentPage)]="currentPage"
+        (pageChanged)="getClaims()"
+    >
+        <ng-template mtEntityListHeader>
+            <th [style.width]="'15%'">
+                Student Info
+            </th>
+            <th [style.width]="'20%'">
+                Encounter Info
+            </th>
+            <th [style.width]="'20%'">
+                Other
+            </th>
+            <th [style.width]="'35%'">
+                Notes / Reason for Audit
+            </th>
+            <th [style.width]="'10%'" class="text-center">
+                Actions
+            </th>
+        </ng-template>
+        <ng-template mtEntityListItem let-columns="columns" let-entity>
+            <tr [style.cursor]="'default'">
+                <td [style.width]="'15%'">
+                    <label>Name: </label> {{ entity.StudentName }} <br />
+                    <label>District: </label> {{ entity.SchoolDistrict }} <br />
+                    <label>Provider: </label> {{ entity.ProviderName }}
+                </td>
+                <td [style.width]="'20%'">
+                    <label>Encounter #: </label> {{ entity.EncounterNumber }} <br />
+                    <label>Status: </label> <a (click)="encounterStatusLogSelected(entity)">{{ entity.CurrentStatus }}</a> <br />
+                    <label>Date: </label> {{ entity.EncounterDate | date: 'mediumDate' }} <br />
+                    <label>Start: </label> {{ entity.StartDateTime | date: 'shortTime' }} <br />
+                    <label>End: </label> {{ entity.EndDateTime | date: 'shortTime' }} <br />
+                    <label>Grouping: </label> {{ entity.NumStudentsInEncounter }} <br />
+                </td>
+                <td [style.width]="'20%'">
+                    <label>Service Areas: </label> {{ entity.ServiceArea }} <br />
+                    <label>CPT Code (Procedure Code): </label> <p>{{ convertCptCodesToCommaSeparatedList(entity.CptCodes) }}</p>
+                    <label>Plan Goals: </label> {{ convertItemsToCommaSeparatedList(entity.Goals) }} <br />
+                </td>
+                <td [style.width]="'25%'">
+                    <label>Treatment Notes: </label> {{ entity.TreatmentNotes }} <br />
+                    <label>Reason for Audit: </label> {{ entity.ReasonForAudit }} <br />
+                    <div *ngIf="entity.CurrentStatusId === encounterStatuses.Abandoned">
+                        <label>Notes for Abandonment: </label> {{ entity.AbandonmentNotes }} <br />
+                    </div>
+                </td>
+                <td [style.width]="'10%'" class="text-left">
+                    <div class="btn-group-vertical">
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-default"
+                            (click)="updateClaimStatus(entity.EncounterId, encounterStatuses.Approve_Encounter)"
+                        >
+                            Approve
+                        </button>
+                        <button
+                            type="button"
+                            [disabled]="entity.CurrentStatusId === encounterStatuses.Hold_For_Research"
+                            class="btn btn-sm btn-default"
+                            (click)="updateClaimStatus(entity.EncounterId, encounterStatuses.Hold_For_Research)"
+                        >
+                            Hold For Research
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-default"
+                            (click)="updateClaimStatus(entity.EncounterId, encounterStatuses.Do_Not_Bill)"
+                        >
+                            Do Not Bill
+                        </button>
+                        <button type="button" class="btn btn-sm btn-default" (click)="toggleEsignModal(entity.EncounterId)">Return</button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </mt-entity-list>
+</div>
+
+<mt-modal-wrapper *ngIf="showEsignModal" [options]="modalOptions" (cancelClick)="toggleEsignModal()">
+    <h4>Reason for Return Must Be Provided</h4>
+    <mt-dynamic-field [field]="getReasonForReturnCategoryField()" (valueChanges)="handleCategorySelection($event)"></mt-dynamic-field>
+    <label *ngIf="selectedCategoryId">Select Reason</label>
+    <select
+        [(ngModel)]="reasonSelected"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="insertReasonText($event)"
+        *ngIf="selectedCategoryId"
+        class="form-control"
+    >
+        <option *ngFor="let reason of selectedReasons" [ngValue]="reason">
+            {{ reason.Name }}
+        </option>
+    </select>
+    <br />
+    <mt-dynamic-field [field]="getReasonForReturnField()" (controlCreated)="reasonForReturnControl = $event"></mt-dynamic-field>
+    <br />
+    <button
+        type="button"
+        class="btn btn-success"
+        [disabled]="reasonForReturnControl.invalid"
+        mt-doubleClickDisabled
+        [(doubleClickIsDisabled)]="doubleClickDisabled"
+        (click)="updateClaimStatus(encounterIdForModal, encounterStatuses.Returned_By_Admin)"
+    >
+        Save Claim
+    </button>
+    <button type="button" class="btn btn-default" (click)="toggleEsignModal()">Cancel</button>
+</mt-modal-wrapper>
+
+<mt-modal-wrapper *ngIf="showStatusesModal" [options]="modalOptions" (cancelClick)="toggleStatusModal()">
+    <h4>Encounter Status Log</h4>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Encounter Status</th>
+                    <th>Date</th>
+                    <th>Changed By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let status of encounterStudentStatusesForModal">
+                    <td class="text-left">
+                        {{ status.StatusName }}
+                    </td>
+                    <td class="text-left">
+                        {{ status.DateCreated | date: 'mediumDate' }}
+                    </td>
+                    <td class="text-left">
+                        {{ status.CreatedBy }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <button type="button" class="btn btn-default" (click)="toggleStatusModal()">Close</button>
+</mt-modal-wrapper>

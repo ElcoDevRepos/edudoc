@@ -1,0 +1,35 @@
+<div class="miles-card padded" *ngIf="!isEditing" (click)="toggleAllSchoolBuildings()">
+    <h4 class="heading-with-button">
+        SCHOOL BUILDINGS
+        <button class="btn btn-sm btn-primary" *ngIf="canEdit" type="button" (click)="addSchool()">
+            <i class="fa fa-plus fa-lg" style="cursor: pointer;" aria-hidden="true"></i>
+        </button>
+    </h4>
+    <ul class="list-group" *ngIf="schools && schools.length > 0 && !showAllSchoolBuildings">
+        <li class="list-group-item" (click)="editSchool(school)" *ngFor="let school of schools | slice:0:10">
+            {{ school.Name }}
+            <i class="fa fa-trash fa-lg pull-right" (mtConfirm)="archiveSchool(school)" [mtConfirmOptions]="archiveConfirm"> </i>
+        </li>
+        <br />
+        <i *ngIf="schools.length > 10"><b>View All</b></i>
+    </ul>
+    <ul class="list-group" *ngIf="schools && schools.length > 10 && showAllSchoolBuildings">
+        <li class="list-group-item" (click)="editSchool(school)" *ngFor="let school of schools">
+            {{ school.Name }}
+            <i class="fa fa-trash fa-lg pull-right" (mtConfirm)="archiveSchool(school)" [mtConfirmOptions]="archiveConfirm"> </i>
+        </li>
+    </ul>
+    <span *ngIf="!schools || !schools.length">No schools</span>
+</div>
+
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4>ADD SCHOOL BUILDINGS</h4>
+    <mt-dynamic-form [config]="formObject" ([isEditing])="(isEditing)" (submitted)="formSubmitted($event)">
+        <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+            Save
+        </button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </mt-dynamic-form>
+</div>

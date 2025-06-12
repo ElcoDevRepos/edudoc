@@ -1,0 +1,94 @@
+@using System;
+@model Templator.Models.VoucherReportParams
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="@Model.ResolveStylesheetPath("Bootstrap.css")" rel="stylesheet" />
+    <link href="@Model.ResolveStylesheetPath("VoucherReport.css")" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="row">
+		<div class="col-xs-7">
+			<div>
+				<strong>@Model.DistrictName</strong>
+			</div>
+			<br />
+			<div>
+				@Model.SchoolYear FISCAL YEAR MEDICAID REVENUE
+			</div>
+			<br />
+			<div>
+				@DateTime.Now.ToLongDateString()
+			</div>
+		</div>
+		<div class="col-xs-5">
+			<div><strong>Healthcare Process Consulting, Inc.</strong></div>
+			<div>2888 Nationwide Parkway</div>
+			<div>Brunswick, Ohio 44212</div>
+			<div>(440) 884-3688 or (866) 625-2003</div>
+		</div>
+	</div>
+
+    <div class="tableheader">
+        <div class="row">
+		    <div class="text-center"><h3>@Model.SchoolYear FISCAL YEAR MEDICAID REVENUE Totals: @Model.Total</h3></div>
+        </div>
+	</div>
+
+    <div class="row">
+        @foreach(var data in @Model.Data)
+        {
+            <div class="tableheader">
+                <div class="row">
+                    <div class="col-xs-3 indentLeft">
+                        <strong>Voucher Date</strong>
+                    </div>
+                    <div class="col-xs-3 indentLeft">
+                        <strong>Voucher Amount</strong>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-3 indentLeft">
+                        <strong>@data.VoucherDate.ToShortDateString()</strong>
+                    </div>
+                    <div class="col-xs-3 indentLeft">
+                        <strong>@data.VoucherAmount</strong>
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-xs-6 indentLeft">
+                    <strong><u>Service Area</u></strong>
+                </div>
+                <div class="col-xs-3 text-right">
+                    <strong><u>Paid Amount</u></strong>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <strong><u>School Year</u></strong>
+                </div>
+            </div>
+            @foreach (var serviceCode in @data.ServiceCodeData)
+            {
+                <div class="row">
+                    <div class="col-xs-6 indentLeft">
+                        @serviceCode.ServiceCodeName
+                    </div>
+                    <div class="col-xs-3 text-right">
+                        @serviceCode.PaidAmount
+                    </div>
+                    <div class="col-xs-3 text-center">
+                        @serviceCode.SchoolYear
+                    </div>
+                </div>
+            }
+            <br />
+        }
+    </div>
+</body>
+
+</html>

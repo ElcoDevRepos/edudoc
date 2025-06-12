@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Provider Case Upload Issues</h2>
+    </div>
+    <div class="col-md-5" *ngIf="providerCaseUploads && providerCaseUploads.length">
+        <button type="button" class="btn btn-sm pull-right btn-success" (click)="toggleModal()">Remove All Issues</button>
+    </div>
+</div>
+<br />
+<mt-entity-list [entities]="providerCaseUploads" [total]="total" [(currentPage)]="currentPage" [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="getProviderCaseUploads()" (itemSelectedEvent)="providerCaseUploadSelected($event)" (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="entityListConfig" (itemDeletedEvent)="archive($event)">
+</mt-entity-list>
+
+<mt-modal-wrapper *ngIf="showModal" [options]="modalOptions" (cancelClick)="showModal = false;" (okClick)="reverseCaseUpload()">
+    Cancel all issues and re-upload case upload with correct format.
+</mt-modal-wrapper>

@@ -1,0 +1,82 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Denied Claims</h2>
+    </div>
+</div>
+
+<div>
+    <mt-search-bar (searched)="getFilterSearchbar($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+    <br />
+</div>
+
+<!-- Filters -->
+<div class="row">
+    <div class="col-md-2">
+        <label>School Districts</label>
+        <mt-virtual-type-ahead
+            [getItems]="getSchoolDistricts"
+            [placeholder]="'Begin typing...'"
+            (selectionChanged)="getFilterSchoolDistrictSearchbar($event)"
+        >
+        </mt-virtual-type-ahead>
+    </div>
+    <div class="col-md-2">
+        <label>Providers</label>
+        <mt-virtual-type-ahead [getItems]="getProviders" [placeholder]="'Begin typing...'" (selectionChanged)="getFilterProviderSearchbar($event)">
+        </mt-virtual-type-ahead>
+    </div>
+    <div class="col-md-2" *ngIf="cptCodes && cptCodes.length > 0">
+        <label>CPT Codes</label><br />
+        <mt-search-filter-select  [items]="selectedCptCodes" entity="CPT Code" [maxToShowInSelectedText]="1"/>
+    </div>
+    <div class="col-md-2" *ngIf="ediErrorCodes && ediErrorCodes.length > 0">
+        <label>Error Codes</label><br />
+        <mt-search-filter-select [items]="ediErrorCodes" entity="Error Codes" [maxToShowInSelectedText]="1"></mt-search-filter-select>
+    </div>
+    <div class="col-md-2" *ngIf="getProviders && getProviders.length > 0">
+        <label>Voucher Date</label><br />
+        <mt-search-filter-daterange
+            [startDate]="startDate"
+            [endDate]="endDate"
+            entity="Voucher Date"
+            (selectionChanged)="getFilterDateRange($event)"
+        ></mt-search-filter-daterange>
+    </div>
+    <div class="col-md-1">
+        <label>Unregistered Codes</label><br />
+        <mt-dynamic-field [field]="getUnRegisteredOnlyField()" (valueChanges)="unRegisteredOnly = $event"> </mt-dynamic-field>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-9"></div>
+    <div class="col-md-1">
+        <button type="button" Class="btn btn-flat btn-success" (click)="applyClicked($event)">Apply</button>
+    </div>
+    <div class="col-md-2">
+        <button
+            type="button"
+            class="btn btn-sm btn-success"
+            (click)="setRebillSelect()"
+        >
+            {{ buttonLabel }}
+        </button>
+    </div>
+</div>
+<br />
+
+<mt-entity-list
+    *ngIf="showList"
+    [entities]="rejectedEncounters"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="getRejectedEncounters()"
+    (columnSortedEvent)="columnSorted($event)"
+    (selectionChangedEvent)="onSelectionChanged($event)"
+    [entityListConfig]="entityListConfig"
+>
+</mt-entity-list>
+
+<button *ngIf="rebillingIds.length > 0" type="button" class="btn btn-sm btn-success" (click)="generateValidationFile()">
+    Generate Rebilling File
+</button>

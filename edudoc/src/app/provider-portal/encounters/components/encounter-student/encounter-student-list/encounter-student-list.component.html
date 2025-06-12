@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Revise Encounters</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2" *ngIf="districtOptions && districtOptions.length">
+        <mt-dynamic-field [field]="getSchoolDistrictField()" (valueChanges)="getFilterSchoolDistrict($event)">
+        </mt-dynamic-field>
+    </div>
+    <div class="col-md-2">
+        <label>Students</label>
+        <mt-virtual-type-ahead [getItems]="getStudents" (selectionChanged)="studentSelected($event)"/>
+    </div>
+    <div class="col-md-3">
+        <label>Date of Encounter</label><br />
+        <mt-search-filter-daterange
+        [startDate]="encounterStartDate" [endDate]="encounterEndDate" entity="Date of Encounter"
+        (selectionChanged)="getFilterDateRange($event)"
+        ></mt-search-filter-daterange>
+    </div>
+    <div class="col-md-2">
+        <label>Service Types</label><br />
+        <mt-search-filter-select
+            [items]="serviceTypes"
+            entity="Service Types"
+            [maxToShowInSelectedText]="1"
+        ></mt-search-filter-select>
+    </div>
+    <div class="col-md-2">
+        <button type="button" Class="btn btn-flat btn-success" (click)="applyClicked($event)">
+            Apply
+        </button>
+    </div>
+</div>
+<br />
+<mt-entity-list
+    *ngIf="showList"
+    [entities]="encounterStudents"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    (pageChanged)="getEncounterStudents()"
+    (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="entityListConfig"
+    (itemSelectedEvent)="encounterSelected($event)"
+>
+</mt-entity-list>

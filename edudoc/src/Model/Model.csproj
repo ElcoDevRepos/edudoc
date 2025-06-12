@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <LangVersion>10.0</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="DTOs\DistrictProgressReportStudentDto.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="DTOs\DistrictProgressReportStudentDto.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Breckenridge.Model.Full" Version="6.1.0" GeneratePathProperty="true" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" GeneratePathProperty="true" />
+        <PackageReference Include="CsvHelper" Version="31.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="$(PkgBreckenridge_Model_Full)\contentFiles\any\$(TargetFramework)\Database.tt">
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>Database.cs</LastGenOutput>
+        </Content>
+    </ItemGroup>
+    <PropertyGroup>
+        <Newtonsoft_Json>$(PkgNewtonsoft_Json)\lib\net45</Newtonsoft_Json>
+    </PropertyGroup>
+    <ItemGroup>
+        <T4ParameterValues Include="Newtonsoft_Json">
+            <Value>$(Newtonsoft_Json)</Value>
+        </T4ParameterValues>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Update="$(PkgBreckenridge_Model_Full)\contentFiles\any\$(TargetFramework)\Database.2019.tt">
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>Database.cs</LastGenOutput>
+        </Content>
+    </ItemGroup>
+    <PropertyGroup>
+        <Newtonsoft_Json>$(PkgNewtonsoft_Json)\lib\net45</Newtonsoft_Json>
+    </PropertyGroup>
+    <ItemGroup>
+        <T4ParameterValues Include="Newtonsoft_Json">
+            <Value>$(Newtonsoft_Json)</Value>
+        </T4ParameterValues>
+    </ItemGroup>
+    <ItemGroup>
+      <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    </ItemGroup>
+
+
+</Project>

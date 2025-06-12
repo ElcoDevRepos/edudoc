@@ -1,0 +1,35 @@
+<div *ngIf="allItems && allItems.length">
+    <div class="row">
+        <div class="col-md-6">
+            <label>Add {{ itemType }}<span *ngIf="required" class="errortext"> *</span></label>
+            <select
+                class="form-control"
+                [(ngModel)]="selectedItem"
+                (ngModelChange)="selectItem($event)"
+                #itemSelect="ngModel"
+                [ngClass]="{ invalid: required && !valid && !itemSelect.pristine }"
+                [disabled]="allItemsSelected"
+            >
+                <option #placeholder [value]="" hidden selected>{{ placeholderText }}</option>
+                <option [ngValue]="selectAllItem" *ngIf="hasSelectAll">Select All</option>
+
+                <option *ngFor="let item of unselectedItems" [ngValue]="item">{{ item.Name }}</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label>Selected {{ itemType }}</label>
+            <ul class="list-group" *ngIf="selectedItems.length">
+                <li class="list-group-item text-left" *ngFor="let item of selectedItems" style="cursor: default;">
+                    <strong>{{ item.Name }}</strong>
+                    <span (click)="removeItem(item.Id)" class="pull-right">
+                        <i class="fa fa-times fa-lg" style="cursor: pointer;" aria-hidden="true"></i>
+                    </span>
+                </li>
+            </ul>
+            <div *ngIf="!selectedItems.length">
+                <strong>No {{ itemType }} selected</strong>
+            </div>
+            <br />
+        </div>
+    </div>
+</div>

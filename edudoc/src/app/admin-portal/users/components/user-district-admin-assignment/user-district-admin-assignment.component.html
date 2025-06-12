@@ -1,0 +1,38 @@
+<div class="miles-editable miles-card padded"
+    *ngIf="!isEditing && user"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    (click)="edit()"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4>
+        DISTRICT ASSIGNMENT
+        <span class="pull-right" *ngIf="canEdit">
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+    <div *ngIf="!districtNames">
+        <em>No district assigned yet!</em>
+    </div>
+    <div *ngIf="districtNames">
+        <label>DISTRICT: </label>
+            <span *ngIf="districtNames && districtNames.length > 0"> {{ districtNames }} </span>
+    </div>
+</div>
+<div class="miles-card padded" *ngIf="isEditing">
+    <h4>CHANGE DISTRICT ASSIGNMENT</h4>
+    <mt-dynamic-field
+        [field]="getDistrictField()"
+        (valueChanges)="handleDistrictSelection($event)">
+    </mt-dynamic-field>
+    <button
+        type="button"
+        class="btn btn-success"
+        [disabled]="!selectedDistrictIds?.length"
+        (click)="updateDistrictAssignment()"
+    >
+        Save
+    </button>
+    <button type="button" class="btn btn-flat" (click)="cancelClick()">Cancel</button>
+</div>
+<br />

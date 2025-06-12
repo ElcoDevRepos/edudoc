@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-md-6">
+        <app-message-basic-info [canEdit]="canEdit"></app-message-basic-info>
+        <br />
+    </div>
+    <div class="col-md-6" *ngIf="messages && messages.length > 0">
+        <app-message-drag-n-drop-list
+            [messages]="messages"
+            (itemDeletedEvent)="getAllMessages()"
+        ></app-message-drag-n-drop-list>
+
+        <div *ngIf="canAdd" class="fab-wrap-b-r">
+            <a class="btn btn-primary btn-fab-lg" (click)="createEmptyMessage()">
+                <span class="fa fa-plus"></span>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+<!-- Add New Student Modal -->
+<mt-modal-wrapper *ngIf="encounterStudent" [options]="modalOptions">
+    <div class="col-md-12">
+        <div class="row">
+            <mt-dynamic-field class="pull-right" [field]="getIsTelehealthField()" (valueChanges)="encounterStudent.isTelehealth = $event"></mt-dynamic-field>
+        </div>
+        <div class="row inputs-side-by-side">
+            <mt-dynamic-field class="field-row-1" *ngIf="defaultLocationId" [field]="getLocationsField()" (valueChanges)="encounterStudent.EncounterLocationId = $event"></mt-dynamic-field>
+            <mt-dynamic-field class="field-row-1" [field]="getDeviationReasonsField()" (valueChanges)="encounterStudent.StudentDeviationReasonId = $event; deviationReasonUpdated($event)"></mt-dynamic-field>
+        </div>
+        <div class="row inputs-side-by-side encounter-date-time-row">
+            <mt-dynamic-field class="encounter-date" [field]="getDateField()" (valueChanges)="handleDateSelection($event)"></mt-dynamic-field>
+            <mt-dynamic-field class="encounter-time" [field]="getStartTimeField()" (valueChanges)="encounterStudent.EncounterStartTime = $event; startTimeUpdated($event)"></mt-dynamic-field>
+            <mt-dynamic-field class="encounter-time" [field]="getEndTimeField()" (valueChanges)="encounterStudent.EncounterEndTime = $event; endTimeUpdated($event)"></mt-dynamic-field>
+        </div>
+        <div *ngIf="encounterStudent.Id > 0" class="row">
+            <div class="notes-wrapper">
+                <mt-dynamic-field *ngIf="showNotes && storedTherapyNotes"
+                    [field]="getStoredNotesControl()"
+                    (valueChanges)="setNotesValue($event)"
+                    (controlCreated)="storedNotesControl = $event"
+                ></mt-dynamic-field>
+                <div class="select-button-flex-container">
+                    <mt-dynamic-field [field]="getCaseNotesField()" (controlCreated)="notesControlCreated($event)" (valueChanges)="typedCaseNotes($event)"></mt-dynamic-field>
+                    <button type="button" class="btn btn-sm btn-primary" (click)="saveNotes()">Store Notes</button>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="encounterStudent.Id > 0" class="row">
+            <div class="col-md-12">
+                <app-encounter-student-cpt-codes
+                    *ngIf="studentId && !hasDeviationReason"
+                    [isEditingStudent]="true"
+                    [encounter]="encounter"
+                    [encounterStudent]="encounterStudent"
+                    [studentForm]="studentFormForSave"
+                    [canEdit]="true"
+                    [isNursingProvider]="isNursingProvider"
+                ></app-encounter-student-cpt-codes>
+            </div>
+        </div>
+        <div class="row save-cancel">
+            <button type="button" class="btn btn-primary" (click)="saveEncounter()">Save Encounter</button>
+            <button type="button" class="btn btn-default" (click)="closeModal()">Cancel</button>
+        </div>
+    </div>
+</mt-modal-wrapper>

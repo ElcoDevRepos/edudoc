@@ -1,0 +1,6 @@
+<div class="miles-card padded">
+    <label>Daily Therapy Notes</label>
+    <div *ngFor="let notes of caseNotes">
+        <p>{{ notes.Date | date: 'shortDate' : '+0000' }} {{ notes.Notes }}</p>
+    </div>
+</div>

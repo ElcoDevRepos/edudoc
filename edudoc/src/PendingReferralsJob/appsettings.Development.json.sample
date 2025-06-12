@@ -1,0 +1,18 @@
+{
+    "Logging": {
+        "LogLevel": {
+            "Default": "Information",
+            "Microsoft": "Information",
+            "Microsoft.Hosting.Lifetime": "Information"
+        }
+    },
+    "EmailConfiguration": {
+        "SmtpServer": "192.168.0.20",
+        "Port": 25
+    },
+    "ConnectionStrings": {
+        "Primary": "Server=(localdb)\\ProjectsV13;Database=<yourDBhere>;Trusted_Connection=True;MultipleActiveResultSets=true"
+    },
+    "DefaultEmailFrom": "no-reply@milesapp.com",
+    "EmailTestMode": "True",
+}

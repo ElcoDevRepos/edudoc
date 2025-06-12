@@ -1,0 +1,57 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info widget miles-card">
+            <div class="panel-heading clearfix">
+                To Do List
+                <div class="resize-block-element pull-right"></div>
+            </div>
+
+            <div class="panel-body action-bottom">
+                <ul class="list-group scroll-list">
+                    <!-- Pending Referrals -->
+                    <div *ngIf="showPendingReferrals && pendingReferralsCount >= 0 && isSupervisor">
+                        <li class="list-group-item" (click)="goToStudentsList()">
+                            <h4 style="border: none;">Pending Referrals: {{ pendingReferralsCount }}</h4>
+                        </li>
+                    </div>
+                    <!-- Pending Approvals / Supervisor Co-signature -->
+                    <div *ngIf="pendingApprovalsCount >= 0 && isSupervisor && showPendingSupervisorCoSign">
+                        <li class="list-group-item" (click)="goToEncountersListForApprovals()">
+                            <h4 style="border: none;">Pending Supervisor Co-Signature: {{ pendingApprovalsCount }}</h4>
+                        </li>
+                    </div>
+                    <!-- Encounters Ready For You -->
+                    <div *ngIf="encountersReadyForYouCount >= 0">
+                        <li class="list-group-item" (click)="goToEncountersReadyForYou()">
+                            <h4 style="border: none;">Encounters Ready For You: {{ encountersReadyForYouCount }}</h4>
+                        </li>
+                    </div>
+                    <!-- Pending Treatment/Therapies -->
+                    <div *ngIf="pendingTreatmentTherapiesCount >= 0">
+                        <li class="list-group-item" (click)="goToEncountersListForPendingTreatmentTherapies()">
+                            <h4 style="border: none;">Pending Treatment/Therapy: {{ pendingTreatmentTherapiesCount }}</h4>
+                        </li>
+                    </div>
+                    <!-- Pending Evaluations -->
+                    <div *ngIf="pendingEvaluationsCount >= 0">
+                        <li class="list-group-item" (click)="goToEncountersListForPendingEvaluations()">
+                            <h4 style="border: none;">Pending Evaluations: {{ pendingEvaluationsCount }}</h4>
+                        </li>
+                    </div>
+                    <!-- Returned Encounters -->
+                    <div *ngIf="returnedEncountersCount >= 0">
+                        <li class="list-group-item" (click)="goToEncountersListForReturned()">
+                            <h4 style="border: none;">Returned Encounters: {{ returnedEncountersCount }}</h4>
+                        </li>
+                    </div>
+                    <!-- Late Progress Reports -->
+                    <div *ngIf="showPendingProgressReports && pendingProgressReportsCount >= 0">
+                        <li class="list-group-item" (click)="goToProgressReports()">
+                            <h4 style="border: none;">Pending 90 Day Progress Reports: {{ pendingProgressReportsCount }}</h4>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

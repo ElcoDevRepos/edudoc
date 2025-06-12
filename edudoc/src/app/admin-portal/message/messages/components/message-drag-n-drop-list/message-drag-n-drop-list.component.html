@@ -1,0 +1,63 @@
+<div class="miles-card padded">
+
+    <div class="table-responsive overflow-y:auto;">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th>
+                        <b>Message Title</b>
+                    </th>
+                    <th>
+                        <b>Message Type</b>
+                    </th>
+                    <th>
+                        <b>Selection</b>
+                    </th>
+                    <th>
+                        <b>Expiration Date</b>
+                    </th>
+                    <th>
+                        <b>Archive</b>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    class="no-pointer"
+                    *ngFor="let row of messages; let index = index"
+                    [draggable]="true"
+                    [class.dragging]="index === this.draggingIndex"
+                    (dragstart)="onDragStart(index)"
+                    (dragenter)="onDragEnter(index)"
+                    (dragend)="onDragEnd(index)"
+                    [style.cursor]="'move'"
+                >
+                    <td class="ellipsis">
+                        <a
+                            (click)="itemSelected(row)"
+                            [style.cursor]="'pointer'"
+                        >
+                            {{ row.Description }}
+                        </a>
+                    </td>
+                    <td class="ellipsis">
+                        {{ row.MessageFilterType.Name }}
+                    </td>
+                    <td class="ellipsis">
+                        {{ getSelection(row) }}
+                    </td>
+                    <td class="ellipsis">
+                        {{ getExpiration(row) }}
+                    </td>
+                    <td class="ellipsis">
+                        <i style="cursor:pointer;" (click)="itemDeleted(row)" class="fa fa-2x fa-trash" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="noMessages">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+</div>

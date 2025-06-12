@@ -1,0 +1,54 @@
+<h2 mtSetTitle>My Reasons For Return</h2>
+<div class="row">
+    <div class="col-md-10">
+        <div class="miles-card padded">
+            <h4>MY REASONS FOR RETURN MANAGEMENT</h4>
+            <div class="row">
+                <div class="col-md-4 border-right">
+                    <mt-dynamic-field
+                        *ngIf="reasonForReturnCategories && reasonForReturnCategories.length"
+                        [field]="getReasonForReturnCategoriesField()"
+                        (valueChanges)="categorySelected($event)"
+                    ></mt-dynamic-field>
+                </div>
+                <div class="col-md-4" *ngIf="selectedCategoryId; else placeholder">
+                    <form [formGroup]="form">
+                        <mt-dynamic-field [form]="form" [field]="reasonForReturnField"></mt-dynamic-field>
+                    </form>
+                    <button
+                        type="submit"
+                        (click)="saveReason()"
+                        mtDisableClickDuringHttpCalls
+                        class="btn btn-flat btn-success"
+                    >
+                        Save
+                    </button>
+                </div>
+                <div class="col-md-4" *ngIf="selectedCategoryId">
+                    <label>Selected Reasons</label>
+                    <ul class="list-group" *ngIf="selectedReasons.length">
+                        <li class="list-group-item text-left" *ngFor="let reason of selectedReasons" style="cursor: default;">
+                            <strong>{{ reason.Name }}</strong>
+                            <span (click)="archiveReason(reason.Id)" class="pull-right">
+                                <i class="fa fa-times fa-lg" style="cursor: pointer;" aria-hidden="true"></i>
+                            </span>
+                        </li>
+                    </ul>
+                    <div *ngIf="!selectedReasons.length">
+                        <strong>No reasons selected</strong>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #placeholder>
+    <div style="position: relative;">
+        <div class="col-md-8 text-center">
+            <br />
+            <strong>Select a Reason For Return Category</strong>
+        </div>
+    </div>
+</ng-template>

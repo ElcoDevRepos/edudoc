@@ -1,0 +1,28 @@
+<div *ngIf="myProfile" class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>My Profile</h2>
+    </div>
+</div>
+<div *ngIf="user && user.Id > 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-school-district-admin-user-basic-info [user]="user" [canEdit]="canEdit"></app-school-district-admin-user-basic-info>
+            <br />
+            <app-auth-user-password [AuthUser]="user.AuthUser" [canEdit]="canEdit" (updateVersion)="updateVersion($event)"></app-auth-user-password>
+        </div>
+        <div class="col-md-6">
+            <app-common-addresses-with-county
+                [canEdit]="canEdit"
+                [address]="userAddress"
+                (onSave)="saveAddress($event)"
+                [requireCounty]="false"
+                (onDelete)="deleteAddress($event)"
+                *ngIf="isNotProvider"
+            ></app-common-addresses-with-county>
+            <br />
+            <mt-common-phone [PhoneArray]="user.UserPhones" (saved)="savePhones($event)" [canEdit]="canEdit" *ngIf="isNotProvider">
+            </mt-common-phone>
+            <br />
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<h3>
+    Electronic Signatures
+</h3>
+<div *ngIf="form">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="miles-form padded" *ngIf="currentSignatures">
+                <mt-dynamic-field [field]="buildSignatureSelect()" (valueChanges)="setSignature($event)"></mt-dynamic-field>
+                <div [ngSwitch]="selectedSignature">
+                    <form *ngSwitchCase="electronicSignatureEnums.Encounter" [formGroup]="form">
+                        <mt-dynamic-field [field]="buildEncounterForm()" (controlCreated)="setFormControl($event)"></mt-dynamic-field>
+                    </form>
+                    <form *ngSwitchCase="electronicSignatureEnums.Referral" [formGroup]="form">
+                        <mt-dynamic-field [field]="buildReferralForm()" (controlCreated)="setFormControl($event)"></mt-dynamic-field>
+                    </form>
+                </div>
+                <button
+                    type="submit"
+                    (click)="saveSignature()"
+                    mtDisableClickDuringHttpCalls
+                    class="btn btn-flat btn-success"
+                >
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

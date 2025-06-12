@@ -1,0 +1,17 @@
+<div *ngIf="voucher && voucher.Id > 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-voucher-basic-info
+                [voucher]="voucher"
+                [canEdit]="canEdit"
+            ></app-voucher-basic-info>
+        </div>
+    </div>
+</div>
+<div *ngIf="voucher && voucher.Id === 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-voucher-basic-info [voucher]="voucher"></app-voucher-basic-info>
+        </div>
+    </div>
+</div>

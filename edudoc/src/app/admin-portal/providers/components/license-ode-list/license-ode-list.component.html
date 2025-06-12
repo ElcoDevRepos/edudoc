@@ -1,0 +1,15 @@
+<div class="miles-card padded">
+    <h4>{{ cardName }}</h4>
+
+    <ul *ngIf="items?.length" class="list-group">
+        <li *ngFor="let item of items" class="list-group-item" [style.cursor]="'default'">
+            <div [innerHTML]="getItemContents(item)"></div>
+        </li>
+    </ul>
+    <em *ngIf="!items?.length">No {{ cardName }}</em>
+    <div [hidden]="!canEdit" class="fab-wrap">
+        <button type="button" class="btn btn-primary btn-fab-md btn-fab-center" (click)="addItem()">
+            <span class="fa fa-plus"></span>
+        </button>
+    </div>
+</div>

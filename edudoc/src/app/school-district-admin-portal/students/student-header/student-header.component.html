@@ -1,0 +1,12 @@
+<div>
+    <div class="row">
+        <div class="col-xl-8">
+            <h2>
+                <mt-route-back-button></mt-route-back-button>
+                {{ header }}
+                <button *ngIf="MARbutton" (click)="goBackToMissingAddressesReport()" class="btn btn-primary">Go Back to Missing Addresses Report</button>
+            </h2>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

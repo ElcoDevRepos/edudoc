@@ -1,0 +1,137 @@
+<div class="import-container">
+    <header class="import-header">
+        <h1>Encounter Data Import</h1>
+        <p>Upload a CSV file containing encounter data to import into the system</p>
+    </header>
+
+    <main class="import-content">
+        <section class="import-section template-section">
+            <div class="section-card">
+                <h2>Get Started</h2>
+                <p>Download a CSV template with the required columns for importing encounter data.</p>
+                <button 
+                    class="btn btn-primary"
+                    (click)="downloadTemplate()" 
+                    [disabled]="isDownloading">
+                    <i class="fa fa-download"></i>
+                    <span *ngIf="!isDownloading">Download Template</span>
+                    <span *ngIf="isDownloading">Downloading...</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="import-section convert-section">
+            <div class="section-card">
+                <h2>Convert Data</h2>
+                <p>Convert integration partner data files into our import format.</p>
+                
+                <div class="select-wrapper">
+                    <select 
+                        [(ngModel)]="selectedPartner" 
+                        (change)="onPartnerChange()"
+                        class="partner-select">
+                        <option value="">Select Integration Partner</option>
+                        <option value="SNAP">SNAP</option>
+                        <option value="MST">MST</option>
+                    </select>
+                </div>
+
+                <ng-container *ngIf="selectedPartner === 'SNAP'">
+                    <div class="file-input-wrapper">
+                        <p class="file-label">Student Data File:</p>
+                        <input
+                            type="file"
+                            accept=".txt"
+                            (change)="onSnapFileSelected($event, 'students')"
+                            class="file-input"
+                        />
+                    </div>
+
+                    <div class="file-input-wrapper">
+                        <p class="file-label">Service Data File:</p>
+                        <input
+                            type="file"
+                            accept=".txt"
+                            (change)="onSnapFileSelected($event, 'services')"
+                            class="file-input"
+                        />
+                    </div>
+
+                    <button 
+                        class="btn btn-primary"
+                        (click)="convertFiles()"
+                        [disabled]="!canConvert">
+                        <i class="fa fa-exchange"></i>
+                        <span *ngIf="!isConverting">Convert Files</span>
+                        <span *ngIf="isConverting">Converting...</span>
+                    </button>
+                </ng-container>
+
+                <ng-container *ngIf="selectedPartner === 'MST'">
+                    <div class="file-input-wrapper">
+                        <p class="file-label">MST Service Data File:</p>
+                        <input
+                            type="file"
+                            accept=".json"
+                            (change)="onMstFileSelected($event)"
+                            class="file-input"
+                        />
+                    </div>
+
+                    <button 
+                        class="btn btn-primary"
+                        (click)="convertFiles()"
+                        [disabled]="!canConvert">
+                        <i class="fa fa-exchange"></i>
+                        <span *ngIf="!isConverting">Convert Files</span>
+                        <span *ngIf="isConverting">Converting...</span>
+                    </button>
+                </ng-container>
+            </div>
+        </section>
+
+        <section class="import-section upload-section">
+            <div class="section-card">
+                <h2>Import Data</h2>
+                <p>Select a CSV file to import your encounter data.</p>
+                
+                <div class="file-input-wrapper">
+                    <input
+                        type="file"
+                        accept=".csv"
+                        (change)="onFileSelected($event)"
+                        #fileInput
+                        class="file-input"
+                    />
+                </div>
+
+                <div class="checkbox-wrapper">
+                    <input 
+                        type="checkbox" 
+                        id="createMissingStudents" 
+                        [(ngModel)]="createMissingStudentRecords">
+                    <label for="createMissingStudents">
+                        Create missing student records
+                    </label>
+                </div>
+
+                <button 
+                    class="btn btn-primary"
+                    (click)="uploadFile()"
+                    [disabled]="!selectedFile || isUploading">
+                    <i class="fa fa-cloud-upload"></i>
+                    <span *ngIf="!isUploading">Upload</span>
+                    <span *ngIf="isUploading">Uploading...</span>
+                </button>
+
+                <div *ngIf="errorMessage" class="message error-message">
+                    {{ errorMessage }}
+                </div>
+
+                <div *ngIf="successMessage" class="message success-message">
+                    {{ successMessage }}
+                </div>
+            </div>
+        </section>
+    </main>
+</div> 

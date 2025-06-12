@@ -1,0 +1,27 @@
+<div
+    class="miles-editable miles-card padded"
+    *ngIf="!isEditing && user.Id > 0"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    (click)="edit()"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4>
+        PROFILE PHOTO
+        <span class="pull-right" *ngIf="canEdit">
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+    <img *ngIf="user.Image" src="{{ imagePath }}{{ user.Image.ThumbnailPath }}" class="thumb" alt="Profile Image" />
+    <img *ngIf="!user.Image" src="{{ imagePath }}noimage.png" class="thumb" alt="Profile Image" />
+</div>
+<div [hidden]="!isEditing" class="miles-form padded">
+    <mt-photo [photo]="user.Image" (fileCropped)="afterFileCropped($event)" (photoDeleted)="deletePhoto()"></mt-photo>
+    <br />
+    <button class="btn btn-flat btn-primary" type="submit" (click)="savePhoto()">
+        Save
+    </button>
+    <button class="btn btn-flat btn-default" type="button" (click)="isEditing = false">
+        Cancel
+    </button>
+</div>

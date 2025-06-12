@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Vouchers</h2>
+    </div>
+</div>
+
+<div>
+    <mt-search-bar (searched)="getFilterSearchbar($event)"></mt-search-bar>
+
+    <div class="row">
+        <div class="col-md-2">
+            <mt-search-filter-select [items]="schoolDistricts" entity="School District">
+            </mt-search-filter-select>
+        </div>
+
+        <div class="col-md-2">   
+            <mt-search-filter-select [items]="serviceCodes" entity="Service Area">
+            </mt-search-filter-select>
+        </div>
+
+        <div class="col-md-3">
+            <mt-search-filter-daterange
+            [startDate]="startDate" [endDate]="endDate" entity="Voucher Date"
+            (selectionChanged)="getFilterDateRange($event)"
+            ></mt-search-filter-daterange>
+        </div>
+
+        <div class="col-md-2">
+            <button type="button" Class="btn btn-flat btn-success" (click)="applyClicked($event)" style="margin: 0.3em 0;">
+                Apply
+            </button>
+        </div>
+
+        <div class="col-md-2">
+            <button
+            *ngIf="singleSchoolDistrictSelected"
+            type="button"
+            class="btn btn-info pull-right"
+            style="margin: 0.3em 0;"
+            (click)="getPdf()">Export PDF
+            </button>
+        </div>
+    </div>
+</div>
+
+<mt-entity-list [entities]="vouchers" [total]="total" [(currentPage)]="currentPage" [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="getVouchers()" (itemSelectedEvent)="voucherSelected($event)" (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="entityListConfig">
+</mt-entity-list>
+
+<div *ngIf="canAddVoucher" class="fab-wrap-b-r">
+    <a class="btn btn-primary btn-fab-lg" [routerLink]="['/vouchers', 'add']">
+        <span class="fa fa-plus"></span>
+    </a>
+</div>

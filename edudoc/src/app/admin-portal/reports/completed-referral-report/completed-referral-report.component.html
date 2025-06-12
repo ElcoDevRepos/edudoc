@@ -1,0 +1,77 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Completed Referrals Report</h2>
+    </div>
+</div>
+
+<div>
+    <mt-search-bar (searched)="getFilterSearchbar($event)"></mt-search-bar>
+    <br />
+</div>
+
+<div class="row">
+    <div class="col-md-2">
+        <label>Providers</label>
+        <mt-virtual-type-ahead
+            [getItems]="getProviders"
+            [placeholder]="'Begin typing...'"
+            (selectionChanged)="getFilterProviderSearchbar($event)"
+        > </mt-virtual-type-ahead>
+    </div>
+    <div class="col-md-2">
+        <mt-search-filter-select
+            [items]="schoolYearSearchFilterItems"
+            entity="Grade"
+            [maxToShowInSelectedText]="3"
+        ></mt-search-filter-select>
+    </div>
+    <div class="col-md-3">
+        <mt-search-filter-select
+        [items]="serviceAreaSearchFilterItems"
+        entity="Service Area"
+        [maxToShowInSelectedText]="1"
+        ></mt-search-filter-select>
+    </div>
+    <div class="col-md-2">
+        <mt-search-filter-select
+            [items]="fiscalYearSearchFilterItems"
+            entity="Fiscal Year"
+            [maxToShowInSelectedText]="1"
+        ></mt-search-filter-select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <label>School Districts</label>
+        <mt-virtual-type-ahead
+            [getItems]="getSchoolDistricts"
+            [placeholder]="'Begin typing...'"
+            (selectionChanged)="getFilterSchoolDistrictSearchbar($event)"
+        > </mt-virtual-type-ahead>
+    </div>
+    <div class="col-md-2">
+        <button type="button" Class="btn btn-flat btn-success" (click)="applyClicked($event)">
+            Apply
+        </button>
+    </div>
+    <br/>
+    <button
+        type="button"
+        class="btn btn-flat btn-success pull-right"
+        style="margin: 10px 15px;"
+        [disabled]="total === 0"
+        (click)="printAllReferrals()">
+        Print Referral(s)
+    </button>
+</div>
+
+<div>
+    <mt-entity-list
+        [entities]="completedReferrals"
+        [total]="total"
+        [(currentPage)]="currentPage"
+        (pageChanged)="getPendingReferrals()"
+        [entityListConfig]="entityListConfig"
+        (columnSortedEvent)="onColumnSorted($event)"
+    ></mt-entity-list>
+</div>

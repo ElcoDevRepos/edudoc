@@ -1,0 +1,255 @@
+<div
+    class="miles-editable miles-card padded"
+    *ngIf="!isEditing && isCardOpen"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4 class="header" *ngIf="isCardOpen">
+        PLAN GOALS
+        <span class="pull-right" *ngIf="canEdit">
+            <i (click)="edit()" class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+
+    <div class="table-responsive" *ngIf="!noEncounterStudentGoals && isCardOpen">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th>
+                        <b>Goal</b>
+                    </th>
+                    <th *ngIf="isNursingProvider">
+                        <b>Outcome / Result</b>
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="no-pointer" *ngFor="let encounterStudentGoal of encounterStudentGoals">
+                    <td class="ellipsis">
+                        <ng-container *ngIf="isNursingProvider && isMedication(encounterStudentGoal)">
+                            {{ getMedicationGoalDescription(encounterStudentGoal) }}
+                        </ng-container>
+                        <ng-container *ngIf="!isNursingProvider || !isMedication(encounterStudentGoal)">
+                            {{ encounterStudentGoal?.Goal?.Description }} 
+                        </ng-container>
+                    </td>
+                    <td *ngIf="isNursingProvider && !needsResults(encounterStudentGoal)" class="ellipsis">
+                        {{ encounterStudentGoal?.ServiceOutcomes }}
+                    </td>
+                    <td *ngIf="isNursingProvider && needsResults(encounterStudentGoal)" class="ellipsis">
+                        <div *ngIf= "encounterStudentGoal?.Goal?.NursingGoalResponse?.ResponseNote"
+                            [ngStyle]="{'border-bottom':encounterStudentGoal?.Goal?.NursingGoalResponse ? '1px solid #aaa' : 'none' }"
+                        >
+                            <div [ngStyle]="{'border-bottom':encounterStudentGoal?.Goal?.NursingGoalResponse?.ResponseNote ? '1px solid #aaa' : 'none' }"
+                            >
+                                {{ encounterStudentGoal?.Goal.NursingGoalResponse.ResponseNoteLabel }}
+                            </div>
+                            <div>
+                                Note: {{ encounterStudentGoal?.NursingResponseNote }} <br />
+                            </div>
+                        </div>
+                        <div
+                            *ngIf= "encounterStudentGoal?.NursingGoalResult"
+                            [ngStyle]="{'border-bottom':encounterStudentGoal?.NursingGoalResult?.ResultsNote ? '1px solid #aaa' : 'none' }"
+                        >
+                            {{ encounterStudentGoal?.NursingGoalResult?.Name }}
+                        </div>
+                        <div *ngIf= "encounterStudentGoal?.NursingGoalResult?.ResultsNote">
+                            Note: {{ encounterStudentGoal.NursingResultNote }} <br />
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="noEncounterStudentGoals">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+</div>
+
+<!-- If Editing Goals -->
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4 class="header">PLAN GOALS</h4>
+
+    <!-- Options for adding goals -->
+    <div class="row" *ngIf="goalOptions && !isNursingProvider">
+        <div class="col-md-6">
+            <mt-multiselect
+                [items]="goalOptions"
+                [showSelectAllButtons]="true"
+                [maxToShowInSelectedText]="1"
+                [autoClose]="true"
+                [filterMode]="false"
+                entity="Goals"
+                placeholder="Select Plan Goals"
+                *ngIf="goalOptions"
+            ></mt-multiselect>
+        </div>
+    </div>
+    <br />
+    <ng-container *ngIf="getSelectedGoals().length">
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" Class="btn btn-flat btn-success" (click)="addGoals()">
+                    Add Goals
+                </button>
+            </div>
+        </div>
+        <br />
+    </ng-container>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th *ngIf="isNursingProvider">
+                        <b>Saving</b>
+                    </th>
+                    <th>
+                        <b>Goal</b>
+                    </th>
+                    <th *ngIf="isNursingProvider">
+                        <b>Outcome / Result</b>
+                    </th>
+                    <th  *ngIf="!isNursingProvider" class="text-center">
+                        <b>Remove</b>
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngIf="outcomeForms.length">
+                <tr class="no-pointer" *ngFor="let row of outcomeForms; let i = index">
+
+                    <!-- Saving Checkbox for Nursing Providers -->
+                    <td *ngIf="isNursingProvider" class="ellipsis">
+                        <mt-search-filter-checkbox [value]="goalSelected(row)" (searchCheckboxChanged)="saveFilterChecked($event, row)" text=""> </mt-search-filter-checkbox>
+                    </td>
+
+                    <td class="ellipsis">
+                        <ng-container *ngIf="isNursingProvider && isMedication(row.encounterStudentGoal)">
+                            {{ getMedicationGoalDescription(row.encounterStudentGoal) }}
+                        </ng-container>
+                        <ng-container *ngIf="!isNursingProvider || !isMedication(row.encounterStudentGoal)">
+                            {{ row.encounterStudentGoal?.Goal?.Description }} 
+                        </ng-container>
+                    </td>
+
+                    <!-- Service Outcomes for Nursing Providers -->
+                    <td *ngIf="isNursingProvider && !needsResults(row.encounterStudentGoal)">
+                        <div *ngIf="row.saving" class="notes-wrapper">
+                            <mt-dynamic-field
+                                *ngIf="showServiceOutcomes"
+                                [field]="getServiceOutcomesControl(row)"
+                                (valueChanges)="setServiceOutcomesValue($event, row)"
+                            >
+                            </mt-dynamic-field>
+                            <div class="select-button-flex-container">
+                                <mt-dynamic-field
+                                    [field]="row.controls.ServiceOutcomes"
+                                    [form]="row.form"
+                                    (controlCreated)="serviceOutcomesControlCreated($event, row)"
+                                    [overrideForm]="true">
+                                </mt-dynamic-field>
+                            </div>
+                        </div>
+                        <div *ngIf="!row.saving">
+                            {{ row.encounterStudentGoal?.ServiceOutcomes }}
+                        </div>
+                    </td>
+
+                    <!-- Nursing Results for Nursing Providers (If no Service Outcome) -->
+                    <td *ngIf="isNursingProvider && needsResults(row.encounterStudentGoal)" class="ellipsis">
+                        <div *ngIf="row.saving" class="notes-wrapper">
+                            <div
+                                [ngStyle]="{'border-bottom':row.encounterStudentGoal?.NursingGoalResult?.ResultsNote ? '1px solid #aaa' : 'none' }"
+                            >
+                                <div *ngIf= "row.encounterStudentGoal?.Goal?.NursingResponseId > 0"
+                                    [ngStyle]="{'border-bottom':row.encounterStudentGoal?.Goal?.NursingGoalResponse?.ResponseNote ? '1px solid #aaa' : 'none' }"
+                                >
+                                    {{ row.encounterStudentGoal?.Goal?.NursingGoalResponse?.Name }}
+                                </div>
+                                <div *ngIf= "row.encounterStudentGoal?.Goal?.NursingGoalResponse?.ResponseNote">
+                                    <mt-dynamic-field [field]="getResponseNoteControl(row.encounterStudentGoal)" (valueChanges)="handleResponseNote(row.encounterStudentGoal, $event)"></mt-dynamic-field>
+                                </div>
+
+                            </div>
+                            <mt-dynamic-field [field]="getResultsControl(row.encounterStudentGoal)" (valueChanges)="handleResultSelection(row, $event)"></mt-dynamic-field>
+
+                            <div *ngIf= "row.nursingGoalResult?.ResultsNote">
+                                <mt-dynamic-field [field]="getResultNoteControl(row)" (valueChanges)="handleResultNote(row, $event)"></mt-dynamic-field>
+                            </div>
+                            <div *ngIf= "!row.nursingGoalResult?.ResultsNote">
+                                <label>{{ row.nursingGoalResult?.Name }}</label>
+                            </div>
+                        </div>
+                        <div *ngIf="!row.saving">
+                            <div
+                                *ngIf="needsResults(row.encounterStudentGoal)"
+                                [ngStyle]="{'border-bottom':row.encounterStudentGoal?.NursingGoalResult?.ResultsNote ? '1px solid #aaa' : 'none' }"
+                            >
+                                <div *ngIf= "row.encounterStudentGoal?.Goal?.NursingGoalResponse?.ResponseNote"
+                                    [ngStyle]="{'border-bottom':row.encounterStudentGoal?.Goal?.NursingGoalResponse?.ResponseNote ? '1px solid #aaa' : 'none' }"
+                                >
+                                    {{ row.encounterStudentGoal?.Goal.NursingGoalResponse.ResponseNoteLabel }}
+                                    {{ row.encounterStudentGoal?.NursingResponseNote }}
+                                </div>
+
+                                {{ row.encounterStudentGoal?.NursingGoalResult?.Name }}
+                            </div>
+                            <div *ngIf= "row.encounterStudentGoal?.NursingGoalResult?.ResultsNote">
+                                {{ row.encounterStudentGoal.NursingResultNote }} <br />
+                            </div>
+                        </div>
+                    </td>
+
+                    <td *ngIf="!isNursingProvider" class="ellipsis">
+                        <div *ngIf="row.encounterStudentGoal.Archived" class="text-center">
+                            <button
+                                type="button"
+                                (mtConfirm)="archiveEncounterStudentGoal(row)"
+                                [mtConfirmOptions]="unarchiveConfirm"
+                            >
+                                <i class="fa fa-undo fa-2x"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="!row.encounterStudentGoal.Archived" class="text-center">
+                            <button
+                                type="button"
+                                (mtConfirm)="archiveEncounterStudentGoal(row)"
+                                [mtConfirmOptions]="archiveConfirm"
+                            >
+                                <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="!outcomeForms.length">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+
+    <!-- Lock in editing mode for new EncounterStudentGoal -->
+    <div>
+        <button
+            *ngIf="isNursingProvider"
+            type="button"
+            class="btn btn-sm btn-success"
+            (click)="saveGoalOutcomes()"
+        >
+            Save Goals
+        </button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Close
+        </button>
+        <!-- Show Archived Checkbox -->
+        <div *ngIf="!isNursingProvider && encounterStudent.Id > 0" class="pull-right">
+            <mt-dynamic-field [field]="getArchivedField()" (valueChanges)="includeArchived = $event; getEncounterStudentGoals()"></mt-dynamic-field>
+        </div>
+    </div>
+</div>
+<br *ngIf="isCardOpen" />

@@ -1,0 +1,312 @@
+<h3 mtSetTitle>Completed Activity Report</h3>
+
+<div class="miles-card padded">
+    <h4>FISCAL SUMMARY REPORT</h4>
+
+    <!-- Filters -->
+    <div class="row">
+        <div class="col-md-2">
+            <label>School Districts</label>
+            <mt-virtual-type-ahead
+                [getItems]="getSchoolDistricts"
+                [placeholder]="'Begin typing...'"
+                (selectionChanged)="handleDistrictSelection($event)"
+            > </mt-virtual-type-ahead>
+        </div>
+        <div class="col-md-2">
+        <mt-dynamic-field
+        [field]="getFiscalYearField()"
+        (valueChanges)="handleFiscalYearSelection($event)"
+    ></mt-dynamic-field>
+
+        </div>
+    </div>
+    <br />
+
+    <!-- Buttons -->
+    <div class="row">
+        <div class="col-md-4">
+            <button type="button" class="btn btn-info" (click)="getFiscalSummaryReport()">Get Completed Activity Report</button>
+        </div>
+    </div>
+</div>
+<br />
+<div *ngIf="fiscalSummaryData && selectedSchoolDistrict" class="miles-card padded">
+    <div class="row">
+        <div class="col-xs-9">
+            <div>
+                <strong>{{selectedSchoolDistrict?.Name}}</strong>
+            </div>
+            <br />
+            <div>
+                SUMMARY REVENUE {{fiscalYear}}
+            </div>
+            <br />
+            <div>
+                {{currentDate}}
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div><strong>Healthcare Process Consulting, Inc.</strong></div>
+            <div>2888 Nationwide Parkway</div>
+            <div>Brunswick, Ohio 44212 </div>
+            <div>(440) 884-3688; or (866) 625-2003</div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <hr>
+        <div class="col-xs-12">
+            <div>
+                <strong>Potential Reimbursement to District</strong>
+            </div>
+        </div>
+        </div>
+    <div class="row reportHeader">
+        <br />
+        <div class="col-xs-4">
+            <div>
+                <strong><br />Reason</strong>
+            </div>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong>Total<br />Encounters</strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong>Dollar<br />Amount</strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong style="font-size: 18px;">Occupational<br />Therapy</strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong style="font-size: 18px;">Physical<br />Therapy</strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong><br />Speech</strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong><br />Psychology</strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong><br />Counseling</strong>
+        </div>
+        <div class="col-xs-1 centerText">
+            <strong><br />Nursing</strong>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <br />
+        <div *ngFor="let report of fiscalSummaryData.ReimbursementReasonData">
+        <div class="col-xs-4">
+            <div>
+                {{report.ReimbursementReason}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                {{report.Count}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                {{report.DollarAmount}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                {{report.OccupationalTherapy}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                {{report.PhysicalTherapy}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                {{report.Speech}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                {{report.Psychology}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                {{report.Counseling}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-1 rightAlign">
+            <div>
+                {{report.Nursing}}
+            </div>
+            <br />
+        </div>
+    </div>
+    </div>
+    <hr>
+    <div class="row">
+        <br />
+        <div class="col-xs-4">
+            <div class="floatRight">
+                <strong>Totals:</strong>
+            </div>
+        </div>
+        <div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    {{fiscalSummaryData.ReimbursementReasonDataTotals.Count}}
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    {{fiscalSummaryData.ReimbursementReasonDataTotals.DollarAmount}}
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    {{fiscalSummaryData.ReimbursementReasonDataTotals.OccupationalTherapy}}
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    {{fiscalSummaryData.ReimbursementReasonDataTotals.PhysicalTherapy}}
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    {{fiscalSummaryData.ReimbursementReasonDataTotals.Speech}}
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    {{fiscalSummaryData.ReimbursementReasonDataTotals.Psychology}}
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    {{fiscalSummaryData.ReimbursementReasonDataTotals.Counseling}}
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    {{fiscalSummaryData.ReimbursementReasonDataTotals.Nursing}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <br />
+        <div class="col-xs-4">
+            <div class="floatRight">
+                <strong>Less Average Applicable FFP 40%:</strong>
+            </div>
+        </div>
+        <div>
+            <div class="col-xs-1">
+                <div>
+
+                </div>
+            </div>
+            <div class="col-xs-1 rightAlign">
+                <div>
+                    {{fiscalSummaryData.LessAverageApplicableFFP}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <hr>
+        <div class="col-xs-12">
+            <div>
+                <strong>Historical Comparison of Documented Encounters</strong>
+            </div>
+        </div>
+    </div>
+    <div class="row reportHeader">
+        <br />
+        <div class="col-xs-6">
+            <div>
+                <strong><br />Service Area</strong>
+            </div>
+        </div>
+        <div class="col-xs-2 centerText">
+            <strong>{{fiscalYear}}<br />Encounters</strong>
+        </div>
+        <div class="col-xs-2 centerText">
+            <strong>{{fiscalYear - 1}}<br />Encounters</strong>
+        </div>
+        <div class="col-xs-2 centerText">
+            <strong>{{fiscalYear - 2}}<br />Encounters</strong>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <br />
+        <div *ngFor="let report of fiscalSummaryData.ServiceCodeData">
+        <div class="col-xs-6">
+            <div>
+                {{findServiceCodeName(report.ServiceCodeId)}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2 floatRight">
+            <div>
+                {{report.CurrentYearTotal}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2 floatRight">
+            <div>
+                {{report.PreviousYearTotal}}
+            </div>
+            <br />
+        </div>
+        <div class="col-xs-2 floatRight">
+            <div>
+                {{report.TwoYearsPriorTotal}}
+            </div>
+            <br />
+        </div>
+    </div>
+    </div>
+    <hr>
+    <div class="row">
+        <br />
+        <div class="col-xs-6">
+            <div class="floatRight">
+                <strong>Totals:</strong>
+            </div>
+        </div>
+        <div>
+            <div class="col-xs-2 floatRight">
+                <div>
+                    {{fiscalSummaryData.HistoricalComparisonCurrentYearTotal}}
+                </div>
+            </div>
+            <div class="col-xs-2 floatRight">
+                <div>
+                    {{fiscalSummaryData.HistoricalComparisonPreviousYearTotal}}
+                </div>
+            </div>
+            <div class="col-xs-2 floatRight">
+                <div>
+                    {{fiscalSummaryData.HistoricalComparisonTwoYearsPriorTotal}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+</div>
+

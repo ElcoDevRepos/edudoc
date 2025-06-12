@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using API.Jwt;
+using Autofac;
+using BreckAuditModelBase.Audit;
+using Microsoft.Owin;
+using Model;
+using Model.Audit;
+using Service.Audit;
+
+namespace API
+{
+    public class AuditModule : Module
+    {
+        protected override void Load(ContainerBuilder builder) {
+
+
+            // Update this configuration to show what entities will be queried in SQL as well as give some configuration for the frontend such as what is displayed in the front end .
+            var auditEntities = new List<AuditEntity> {
+                new AuditEntity<User>(
+                    "User", "User", "Model.User", "/users/{0}",
+                    new List<Expression<Func<User, object>>> {
+                        {(x) => x.AuthUserId},
+                        {(x) => x.Version}
+                    }
+                )
+            };
+            
+
+            builder.RegisterType<AuditRepository>().As<IAuditRepository>();  // .WithParameter("ConnectionString", "Name=Primary");  // If the Connection String is not named Primary
+            builder.RegisterType<PrimaryContext>().As<IAuditContext>().As<IPrimaryContext>().OnActivated(ctx =>
+            {
+                IOwinContext owin = ctx.Context.Resolve<IOwinContext>();
+                IAuditRepository auditRepository = ctx.Context.Resolve<IAuditRepository>();
+                string authUserId = owin?.Get<string>(OwinKeys.AuthUserId);
+                PrimaryContext pc = ctx.Instance;
+                if (!string.IsNullOrEmpty(authUserId))
+                {
+                    pc.ConfigureUsername(authUserId);
+                }
+
+                AuditRelationshipTracker auditRelationshipTracker = new AuditRelationshipTracker(pc, auditRepository);
+
+                pc.OnAuditLogGenerated += (sender, args) => auditRelationshipTracker.AuditwithRelationship(args);
+            }).InstancePerLifetimeScope();
+
+            builder.RegisterType<AuditService>().As<IAuditService>().WithParameter("auditEntity", auditEntities);
+        }
+    }
+}

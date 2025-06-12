@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>90-Day MSP Progress Reports</h2>
+    </div>
+</div>
+
+<!-- Search Bar -->
+<div>
+    <mt-search-bar (searched)="search($event)"></mt-search-bar>
+    <br />
+</div>
+
+<!-- Filters -->
+<div class="row">
+    <div class="col-md-6">
+        <mt-search-filter-daterange
+        [startDate]="startDate" [endDate]="endDate" entity="Progress Report Dates" [minDate]="minDate"
+        (selectionChanged)="dateSelectionChanged($event)"
+        ></mt-search-filter-daterange>
+    </div>
+    <div class="col-md-3">
+        <mt-search-filter-select
+            [items]="serviceAreas"
+            entity="Service Areas"
+            [maxToShowInSelectedText]="1"
+            (selectionChanged)="filterSelectionChanged()"
+        ></mt-search-filter-select>
+    </div>
+</div>
+
+<!-- Provider Table -->
+<mt-entity-list
+    [entities]="districtProgressReports"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    (pageChanged)="getProgressReports()"
+    (itemSelectedEvent)="providerSelected($event.entity.ProviderId)"
+    [entityListConfig]="entityListConfig">
+</mt-entity-list>

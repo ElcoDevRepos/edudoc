@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info widget miles-card">
+            <div class="panel-heading clearfix">
+                <h4>{{ districtName }}</h4>
+                <h4>90-DAY PROGRESS REPORT</h4>
+                <div class="resize-block-element pull-right"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Student Info -->
+    <div class="row" *ngIf="student" style="padding-left: 15px">
+        <div class="col-md-3"><label>Student Name: </label> {{ studentName }}</div>
+        <div class="col-md-3"><label>Date of Birth: </label> {{ student.DateOfBirth | date : 'shortDate' }}</div>
+        <div class="col-md-3"><label>ID: </label> {{ student.StudentCode ?? 'N/A' }}</div>
+    </div>
+    <br />
+    <ng-container *ngIf="loaded">
+        <div *ngFor="let report of progressReports">
+            <div class="col-md-12">
+                <br />
+                <app-progress-report-basic-info
+                    [canEdit]="canEdit"
+                    [progressReport]="report"
+                    [student]="student"
+                    [quarter]="quarter"
+                    [isSupervisor]="isSupervisor && report.Id > 0"
+                    [dateRanges]="districtDates"
+                    [permissions]="permissions"
+                />
+            </div>
+        </div>
+    </ng-container>
+</div>
+<br />
+
+<!-- Buttons -->
+<div class="row">
+    <div class="col-md-4">
+        <a *ngIf="!isOldReport && !currentUserHasProgressReport && permissions?.CanHaveMultipleProgressReportsPerStudent " class="btn btn-primary" (click)="addNewProgressReport()">Add New Progress Report</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <a [routerLink]="closePath" class="btn btn-default">Close</a>
+    </div>
+</div>

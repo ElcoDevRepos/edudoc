@@ -1,0 +1,154 @@
+<#
+    // This file is included to contain Setting Overrides from the Database.tt file
+    // Instead of updating the Database.tt file settings update them here because the Database.tt file will get overwritten by the package.
+
+
+    // Uncomment Below for Adding in the Audit Log
+    // Settings.DbContextBaseClass = "BreckContext, IBaseContext, IAuditContext";
+
+    // Uncomment Below to add in Class Attribute such as what class to Track in the AuditLog
+    // WritePocoClassAttributes = t =>
+    // {
+    //    if (Settings.UseDataAnnotations)
+    //    {
+    //        foreach (var dataAnnotation in t.DataAnnotations)
+    //        {
+    //            WriteLine("    [" + dataAnnotation + "]");
+    //        }
+    //    }
+    //
+    //    // Example:
+    //    // if(t.ClassName.StartsWith("Order"))
+    //    //     WriteLine("    [SomeAttribute]");
+    //    if (!t.ClassName.StartsWith("Auth"))
+    //        WriteLine("    [TrackChanges]");		
+    //};
+
+
+    Settings.ForeignKeyName = (tableName, foreignKey, foreignKeyName, relationship, attempt) =>
+    {
+
+        string fkName;
+
+        // 5 Attempts to correctly name the foreign key
+        switch (attempt)
+        {
+            case 1:
+                // Try without appending foreign key name
+                fkName = tableName;
+                break;
+
+
+            case 2:
+                // Only called if foreign key name ends with "id"
+                // Use foreign key name without "id" at end of string
+                fkName = foreignKeyName.Remove(foreignKeyName.Length-2, 2);
+                break;
+
+
+            case 3:
+                // Use foreign key name only
+                fkName = foreignKeyName;
+                break;
+
+
+            case 4:
+                // Use table name and foreign key name
+                fkName = tableName + "_" + foreignKeyName;
+                break;
+
+
+            case 5:
+                // Used in for loop 1 to 99 to append a number to the end
+                fkName = tableName;
+                break;
+
+            default:
+                // Give up
+                fkName = tableName;
+                break;
+        }
+
+
+        // Apply custom foreign key renaming rules. Can be useful in applying pluralization.
+        // For example:
+
+        if (tableName == "User" && foreignKey.FkColumn == "CreatedById" && foreignKey.FkTableName == "EncounterStudentStatuses")
+            return "CreatedBy";
+
+        if (tableName == "Provider" && foreignKey.FkColumn == "SupervisorId" && foreignKey.FkTableName == "SupervisorProviderStudentReferalSignOffs")
+        {
+            foreignKey.OverrideNames = true;
+            return "Supervisor";
+        }
+
+       return fkName;
+    };
+
+
+   // Uncomment Below to Add Column Attributes such as marking which Columns to SkipTracking
+   /*
+     WritePocoColumn = c =>
+    {
+        bool commentWritten = false;
+        if ((Settings.IncludeExtendedPropertyComments == CommentsStyle.InSummaryBlock ||
+             Settings.IncludeComments == CommentsStyle.InSummaryBlock) &&
+            !string.IsNullOrEmpty(c.SummaryComments))
+        {
+            WriteLine(string.Empty);
+            WriteLine("        ///<summary>");
+            WriteLine("        /// {0}", System.Security.SecurityElement.Escape(c.SummaryComments));
+            WriteLine("        ///</summary>");
+            commentWritten = true;
+        }
+        if (Settings.UseDataAnnotations)
+        {
+            if(c.Ordinal > 1 && !commentWritten)
+                WriteLine(string.Empty);    // Leave a blank line before the next property
+
+            foreach (var dataAnnotation in c.DataAnnotations)
+            {
+                WriteLine("        [" + dataAnnotation + "]");
+            }
+
+            if (c.Name.ToLower() == "version") {
+               WriteLine("        [SkipTracking]");
+            }
+        }
+
+        // Example of adding a [Required] data annotation attribute to all non-null fields
+        //if (!c.IsNullable)
+        //    return "        [System.ComponentModel.DataAnnotations.Required] " + c.Entity;
+
+        return "        " + c.Entity;
+    };
+
+ */
+
+
+ /*
+    Settings.ForeignKeyAnnotationsProcessing = (Table fkTable, Table pkTable, string propName, string fkPropName) =>
+    {
+
+        // Add Foreign Key Data Annotation to Collections
+       // if (!pkTable.NameHumanCase.Equals(propName))
+       //   return new[] { "System.ComponentModel.DataAnnotations.Schema.ForeignKey(\"" + propName + "\")" };
+
+        // Includes Inverse Property when using Data Annotations
+         if (Settings.UseDataAnnotations) {
+            List<string> dataAnnotations = new List<string>();
+            if (fkPropName != string.Empty) dataAnnotations.Add("InverseProperty(\"" + fkPropName + "\")");
+            
+            // if (fkTable.NameHumanCase.Equals("Customer") && fkPropName == "Customers") dataAnnotations.Add("SkipTrackingRelationship");
+
+            // if (pkTable.NameHumanCase.Equals("Customer") && fkTable.NameHumanCase.Equals("CustomerPhone")) dataAnnotations.Add("SkipTrackingRelationship");
+
+            if (dataAnnotations.Count() > 0) {
+                return dataAnnotations.ToArray();
+            }
+         }
+
+       return null;
+    };
+  */
+#>

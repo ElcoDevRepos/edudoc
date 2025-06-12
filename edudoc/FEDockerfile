@@ -1,0 +1,12 @@
+FROM nginx:alpine
+
+# Need bash so I can run my bash script to move files
+
+RUN apk add --update bash && rm -rf /var/cache/apk/*
+
+COPY /dist /usr/share/nginx/html
+
+# Clear out the default nginx files
+
+RUN find /usr/share/nginx/html/ -maxdepth 1 -name "*.html" -type f -delete
+

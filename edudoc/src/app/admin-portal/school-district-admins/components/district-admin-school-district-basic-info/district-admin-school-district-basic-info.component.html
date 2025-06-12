@@ -1,0 +1,32 @@
+<div class="miles-card padded">
+    <h4>{{ schoolDistrict.Name }}</h4>
+    <div class="row">
+        <div class="col-md-6">
+            <span [innerHTML]="getUserLabel('HPC Account Manager', schoolDistrict.AccountManager)"></span>
+            <br />
+            <div *ngIf="schoolDistrict.AccountManager">
+                <label>Email: </label> {{ schoolDistrict.AccountManager.Email }}
+                <br />
+                <label>Phone: </label> {{ getUserPhone(schoolDistrict.AccountManager) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <span [innerHTML]="getUserLabel('Treasurer', treasurerContact)"></span>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <span [innerHTML]="getUserLabel('HPC Account Assistant', schoolDistrict.AccountAssistant)"></span>
+            <br />
+            <div *ngIf="schoolDistrict.AccountAssistant">
+                <label>Email: </label> {{ schoolDistrict.AccountAssistant.Email }}
+                <br />
+                <label>Phone: </label> {{ getUserPhone(schoolDistrict.AccountAssistant) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <span [innerHTML]="getUserLabel('Special Education Contact', specialEdContact)"></span>
+        </div>
+    </div>
+</div>

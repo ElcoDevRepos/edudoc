@@ -1,0 +1,172 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Approve Assistant Encounters</h2>
+    </div>
+</div>
+
+<!-- Search Bar -->
+<div>
+    <mt-search-bar (searched)="getFilterSearchbar($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+    <br />
+</div>
+
+<!-- Filters -->
+<div class="row">
+    <div class="col-md-2">
+        <label>Assistant</label><br />
+        <mt-search-filter-select
+        [items]="assistants"
+        entity="Assistants"
+        [maxToShowInSelectedText]="1"
+        ></mt-search-filter-select>
+    </div>
+    <div class="col-md-2">
+        <label>Student</label><br />
+        <mt-search-filter-select
+        [items]="students"
+        entity="Student"
+        [maxToShowInSelectedText]="1"
+        ></mt-search-filter-select>
+    </div>
+    <div class="col-md-2">
+        <label>Encounter Date</label><br />
+        <mt-search-filter-daterange [startDate]="startDate" [endDate]="endDate" entity="Date" (selectionChanged)="getFilterDateRange($event)">
+        </mt-search-filter-daterange>
+    </div>
+    <div class="col-md-6">
+        <mt-dynamic-field [field]="esignEncounterField" (valueChanges)="esignEncounterSelected = $event"></mt-dynamic-field>
+        <div class="col-md-2">
+            <button type="button" style="margin: 0.3em 0;" Class="btn btn-flat btn-success" (click)="applyClicked($event)">
+                Apply
+            </button>
+        </div>
+        <div style="display:inline-block;padding:5px;">
+            <button
+                type="button"
+                Class="btn btn-flat btn-success"
+                (click)="selectAllEncounters()"
+                *ngIf="showSelectAllButton"
+            >
+                Select All Encounters
+            </button>
+            <button
+                type="button"
+                Class="btn btn-flat btn-success"
+                (click)="unselectAllEncounters()"
+                *ngIf="showUnselectAllButton"
+            >
+                Unselect All Encounters
+            </button>
+            <button
+                type="button"
+                Class="btn btn-flat btn-success"
+                (click)="showSignModal()"
+                *ngIf="esignEncounterSelected"
+                [disabled]="!selectedEncounters || !selectedEncounters.length"
+            >
+                Sign All Encounters ({{ selectedEncounters.length }})
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Entity List -->
+<div>
+    <mt-entity-list
+        *ngIf="showList"
+        [entityListConfig]="entityListConfig"
+        [entities]="encounters"
+        [total]="total"
+        [(itemsPerPage)]="itemsPerPage"
+        [(currentPage)]="currentPage"
+        (pageChanged)="getEncounters()"
+        (selectionChangedEvent)="onSelectionChanged($event)"
+    >
+        <ng-template entityListHeader>
+            <th [style.width]="'10%'">
+                Student Info
+            </th>
+            <th [style.width]="'15%'">
+                Encounter Info
+            </th>
+            <th [style.width]="'20%'">
+                Other
+            </th>
+            <th [style.width]="'25%'">
+                Treatment Notes
+            </th>
+            <th [style.width]="'20%'">
+                Supervisor Notes
+            </th>
+            <th [style.width]="'10%'" class="text-center">
+                Actions
+            </th>
+        </ng-template>
+        <ng-template mtEntityListItem let-columns="columns" let-entity>
+            <tr [style.cursor]="'default'">
+                <td [style.width]="'10%'">
+                    <label>Assistant Name: </label><br /> {{ entity.ProviderName }} <br />
+                    <label>Student Name: </label><br /> {{ entity.StudentName }} <br />
+                    <label>Student DOB: </label><br /> {{ entity.DateOfBirth | date: 'mediumDate' }} <br />
+                    <label>District: </label><br /> {{ entity.SchoolDistrict }} <br />
+                    <label>Student Code: </label><br /> {{ entity.StudentCode }} <br />
+                </td>
+                <td [style.width]="'15%'">
+                    <label>Encounter #: </label><br /> {{ entity.EncounterNumber }} <br />
+                    <label>Date: </label><br /> {{ entity.EncounterDate | date: 'mediumDate' }} <br />
+                    <label>Start: </label><br /> {{ entity.StartDateTime | date: 'shortTime' }} <br />
+                    <label>End: </label><br /> {{ entity.EndDateTime | date: 'shortTime' }} <br />
+                    <label>Grouping: </label><br /> {{ entity.NumStudentsInEncounter }} <br />
+                </td>
+                <td [style.width]="'20%'">
+                    <label>Reason For Service: </label><br /> {{ entity.ReasonForService }} <br />
+                    <label>CPT Code (Procedure Code): </label><br /> <p>{{ convertCptCodesToList(entity.CptCodes) }}</p>
+                    <label>Plan Goals: </label><br /> {{ convertItemsToCommaSeparatedList(entity.Goals) }} <br />
+                </td>
+                <td [style.width]="'25%'">
+                    <label style="font-size:16px;margin-bottom:0px;">Treatment Notes: </label><br /><span style="font-size:16px;">{{ entity.TreatmentNotes }}</span><br />
+                </td>
+                <td [style.width]="'20%'">
+                    <label>Supervisor Notes: </label><br /> <div style="white-space: pre-line;">{{ entity.ReasonForReturn }}</div> <br />
+                </td>
+                <td [style.width]="'10%'">
+                    <ng-container *ngIf="!esignEncounterSelected">
+                        <button class="btn btn-flat btn-success" (click)="returnEncounter(entity)"
+                        [disabled]="isEncounterReturnedBySupervisor(entity)">
+                            Return Encounter
+                        </button>
+                        <br />
+                        <br />
+                        <button class="btn btn-flat btn-success" (click)="signEncounter(entity)">
+                            Sign Encounter
+                        </button>
+                    </ng-container>
+                    <ng-container *ngIf="esignEncounterSelected">
+                        <input #checkboxes type="checkbox" (change)="encounterSelectedForBulkEsign(entity, $event)">
+                    </ng-container>
+                </td>
+            </tr>
+        </ng-template>
+    </mt-entity-list>
+</div>
+
+<!-- Return Encounter Modal -->
+<mt-modal-wrapper *ngIf="showReturnEncounterModal" [options]="modalOptions" (cancelClick)="showReturnEncounterModal = false">
+    <h4>Reason for Return Must Be Provided</h4>
+    <mt-dynamic-field style="min-height: 200px;"
+        [field]="getReasonForReturnField()"
+        (controlCreated)="reasonForReturnControl = $event">
+    </mt-dynamic-field>
+    <br />
+    <button
+        type="button"
+        class="btn btn-success"
+        [disabled]="reasonForReturnControl.invalid"
+        mt-doubleClickDisabled
+        [(doubleClickIsDisabled)]="doubleClickDisabled"
+        (click)="updateEncounterStatus(encounterStudentIdForModal)"
+    >
+        Save Encounter
+    </button>
+    <button type="button" class="btn btn-default" (click)="showReturnEncounterModal = false">Cancel</button>
+</mt-modal-wrapper>

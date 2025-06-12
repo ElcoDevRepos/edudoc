@@ -1,0 +1,9 @@
+<mt-dynamic-form [config]="config.formObject" (submitted)="formSubmitted($event)">
+    <button type="submit" mtDisableClickDuringHttpCalls
+        Class="btn btn-flat btn-success">
+        Save
+    </button>
+    <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+        Cancel
+    </button>
+</mt-dynamic-form>

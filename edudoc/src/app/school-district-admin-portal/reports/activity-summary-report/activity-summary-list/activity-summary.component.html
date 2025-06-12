@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>
+            <mt-route-back-button *ngIf="isAdmin"></mt-route-back-button>
+            Activity Summary Report
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="miles-editable miles-card padded">
+            <h4>
+                ACTIVITY SUMMARY TOTALS
+            </h4>
+
+            <label>Referrals Pending: </label> {{ totalsLoaded ? activitySummaryDistrict.ReferralsPending : 'Loading...' }} <br />
+            <label>Encounters Returned: </label> {{ totalsLoaded ? activitySummaryDistrict.EncountersReturned : 'Loading...' }} <br />
+            <label>Pending Supervisor Co-Signature: </label> {{ totalsLoaded ? activitySummaryDistrict.PendingSupervisorCoSign : 'Loading...' }} <br />
+            <ng-container *ngIf="!isAdmin"><label>Encounters Ready For Scheduling: </label> {{ totalsLoaded ? activitySummaryDistrict.EncountersReadyForScheduling : 'Loading...' }} <br /></ng-container>
+            <ng-container *ngIf="isAdmin"><label>Pending Evaluations: </label> {{ totalsLoaded ? activitySummaryDistrict.PendingEvaluations : 'Loading...' }} <br /></ng-container>
+        </div>
+    </div>
+</div>
+<br />
+
+<!-- Filters -->
+<div class="row">
+    <div class="col-md-2">
+        <mt-dynamic-field [field]="getCompletedField()" (valueChanges)="completed = $event"></mt-dynamic-field>
+    </div>
+</div>
+<br />
+
+<div *ngIf="!completed && summaries">
+    <mt-entity-list
+        [entities]="summaries"
+        [total]="total"
+        [(currentPage)]="currentPage"
+        (itemSelectedEvent)="summarySelected($event)"
+        [entityListConfig]="openEntityListConfig"
+    >
+    </mt-entity-list>
+</div>
+
+<div *ngIf="completed">
+    <div class="row">
+        <div class="col-md-2">
+            <mt-search-filter-daterange
+            [startDate]="startDate" [endDate]="endDate" entity="Completed Activity Summary Report"
+            (selectionChanged)="dateSelectionChanged($event)"
+            ></mt-search-filter-daterange>
+        </div>
+    </div>
+    <br />
+
+    <mt-entity-list
+        [entities]="completedSummaries"
+        [total]="total"
+        [(currentPage)]="currentPage"
+        (itemSelectedEvent)="summarySelected($event)"
+        [entityListConfig]="completedEntityListConfig"
+    >
+    </mt-entity-list>
+</div>
+

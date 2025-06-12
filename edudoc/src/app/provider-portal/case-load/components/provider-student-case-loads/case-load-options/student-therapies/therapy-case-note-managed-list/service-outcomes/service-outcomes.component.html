@@ -1,0 +1,54 @@
+<h2 mtSetTitle>Service Outcomes</h2>
+
+<div class="col-md-8">
+    <div class="miles-card padded">
+
+        <h4>MY SERVICE OUTCOMES MANAGEMENT</h4>
+        <div class="row">
+            <div class="col-md-4 border-right">
+                <mt-dynamic-field
+                    *ngIf="goals && goals.length"
+                    [field]="getGoalsField()"
+                    (valueChanges)="goalSelected($event)"
+                ></mt-dynamic-field>
+            </div>
+            <div class="col-md-4" *ngIf="selectedGoalId; else placeholder">
+                <form [formGroup]="form">
+                    <mt-dynamic-field [form]="form" [field]="serviceOutcomeField"></mt-dynamic-field>
+                </form>
+                <button
+                    type="submit"
+                    (click)="saveOutcome()"
+                    mtDisableClickDuringHttpCalls
+                    class="btn btn-flat btn-success"
+                >
+                    Save
+                </button>
+            </div>
+            <div class="col-md-4" *ngIf="selectedGoalId">
+                <label>Selected Outcomes</label>
+                <ul class="list-group" *ngIf="selectedOutcomes.length">
+                    <li class="list-group-item text-left" *ngFor="let outcome of selectedOutcomes" style="cursor: default;">
+                        <strong>{{ outcome.Notes }}</strong>
+                        <span (click)="archiveOutcome(outcome.Id)" class="pull-right">
+                            <i class="fa fa-times fa-lg" style="cursor: pointer;" aria-hidden="true"></i>
+                        </span>
+                    </li>
+                </ul>
+                <div *ngIf="!selectedOutcomes.length">
+                    <strong>No outcomes selected</strong>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #placeholder>
+    <div style="position: relative;">
+        <div class="col-md-8 text-center">
+            <br />
+            <strong>Select a Goal</strong>
+        </div>
+    </div>
+</ng-template>

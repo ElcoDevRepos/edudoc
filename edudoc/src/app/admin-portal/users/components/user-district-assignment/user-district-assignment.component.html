@@ -1,0 +1,25 @@
+<div class="miles-card padded" *ngIf="!isEditing">
+    <h4>DISTRICT ASSIGNMENTS</h4>
+    <div *ngIf="assignedSchoolDistricts.length === 0">
+        <em>No district assignments yet!</em>
+    </div>
+    <div *ngIf="assignedSchoolDistricts.length > 0">
+        <ul class="list-group">
+            <li *ngFor="let district of assignedSchoolDistricts" class="list-group-item">
+                <span>{{ district.Name }}</span>
+                <button class="btn btn-flat btn-danger pull-right" (click)="removeAssignment(district)">Remove</button>
+            </li>
+        </ul>
+    </div>
+    <br />
+    <button type="button" class="btn btn-flat btn-success" (click)="isEditing = true">Add Assignment</button>
+</div>
+<div class="miles-card padded" *ngIf="isEditing">
+    <h4>ADD DISTRICT ASSIGNMENT</h4>
+    <form *ngIf="form" (ngSubmit)="districtSaved()">
+        <mt-dynamic-field [field]="districtDropdown" [form]="form"></mt-dynamic-field>
+        <button type="submit" class="btn btn-flat btn-success">Save</button>
+        <button type="button" class="btn btn-flat" (click)="isEditing = false">Cancel</button>
+    </form>
+</div>
+<br />

@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Students</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <label
+            >School Districts
+            <span style="color: red;" *ngIf="schoolDistrictIdFilter === 0">
+                - Select A School District
+            </span>
+        </label>
+        <mt-virtual-type-ahead
+            [getItems]="getSchoolDistricts"
+            [placeholder]="'Begin typing...'"
+            (selectionChanged)="getFilterSchoolDistrictSearchbar($event)"
+            (ready)="typeAheadControlReady($event)"> 
+        </mt-virtual-type-ahead>
+    </div>
+    <div class="col-md-2" *ngIf="schoolDistrictIdFilter > 0 || query.length">
+        <label>Date Of Birth</label><br />
+        <mt-search-filter-daterange
+        [startDate]="startDate" [endDate]="endDate" entity="Date"
+        (selectionChanged)="getFilterDateRange($event)"
+        ></mt-search-filter-daterange>
+    </div>
+    <div class="col-md-2">
+        <button type="button" Class="btn btn-flat btn-success" (click)="applyClicked($event)">
+            Apply
+        </button>
+    </div>
+</div>
+<br />
+<div>
+    <label>Students</label>
+    <mt-search-bar #searchBar (searched)="getFilterStudentSearchbar($event)" [(ngModel)]="query" (ready)="searchControlReady($event)"></mt-search-bar>
+</div>
+<br />
+
+<mt-entity-list
+    [entities]="students"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="getStudents()"
+    (itemSelectedEvent)="studentSelected($event)"
+    (columnSortedEvent)="columnSorted($event)"
+    (itemDeletedEvent)="archiveStudent($event)"
+    [entityListConfig]="entityListConfig"
+>
+</mt-entity-list>

@@ -1,0 +1,9 @@
+<div *ngIf="schoolDistrictRoster">
+    <app-school-district-roster-issues-basic-info
+        [schoolDistrictRoster]="schoolDistrictRoster"
+        [isMerging]="isMerging"
+    ></app-school-district-roster-issues-basic-info>
+</div>
+<br />
+
+<a routerLink="/school-district-admin/students/issues" class="btn btn-default">Close</a>

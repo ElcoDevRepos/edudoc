@@ -1,0 +1,50 @@
+<br />
+<div class="row">
+    <div class="col-md-6">
+        <app-district-admin-school-district-basic-info
+            *ngIf="schoolDistrict"
+            [schoolDistrict]="schoolDistrict"
+            [districtIds]="districtIds"
+            (schoolDistrictChanged)="onSchoolDistrictChanged($event)">
+        </app-district-admin-school-district-basic-info>
+        <br />
+        <app-overridden-common-documents-mer
+            *ngIf="showMERDocumentsCard"
+            [canEdit]="canUpload"
+            [districtId]="schoolDistrict.Id"
+            headerTitle="MER FILE"
+        ></app-overridden-common-documents-mer>
+        <br />
+        <app-overridden-common-documents
+            *ngIf="showRosterDocumentsCard"
+            [allowedMimeType]="allowedRosterDocumentTypes"
+            [canEdit]="canUpload"
+            [schoolDistrictRosterService]="schoolDistrictRosterService"
+            headerTitle="ROSTERS"
+        ></app-overridden-common-documents>
+        <br />
+        <button type="button" class="btn btn-flat btn-success pull-right" (click)="downloadSampleRoster()">Download Sample Roster</button>
+        <br />
+        <br />
+        <br />
+        <div>
+            <app-overridden-common-documents-case-upload
+                *ngIf="showRosterDocumentsCard"
+                [allowedMimeType]="allowedRosterDocumentTypes"
+                [canEdit]="canUpload"
+                [providerCaseUploadService]="providerCaseUploadService"
+                headerTitle="CASE UPLOADS"
+            ></app-overridden-common-documents-case-upload>
+        </div>
+        <br />
+        <button type="button" class="btn btn-flat btn-success pull-right" (click)="downloadSampleCaseloadUpload()">Download Sample Caseload Upload</button>
+    </div>
+    <br />
+
+    <div class="col-md-6" *ngIf="schoolDistrict">
+        <app-district-admin-school-progress-report-date [districtId]="schoolDistrict.Id">
+        </app-district-admin-school-progress-report-date>
+        <br />
+        <app-district-admin-schools [districtId]="schoolDistrict.Id"></app-district-admin-schools>
+    </div>
+</div>

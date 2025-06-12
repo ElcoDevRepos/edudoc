@@ -1,0 +1,17 @@
+<div *ngIf="annualEntry && annualEntry.Id > 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-annual-entry-basic-info
+                [annualEntry]="annualEntry"
+                [canEdit]="canEdit"
+            ></app-annual-entry-basic-info>
+        </div>
+    </div>
+</div>
+<div *ngIf="annualEntry && annualEntry.Id === 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-annual-entry-basic-info [annualEntry]="annualEntry"></app-annual-entry-basic-info>
+        </div>
+    </div>
+</div>

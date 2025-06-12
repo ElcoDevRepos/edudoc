@@ -1,0 +1,34 @@
+<div class="miles-card padded">
+    <h4>Encounters for AUP Audit</h4>
+    <button type="button" Class="btn btn-flat btn-success" (click)="getAll()">
+        Get All
+    </button>
+    <button *ngIf="encounters && encounters.length" type="button" Class="btn btn-flat btn-success" (click)="exportToCSV()">
+        Export to CSV
+    </button>
+    <button *ngIf="encounters && encounters.length" type="button" Class="btn btn-flat btn-success" (click)="exportToPDF()">
+        Export to PDF
+    </button>
+    <button *ngIf="encounters && encounters.length" type="button" Class="btn btn-flat btn-success" (click)="clearAll()">
+        Clear All
+    </button>
+    <br />
+    <br />
+    <div *ngIf="!encounters || !encounters.length">
+        <span>No encounters added to AUP Audit.</span>
+    </div>
+    <div *ngIf="encounters && encounters.length">
+        <div class="container-fluid nopadding">
+            <ul class="list-group">
+                <li *ngFor="let encounter of encounters" class="list-group-item" (click)="removeEncounterFromList(encounter)">
+                    <span> {{ encounter.EncounterNumber }} </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <mt-entity-list
+        [entityListConfig]="entityListConfig"
+        [entities]="encounters"
+    ></mt-entity-list>
+</div>
+

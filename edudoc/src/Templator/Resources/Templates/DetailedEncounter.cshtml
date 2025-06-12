@@ -1,0 +1,99 @@
+@using System;
+@using Service.Utilities;
+@model Templator.Models.DetailedEncounterParams
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="@Model.ResolveStylesheetPath("Bootstrap.css")" rel="stylesheet" />
+    <link href="@Model.ResolveStylesheetPath("DetailedEncounter.css")" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-xs-4 pull-left">@CommonFunctions.NowInEasternTime()</div>
+        <div class="col-xs-6">
+            <h3>Encounter (Detail)</h3>
+        </div>
+    </div>
+
+    @foreach (var district in Model.districtData)
+    {
+        @foreach (var group in @district.GroupData)
+        {
+
+            @foreach (var line in @group.LineData)
+            {
+                <div style="page-break-inside: avoid;">
+                    <div style="padding-left: 5px;"><strong>@group.StudentInfo</strong>
+                        For @group.ProviderName in @district.DistrictName </div>
+                    <div style="padding-left: 10px;">IEP Starts On: @group.IEPStartDate</div>
+                    <br />
+                    <div class="row" style="padding-left: 15px;">
+                        <div class="col-xs-4">
+                            <div><strong>Encounter # @line.EncounterNumber</strong></div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div>Entry Date @line.EntryDate</div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div>@line.ServiceType</div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding-left: 20px;">
+                        <div class="col-xs-2">
+                            <div>@(line.IsTelehealth ? "(telehealth)" : "") </div>
+                        </div>
+                        <div class="col-xs-2">
+                            @line.ReasonForService
+                        </div>
+                        <div class="col-xs-4">
+                        </div>
+                        <div class="col-xs-4">
+                            @line.Status (Reason: @line.ReasonForDeviation)
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding-left: 20px;">
+                        <div class="col-xs-4">@line.EncounterDate</div>
+                        <div class="col-xs-4">@line.StartTime - @line.EndTime</div>
+                        <div class="col-xs-4">
+                            <div>Group: @line.Grouping Additional Students: @line.AdditionalStudents</div>
+                            <div>Total Minutes: @line.TotalMinutes</div>
+                        </div>
+                    </div>
+
+                    @foreach (var method in line.Methods)
+                    {
+                        <div style="padding-left: 20px;">
+                            <div>@method.Name</div>
+                        </div>
+                    }
+
+                    @foreach (var goal in line.Goals)
+                    {
+                        <div style="padding-left: 20px;">
+                            <div>@goal.Description</div>
+                        </div>
+                    }
+
+                    @foreach (var cptCode in line.ProcedureCodes)
+                    {
+                        <div style="padding-left: 20px;">
+                            <div>@cptCode.CptCode.Description: @cptCode.Minutes mins</div>
+                        </div>
+                    }
+
+                    <div style="padding-left: 30px;">
+                        <div>@line.Notes</div>
+                    </div>
+
+                    <hr>
+                </div>
+            }
+        }
+    }
+</body>
+
+</html>

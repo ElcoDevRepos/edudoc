@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>
+            Encounters Ready for You
+            <button *ngIf="studentId" (click)="goBackToCaseLoad()" class="btn btn-primary">Go Back to Case Load</button>
+        </h2>
+    </div>
+</div>
+<div>
+    <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+    <br />
+
+    <div class="row">
+        <div class="col-md-2">
+            <mt-search-filter-select
+                [items]="daysOfTheWeek"
+                entity="Weekdays"
+                (selectionChanged)="filterSelectionChanged()"
+            ></mt-search-filter-select>
+        </div>
+        <div class="col-md-3">
+            <mt-search-filter-daterange [startDate]="startDate" [endDate]="endDate" entity="Date" (selectionChanged)="dateSelectionChanged($event)">
+            </mt-search-filter-daterange>
+        </div>
+        <div class="col-md-2">
+            <button class="btn" [class.btn-primary]="!bulkDelete" (click)="toggleBulkDelete()">{{ bulkDelete ? 'Cancel' : 'Bulk Delete' }}</button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-danger" *ngIf="bulkDelete && selectedSchedules.length > 0" (click)="deleteSelected()">Delete Selected</button>
+        </div>
+        <div class="pull-right">
+            <mt-dynamic-field [field]="getArchivedField()" (valueChanges)="includeArchived = $event; getStudentTherapySchedules()"></mt-dynamic-field>
+        </div>
+    </div>
+</div>
+<br />
+<mt-entity-list
+    *ngIf="showList"
+    [(currentPage)]="currentPage"
+    [entities]="studentTherapySchedules"
+    [entityListConfig]="entityListConfig"
+    [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="onPageChanged()"
+    (columnSortedEvent)="columnSorted($event)"
+    (itemSelectedEvent)="studentTherapyScheduleSelected($event)"
+    (itemDeletedEvent)="archiveSchedule($event)"
+    (selectionChangedEvent)="onSelectionChanged($event)"
+    [total]="total"
+>
+</mt-entity-list>

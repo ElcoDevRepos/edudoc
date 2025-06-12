@@ -1,0 +1,28 @@
+<h3 mtSetTitle>ESCs</h3>
+<div class="row">
+    <div class="col-md-12">
+        <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+        <div class="pull-right">
+            <mt-dynamic-field [field]="getArchivedField()" (valueChanges)="includeArchived = $event; search(query)"> </mt-dynamic-field>
+        </div>
+        <br />
+    </div>
+</div>
+
+<mt-entity-list
+    [entities]="escs"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    (pageChanged)="getEscs()"
+    (itemSelectedEvent)="escSelected($event)"
+    (columnSortedEvent)="columnSorted($event)"
+    (itemDeletedEvent)="archiveEsc($event)"
+    [entityListConfig]="entityListConfig"
+>
+</mt-entity-list>
+
+<div *ngIf="canAddEsc" class="fab-wrap-b-r">
+    <a class="btn btn-primary btn-fab-lg" [routerLink]="['/escs', 'add']">
+        <span class="fa fa-plus"></span>
+    </a>
+</div>

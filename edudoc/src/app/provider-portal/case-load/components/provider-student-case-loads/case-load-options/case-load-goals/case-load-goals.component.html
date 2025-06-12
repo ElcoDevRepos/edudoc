@@ -1,0 +1,82 @@
+<div *ngIf="!isCardOpen" class="miles-editable miles-card padded">
+    <h4>
+        PLAN GOALS
+        <i (click)="toggleCardOpen()" style="padding:5px;cursor:pointer;" class="fa fa-chevron-down"></i>
+    </h4>
+</div>
+
+<!-- If Editing Goals -->
+<div *ngIf="isEditing && isCardOpen" class="miles-form padded">
+    <h4>PLAN GOALS
+        <span>
+            <i (click)="toggleCardOpen()" style="padding:5px;cursor:pointer;" class="fa fa-chevron-up"></i>
+        </span>
+    </h4>
+
+    <!-- Options for adding goals -->
+    <div class="row" *ngIf="goalOptions.length">
+        <div class="col-md-6">
+            <mt-multiselect
+                [items]="goalOptions"
+                [showSelectAllButtons]="false"
+                [maxToShowInSelectedText]="3"
+                [autoClose]="true"
+                [filterMode]="false"
+                entity="Goals"
+                placeholder="Select Plan Goals"
+            ></mt-multiselect>
+        </div>
+        <div class="col-md-6">
+            <button type="button" Class="btn btn-flat btn-success" (click)="addGoals()" *ngIf="getSelectedGoals().length">
+                Add Goals
+            </button>
+        </div>
+    </div>
+    <br />
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr class="no-pointer">
+                    <th>
+                        <b>Description</b>
+                    </th>
+                    <th>
+                        <b>Remove</b>
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngIf="caseLoadGoals">
+                <tr class="no-pointer" *ngFor="let caseLoadGoal of caseLoadGoals">
+                    <td class="ellipsis">
+                        {{ caseLoadGoal.Goal.Description }}
+                    </td>
+                    <td class="ellipsis">
+                        <div *ngIf="caseLoadGoal.Archived" class="text-center">
+                            <button type="button" (mtConfirm)="archiveCaseLoadGoal(caseLoadGoal)" [mtConfirmOptions]="unarchiveConfirm">
+                                <i class="fa fa-undo fa-2x"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="!caseLoadGoal.Archived" class="text-center">
+                            <button type="button" (mtConfirm)="archiveCaseLoadGoal(caseLoadGoal)" [mtConfirmOptions]="archiveConfirm">
+                                <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="noCaseLoadGoals()">
+        <h3 style="text-align: center;">No data to display.</h3>
+    </div>
+
+    <!-- Lock in editing mode for new CaseLoadGoal -->
+    <div *ngIf="!isAdding">
+        <div class="pull-right">
+            <mt-dynamic-field [field]="getArchivedField()" (valueChanges)="includeArchived = $event; getCaseLoadGoals()"></mt-dynamic-field>
+        </div>
+    </div>
+</div>
+<br />

@@ -1,0 +1,13 @@
+<div *ngIf="goal">
+    <div class="row">
+        <div class="col-md-6">
+            <app-goal-basic-info [goal]="goal" [canEdit]="canEdit"></app-goal-basic-info>
+            <br />
+        </div>
+        <div class="col-md-6">
+            <app-nurse-progress-quick-text></app-nurse-progress-quick-text>
+            <br />
+        </div>
+    </div>
+    <a routerLink="/goals" class="btn btn-default">Close</a>
+</div>

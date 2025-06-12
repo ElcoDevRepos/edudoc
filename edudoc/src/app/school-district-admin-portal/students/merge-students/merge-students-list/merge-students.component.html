@@ -1,0 +1,17 @@
+<h3 mtSetTitle>Merge Students</h3>
+<div>
+    <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+    <br />
+</div>
+<br />
+<mt-entity-list
+    [entities]="students"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    (pageChanged)="getStudents()"
+    (itemSelectedEvent)="studentSelected($event)"
+    (columnSortedEvent)="columnSorted($event)"
+    (itemDeletedEvent)="deleteStudent($event)"
+    [entityListConfig]="entityListConfig"
+>
+</mt-entity-list>

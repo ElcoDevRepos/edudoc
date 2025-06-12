@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Provider Titles</h2>
+    </div>
+</div>
+<div>
+    <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+    <div class="pull-right">
+        <mt-dynamic-field [field]="getArchivedField()" (valueChanges)="includeArchived = $event; search(query)"> </mt-dynamic-field>
+    </div>
+    <mt-search-filter-select [items]="serviceCodes" entity="Service Area" (selectionChanged)="filterSelectionChanged()"> </mt-search-filter-select>
+</div>
+
+<mt-entity-list
+    [entities]="providerTitles"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="getProviderTitles()"
+    (itemSelectedEvent)="providerTitleSelected($event)"
+    (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="entityListConfig"
+    (itemDeletedEvent)="archive($event)"
+>
+</mt-entity-list>
+
+<div *ngIf="canAddProviderTitle" class="fab-wrap-b-r">
+    <a class="btn btn-primary btn-fab-lg" [routerLink]="['/provider-titles', 'add']">
+        <span class="fa fa-plus"></span>
+    </a>
+</div>

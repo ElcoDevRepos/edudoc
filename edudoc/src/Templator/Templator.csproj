@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Resources\Templates\Master\**" />
+    <EmbeddedResource Remove="Resources\Templates\Master\**" />
+    <None Remove="Resources\Templates\Master\**" />
+  </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Breckenridge.HtmlToPdf" Version="3.1.0" />
+        <PackageReference Include="Humanizer.Core" version="2.7.9" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+        <PackageReference Include="RazorEngineCore" Version="2020.10.1" />
+        <PackageReference Include="RazorEngineCore.Extensions" Version="0.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Model\Model.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\Fonts\" />
+      <Folder Include="Resources\Images\" />
+    </ItemGroup>
+</Project>

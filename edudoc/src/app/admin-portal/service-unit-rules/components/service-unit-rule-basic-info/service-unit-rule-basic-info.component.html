@@ -1,0 +1,57 @@
+<div class="miles-form padded" [@itemAnim]>
+    <h4>SERVICE UNIT RULE INFO</h4>
+    <form
+        *ngIf="abstractServiceUnitRuleControls"
+        [formGroup]="serviceUnitRuleForm"
+        (ngSubmit)="formSubmitted(serviceUnitRuleForm)"
+    >
+        <mt-dynamic-field
+            [field]="abstractServiceUnitRuleControls.Name"
+            [form]="serviceUnitRuleForm"
+            (controlCreated)="nameControlCreated($event)"
+        > </mt-dynamic-field>
+
+        <mt-dynamic-field
+            [field]="abstractServiceUnitRuleControls.Description"
+            [form]="serviceUnitRuleForm"
+            (controlCreated)="descriptionControlCreated($event)"
+        > </mt-dynamic-field>
+
+        <label>Crossover: </label> {{ crossoverCode }}
+
+        <mt-dynamic-field
+            [field]="abstractServiceUnitRuleControls.HasReplacement"
+            [form]="serviceUnitRuleForm"
+            (controlCreated)="isReplacementControlCreated($event)"
+        > </mt-dynamic-field>
+
+        <br />
+
+        <button type="submit" Class="btn btn-flat btn-success">
+            Save
+        </button>
+    </form>
+</div>
+
+<mt-modal-wrapper *ngIf="showCrossoverModal" [options]="modalOptions">
+    <h4>Select A CPT Code For The Crossover</h4>
+    <mt-dynamic-field
+        [field]="getCptCodesField()"
+        (controlCreated)="crossoverControl = $event"
+    ></mt-dynamic-field>
+    <br />
+    <mt-dynamic-field
+        [field]="getIsReplacementField()"
+        (controlCreated)="isReplacementControl = $event"
+    ></mt-dynamic-field>
+    <br />
+    <button
+        type="button"
+        class="btn btn-success"
+        mtDisableClickDuringHttpCalls
+        (click)="saveCrossover()"
+    >
+        Save Crossover
+    </button>
+    <button type="button" class="btn btn-default" (click)="cancel()">Cancel</button>
+</mt-modal-wrapper>

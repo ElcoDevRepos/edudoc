@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Annual Entry</h2>
+    </div>
+</div>
+<div>
+    <mt-search-bar (searched)="search($event)"></mt-search-bar>
+    <mt-search-filter-select [items]="districts" entity="School District" (selectionChanged)="filterSelectionChanged()"></mt-search-filter-select>
+    <mt-search-filter-select [items]="statuses" entity="Status" (selectionChanged)="filterSelectionChanged()">
+    </mt-search-filter-select>
+
+</div>
+
+<mt-entity-list [entities]="annualEntries" [total]="total" [(currentPage)]="currentPage" [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="getAnnualEntries()" (itemSelectedEvent)="annualEntrySelected($event)" (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="entityListConfig">
+</mt-entity-list>
+
+<div *ngIf="canAddAnnualEntry" class="fab-wrap-b-r">
+    <a class="btn btn-primary btn-fab-lg" [routerLink]="['/annual-entries', 'add']">
+        <span class="fa fa-plus"></span>
+    </a>
+</div>

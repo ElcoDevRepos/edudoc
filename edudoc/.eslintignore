@@ -1,0 +1,5 @@
+**/*.spec.ts
+**/*.d.ts
+**/*.form-controls.ts
+src/app/model/*
+**/*.dynamic-config.ts

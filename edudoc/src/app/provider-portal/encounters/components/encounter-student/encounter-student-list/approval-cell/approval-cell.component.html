@@ -1,0 +1,14 @@
+<div *ngIf="encounterStudent && encounterNeedsSignature" style="display: inline-block; width: 120px;">
+    <div class="btn-group-vertical">
+        <!-- approve button -->
+        <button type="button" class="btn btn-flat btn-success" (click)="signEncounter($event)" title="Sign Off">
+            <i class="fa fa-lg fa-check-circle"></i>
+            Sign Off
+        </button>
+        <!-- reject button -->
+        <button type="button" class="btn btn-flat btn-danger" (click)="rejectEncounter($event)" title="Reject">
+            <i class="fa fa-lg fa-ban"></i>
+            Reject
+        </button>
+    </div>
+</div>

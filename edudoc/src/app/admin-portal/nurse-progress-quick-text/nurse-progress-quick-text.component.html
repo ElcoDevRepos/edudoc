@@ -1,0 +1,30 @@
+<div class="miles-card padded" *ngIf="!isEditing">
+    <h4>
+        NURSE PROGRESS QUICK TEXT
+    </h4>
+    <ul style="height:250px;overflow-y:scroll;" class="list-group" *ngIf="nursingGoalResults && nursingGoalResults.length">
+        <li class="list-group-item" (click)="editNursingGoalResult(ngr)" *ngFor="let ngr of nursingGoalResults">
+            {{ ngr.Name }}
+            <i class="fa fa-trash fa-lg pull-right" (mtConfirm)="archiveNursingGoalResult(ngr)" [mtConfirmOptions]="archiveConfirm"> </i>
+        </li>
+    </ul>
+    <span *ngIf="!nursingGoalResults || !nursingGoalResults.length"><i>No Quick Texts</i></span>
+    <div class="fab-wrap">
+        <button type="button" class="btn btn-primary btn-fab-md btn-fab-center" (click)="addNursingGoalResult()">
+            <span class="fa fa-plus"></span>
+        </button>
+    </div>
+</div>
+
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4>ADD QUICK TEXT</h4>
+    <mt-dynamic-form [config]="formObject" (formCreated)="formCreated($event)" (submitted)="formSubmitted($event)">
+        <button type="submit" class="btn btn-flat btn-success">
+            Save
+        </button>
+        <button type="button" class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </mt-dynamic-form>
+</div>
+<br />

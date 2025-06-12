@@ -1,0 +1,20 @@
+<mt-modal-wrapper [options]="modalOptions" (cancelClick)="cancel()">
+    <h4>Validation Errors</h4>
+    <br />
+    <ul *ngIf="errorsContent?.length" class="list-group">
+        <li *ngFor="let error of errorsContent" class="list-group-item" [style.cursor]="'default'">
+            <div [innerHTML]="error"></div>
+        </li>
+    <br />
+    </ul>
+    <button
+        *ngIf="!isHardValidation"
+        type="button"
+        class="btn btn-success"
+        mtDisableClickDuringHttpCalls
+        (click)="proceed()"
+    >
+        Proceed With Save
+    </button>
+    <button type="button" [ngClass]="isHardValidation ? 'btn btn-danger' : 'btn btn-default'" (click)="cancel()">Cancel</button>
+</mt-modal-wrapper>

@@ -1,0 +1,47 @@
+<div
+    class="miles-editable miles-card padded"
+    *ngIf="!isEditing && schoolDistrict.Id > 0"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    (click)="edit()"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4>
+        SCHOOL DISTRICT PROFILE
+        <span class="pull-right" *ngIf="canEdit">
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+    <mt-dynamic-view [config]="viewOnly"></mt-dynamic-view>
+</div>
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4>SCHOOL DISTRICT PROFILE</h4>
+    <mt-dynamic-form
+        [config]="formObject"
+        ([isEditing])="(isEditing)"
+        (submitted)="formSubmitted($event)"
+        (formCreated)="onFormCreated($event)"
+    >
+        <mt-dynamic-field *ngIf="contactsLoaded" [field]="specialEducationDirectorControl" (valueChanges)="handleSpecialEdDirectorSelection($event)"></mt-dynamic-field>
+
+        <h4>Case Notes Requirement</h4>
+        <mt-dynamic-field [field]="getCaseNotesRequiredControl()" (valueChanges)="caseNotesRequired = $event"></mt-dynamic-field>
+        <div *ngIf="caseNotesRequired" class="row">
+            <div class="col-md-12">
+                <div class="col-md-6" *ngFor="let field of providerFields">
+                    <mt-dynamic-field [field]="field" (valueChanges)="providerFieldValueChange(field, $event)"></mt-dynamic-field>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <h4>IEP Date Requirement</h4>
+        <mt-dynamic-field [field]="getIEPDatesRequiredControl()" (valueChanges)="iepDatesRequired = $event"></mt-dynamic-field>
+
+        <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+            Save
+        </button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </mt-dynamic-form>
+</div>

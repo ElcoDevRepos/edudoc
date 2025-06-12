@@ -1,0 +1,35 @@
+<div
+    class="miles-editable miles-card padded"
+    *ngIf="!isEditing && districtProgressReportDate && districtProgressReportDate.Id > 0"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    (click)="isEditing = true"
+    [style.cursor]="'pointer'"
+>
+    <h4>
+        90 Day Progress Report Date Range
+        <span class="pull-right"><i class="fa fa-lg fa-edit"></i></span>
+    </h4>
+    <mt-dynamic-view [config]="viewOnly"></mt-dynamic-view>
+</div>
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4>90 Day Progress Report Date Range</h4>
+    <form [formGroup]="formGroup" (submit)="formSubmitted(formGroup)">
+        <div class="row">
+            <div class="col-md-6">
+                <mt-dynamic-field [form]="formGroup" [field]="formObject[0]" />
+                <mt-dynamic-field [form]="formGroup" [field]="formObject[1]" />
+                <mt-dynamic-field [form]="formGroup" [field]="formObject[2]" />
+                <mt-dynamic-field [form]="formGroup" [field]="formObject[3]" />
+            </div>
+            <div class="col-md-6">
+                <mt-dynamic-field [form]="formGroup" [field]="formObject[4]" />
+                <mt-dynamic-field [form]="formGroup" [field]="formObject[5]" />
+                <mt-dynamic-field [form]="formGroup" [field]="formObject[6]" />
+                <mt-dynamic-field [form]="formGroup" [field]="formObject[7]" />
+            </div>
+        <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">Save</button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="isEditing = false">Cancel</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,16 @@
+<mt-modal-wrapper [options]="modalOptions" (cancelClick)="cancel()">
+    <h4>Reject Encounter</h4>
+    <label>Add Comments</label>
+    <mt-dynamic-field [field]="getSupervisorCommentaryField()" (controlCreated)="supervisorCommentaryControl = $event"></mt-dynamic-field>
+    <br />
+    <button
+        type="button"
+        class="btn btn-success"
+        [disabled]="supervisorCommentaryControl.invalid"
+        mtDisableClickDuringHttpCalls
+        (click)="reject()"
+    >
+        Save Rejection
+    </button>
+    <button type="button" class="btn btn-default" (click)="cancel()">Cancel</button>
+</mt-modal-wrapper>

@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>MedMatch Files</h2>
+    </div>
+</div>
+<div>
+    <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+<br>
+</div>
+
+<mt-entity-list
+    [entities]="rosterValidationFiles"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="getRosterValidationFiles()"
+    (columnSortedEvent)="columnSorted($event)"
+    (itemDeletedEvent)="downloadFile($event)"
+    [entityListConfig]="entityListConfig">
+</mt-entity-list>
+
+<button
+    type="button"
+    class="btn btn-sm btn-success"
+    (click)="generateValidationFile()"
+>
+    Generate Validation File
+</button>

@@ -1,0 +1,103 @@
+<div
+    class="miles-editable miles-card padded"
+    [@itemAnim]
+    *ngIf="!isEditing && title"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    (click)="edit()"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4>
+        {{ title }}
+        <span class="pull-right" *ngIf="canEdit && canEditSegments">
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+    <div *ngIf="hasTimeSegments; else noSegments">
+        <div class="table-responsive" *ngIf="timeSegmentForms && timeSegmentForms.length">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Billing Units</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of timeSegmentForms; let i = index">
+                        <td>
+                            {{ row.timeSegment.UnitDefinition }}
+                        </td>
+                        <td>
+                            {{ row.timeSegment.StartMinutes }}
+                        </td>
+                        <td>
+                            {{ row.timeSegment.EndMinutes ? row.timeSegment.EndMinutes : 'Max' }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isEditing" class="miles-form padded" [@itemAnim]>
+    <h4 class="heading-with-button">
+        {{ title }}
+        <button class="btn btn-sm btn-primary" *ngIf="canEdit" type="button" (click)="addRow()">
+            <i class="fa fa-plus fa-lg" style="cursor: pointer;" aria-hidden="true"></i>
+        </button>
+    </h4>
+    <div class="table-responsive" *ngIf="timeSegmentForms && timeSegmentForms.length">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Billing Units</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th class="text-center">Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of timeSegmentForms; let i = index">
+                    <td>
+                        <mt-dynamic-field [field]="row.controls.UnitDefinition" [form]="row.form" [overrideForm]="true"> </mt-dynamic-field>
+                    </td>
+                    <td>
+                        <mt-dynamic-field [field]="row.controls.StartMinutes" [form]="row.form" [overrideForm]="true"> </mt-dynamic-field>
+                    </td>
+                    <td>
+                        <mt-dynamic-field [field]="row.controls.EndMinutes" [form]="row.form" [overrideForm]="true"> </mt-dynamic-field>
+                    </td>
+                    <td>
+                        <div class="text-center" style="padding-top: 25px;">
+                            <button type="button" (click)="removeRow(row)">
+                                <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button
+        type="submit"
+        class="btn btn-flat btn-success"
+        (click)="formSubmitted()"
+    >
+        Save
+    </button>
+    <button
+        type="button"
+        Class="btn btn-flat btn-default"
+        (click)="cancelClick()"
+    >
+        Cancel
+    </button>
+
+</div>
+<br />
+
+<ng-template #noSegments>
+    <div class="text-center"><strong>This Service Unit Rule does not have any time segments yet</strong></div>
+</ng-template>

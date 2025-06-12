@@ -1,0 +1,9 @@
+<div *ngIf="providerTitle">
+    <div class="row">
+        <div class="col-md-6">
+            <app-provider-title-basic-info [providerTitle]="providerTitle" [canEdit]="canEdit"></app-provider-title-basic-info>
+            <br />
+        </div>
+    </div>
+    <a routerLink="/provider-titles" class="btn btn-default">Close</a>
+</div>

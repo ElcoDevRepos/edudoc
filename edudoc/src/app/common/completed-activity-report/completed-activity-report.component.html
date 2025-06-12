@@ -1,0 +1,47 @@
+<h3 mtSetTitle>Completed Activity Report</h3>
+
+<div class="miles-card padded">
+    <h4>COMPLETED ACTIVITY REPORT</h4>
+
+    <!-- Filters -->
+    <div class="row">
+        <div class="col-md-2" *ngIf="!districtId">
+            <label>School Districts</label>
+            <mt-virtual-type-ahead
+                [getItems]="getSchoolDistricts"
+                [placeholder]="'Begin typing...'"
+                (selectionChanged)="handleDistrictSelection($event)"
+            >
+            </mt-virtual-type-ahead>
+        </div>
+        <div class="col-md-2">
+            <label>Fiscal Year</label>
+            <br />
+            <input type="number" min="1901" [max]="currentYear" [(ngModel)]="fiscalYear"/>
+        </div>
+        <div class="col-md-3" *ngIf="serviceCodes && serviceCodes.length">
+            <label>Service Area</label><br />
+            <mt-search-filter-select [items]="serviceCodes" entity="ServiceCodes" [maxToShowInSelectedText]="1"></mt-search-filter-select>
+        </div>
+        <div class="col-md-4">
+            <label>Providers</label>
+            <mt-virtual-type-ahead
+                [disabled]="!(schoolDistrictIdFilter || districtId)"
+                [getItems]="getProviders"
+                [placeholder]="'Begin typing...'"
+                (selectionChanged)="handleProviderSelection($event)"
+            >
+            </mt-virtual-type-ahead>
+        </div>
+    </div>
+    <br />
+
+    <!-- Buttons -->
+    <div class="row">
+        <div class="col-md-4">
+            <button type="button" class="btn btn-info" [disabled]="!serviceCodes || !serviceCodes.length" (click)="getCompletedActivityReport()">
+                Get Completed Activity Report
+            </button>
+        </div>
+    </div>
+</div>

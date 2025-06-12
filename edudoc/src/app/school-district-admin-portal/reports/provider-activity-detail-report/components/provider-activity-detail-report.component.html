@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>
+            <mt-route-back-button></mt-route-back-button>
+            {{ providerName }} - Activity Detail Report
+        </h2>
+    </div>
+</div>
+<router-outlet></router-outlet>
+
+<div class="row">
+  <div class="col-md-12">
+      <div class="miles-editable miles-card padded">
+          <h4>
+              ACTIVITY SUMMARY TOTALS
+          </h4>
+
+          <label>Referrals Pending: </label> {{ totalsLoaded ? openPendingReferrals : 'Loading...' }} <br />
+          <label>Encounters Returned: </label> {{ totalsLoaded ? openReturnedEncounters : 'Loading...' }} <br />
+          <label>Pending Supervisor Co-Signature: </label> {{ totalsLoaded ? openEncountersReadyForFinalESign : 'Loading...' }} <br />
+          <ng-container *ngIf="!isAdmin"><label>Encounters Ready For Scheduling: </label> {{ totalsLoaded ? openScheduledEncounters : 'Loading...' }} <br /></ng-container>
+          <ng-container *ngIf="isAdmin"><label>Pending Evaluations: </label> {{ totalsLoaded ? pendingEvaluations : 'Loading...' }} <br /></ng-container>
+      </div>
+  </div>
+</div>
+<br />
+
+<!-- Lazy Loaded Tabs -->
+<mat-tab-group  *ngIf="students && students.length">
+    <mat-tab label="Referrals Pending">
+      <ng-template matTabContent>
+        <app-referrals-pending-activity-summary [providerId] = "providerId" [students] = "students"></app-referrals-pending-activity-summary>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Returned Encounters">
+      <ng-template matTabContent>
+        <app-encounters-returned-activity-summary [providerId] = "providerId" [students] = "students" [serviceTypes] = "serviceTypes"></app-encounters-returned-activity-summary>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Encounters Ready For Final ESign">
+      <ng-template matTabContent>
+        <app-ready-for-final-esign-activity-summary [providerId] = "providerId" [students] = "students" [serviceTypes] = "serviceTypes"></app-ready-for-final-esign-activity-summary>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Encounters Ready For Scheduling">
+        <ng-template matTabContent>
+            <app-ready-for-scheduling-activity-summary [providerId] = "providerId" [students] = "students" [serviceTypes] = "serviceTypes"></app-ready-for-scheduling-activity-summary>
+        </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+

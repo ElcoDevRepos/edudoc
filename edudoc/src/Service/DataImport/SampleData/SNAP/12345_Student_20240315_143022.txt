@@ -1,0 +1,4 @@
+StudentId|StudentLocalId|StudentStateId|LastName|FirstName|MiddleName|GenderCode|DateOfBirth|MedicaidNumber|ParentAuthorization|AddressLine1|AddressLine2|City|State|ZipCode|HomePhone
+STU001|LOC001|STATE001|Smith|John|A|M|01/15/2010|123456789012|Y|123 Main St|Apt 4B|Anytown|OH|12345|555-123-4567
+STU002|LOC002|STATE002|Johnson|Sarah||F|02/20/2010|234567890123|Y|456 Oak St||Somewhere|OH|54321|555-234-5678
+STU003|LOC003|STATE003|Williams|Michael|B|M|03/10/2010|345678901234|Y|789 Pine St|Unit 7|Elsewhere|OH|98765|555-345-6789 

@@ -1,0 +1,125 @@
+@using System;
+@using Service.Utilities;
+@model Templator.Models.AupAuditParams
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="@Model.ResolveStylesheetPath("Bootstrap.css")" rel="stylesheet" />
+    <link href="@Model.ResolveStylesheetPath("AupAudit.css")" rel="stylesheet" />
+</head>
+
+<body>
+    @{
+        int i = 0;
+    }
+    @foreach (var encounter in Model.Encounters)
+    {
+        <div class="single-page">
+            <div class="float-left invoice-date">
+                <h4>INVOICE DATE</h4>
+                <h4>@encounter.DateInvoiced?.ToString("MM/dd/yy")</h4>
+            </div>
+            <div class="center-block text-center">
+                <h4 class="text-uppercase">@Model.HeaderText</h4>
+                <h4>MEDICAID SERVICES DOCUMENTATION</h4>
+                <h4>@encounter.ServiceArea</h4>
+            </div>
+            <div class="audit-table">
+                <div class="headers container">
+                    <div class="row">
+                        <div class="col-xs-2">Location</div>
+                        <div class="col-xs-2">Service Type</div>
+                        <div class="col-xs-6">Reason for Service</div>
+                        <div class="col-xs-2">EDI Claim #</div>
+                    </div>
+                    <div class="dotted-line-header row space-above">
+                        <div class="col-xs-2">Date</div>
+                        <div class="col-xs-1">Start</div>
+                        <div class="col-xs-1">Stop</div>
+                        <div class="col-xs-2">Minutes</div>
+                        <div class="col-xs-2">IEP Group #</div>
+                        <div class="col-xs-2">Total Group #</div>
+                        <div class="col-xs-2">ESignature</div>
+                    </div>
+                </div>
+                <div class="body">
+                    <div class="row">
+                        <div class="col-xs-6"><strong>Student Name:</strong>@encounter.StudentName</div>
+                        <div class="col-xs-6"><strong>Student ID:</strong>@encounter.StudentCode</div>
+                    </div>
+                    <div class="row space-above">
+                        <div class="col-xs-2">@encounter.Location</div>
+                        <div class="col-xs-2">@encounter.ServiceType</div>
+                        <div class="col-xs-6">@encounter.ReasonForService</div>
+                        <div class="col-xs-2">
+                            @foreach(var claimId in @encounter.ClaimIds) {
+                                <p>@claimId</p>
+                            }
+                        </div>
+                    </div>
+                    <div class="dotted-line-body row space-above">
+                        <div class="col-xs-2">@encounter.EncounterDate.ToString("ddd MM/dd/yy")</div>
+                        <div class="col-xs-1">@TimeOnly.FromTimeSpan(encounter.StartTime).ToShortTimeString() </div>
+                        <div class="col-xs-1">@TimeOnly.FromTimeSpan(encounter.EndTime).ToShortTimeString()</div>
+                        <div class="col-xs-2">@((encounter.EndTime - encounter.StartTime).Minutes)</div>
+                        <div class="col-xs-2">@encounter.NumStudentsInEncounter</div>
+                        <div class="col-xs-2">@encounter.NumStudentsInEncounter</div>
+                        <div class="col-xs-2">@encounter.DateESigned?.ToShortDateString()</div>
+                    </div>
+                    <!-- Goals -->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="big-row">
+                                <strong>Goals:</strong>
+                                <ul>
+                                    @foreach (var goal in @encounter.Goals)
+                                    {
+                                        <li>
+                                            @goal.Description
+                                        </li>
+                                    }
+                                </ul>
+                                <!-- Methods -->
+                                <strong>Methods:</strong>
+                                <ul>
+                                    @foreach (var method in @encounter.Methods)
+                                    {
+                                        <li>
+                                            @method.Name
+                                        </li>
+                                    }
+                                </ul>
+                                <!-- Codes -->
+                                <strong>Procedure Codes:</strong>
+                                <ul>
+                                    @foreach (var code in @encounter.CptCodes)
+                                    {
+                                        <li>
+                                            <strong>@code.CptCode.Code</strong> @code.CptCode.Description
+                                        </li>
+                                    }
+                                </ul>
+                                <p>
+                                    My signature attests to the validity of the services delivered to the child/children as
+                                    specified on this document.
+                                </p>
+                                <p>Esign Provider/Title: <span class="provider-signature">@encounter.ProviderName /
+                                        @encounter.ProviderTitle @encounter.ProviderLicenseNumber</span></p>
+                                @if(encounter.HasSupervisor) {
+
+                                <p>Esign Supervisor/Title: <span class="provider-signature">@encounter.SupervisorName /
+                                        @encounter.SupervisorTitle @encounter.SupervisorLicenseNumber</span></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        i++;
+    }
+
+</body>
+
+</html>

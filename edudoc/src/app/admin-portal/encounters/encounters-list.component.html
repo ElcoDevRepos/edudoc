@@ -1,0 +1,237 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Encounters</h2>
+    </div>
+</div>
+
+<!-- Search Filters -->
+<div class="row">
+    <div class="col-md-3">
+        <label>Student First Name</label>
+        <mt-search-bar [(ngModel)]="studentFirstNameQuery"></mt-search-bar>
+    </div>
+    <div class="col-md-3">
+        <label>Student Last Name</label>
+        <mt-search-bar [(ngModel)]="studentLastNameQuery"></mt-search-bar>
+    </div>
+    <div class="col-md-3">
+        <label>Medicaid No.</label>
+        <mt-search-bar [(ngModel)]="medicaidNoQuery"></mt-search-bar>
+    </div>
+    <div class="col-md-3">
+        <label>Student Code</label>
+        <mt-search-bar [(ngModel)]="studentCodeQuery"></mt-search-bar>
+    </div>
+</div>
+<br />
+
+<div class="row">
+    <div class="col-md-3">
+        <label>School Districts</label>
+        <mt-virtual-type-ahead [getItems]="getSchoolDistricts" [placeholder]="'Begin typing...'"
+            (selectionChanged)="getFilterSchoolDistrictSearchbar($event)" (ready)="schoolDistrictQueryApi = $event">
+        </mt-virtual-type-ahead>
+    </div>
+    <div class="col-md-3">
+        <label>Providers</label>
+        <mt-virtual-type-ahead [getItems]="getProviders" [placeholder]="'Begin typing...'"
+            (selectionChanged)="getFilterProviderSearchbar($event)" (ready)="providerQueryApi = $event">
+        </mt-virtual-type-ahead>
+    </div>
+    <div class="col-md-3">
+        <label>Encounter Number</label>
+        <mt-search-bar [(ngModel)]="encounterNumberQuery"></mt-search-bar>
+    </div>
+    <div class="col-md-3">
+        <label>Claim Id</label>
+        <mt-search-bar [(ngModel)]="claimIdQuery"></mt-search-bar>
+    </div>
+</div>
+<br />
+
+<!-- Filters -->
+<div class="row">
+    <div class="col-md-2">
+        <label>CPT Code (Procedure Code)</label><br />
+        <mt-search-filter-select [items]="cptCodes" entity="CPT Codes"
+            [maxToShowInSelectedText]="1"></mt-search-filter-select>
+    </div>
+    <div class="col-md-2">
+        <label>Statuses</label><br />
+        <mt-search-filter-select [items]="statuses" entity="Statuses"
+            [maxToShowInSelectedText]="1"></mt-search-filter-select>
+    </div>
+    <div class="col-md-2">
+        <label>Service Areas</label><br />
+        <mt-search-filter-select [items]="serviceCodes" entity="Service Areas"
+            [maxToShowInSelectedText]="1"></mt-search-filter-select>
+    </div>
+    <div class="col-md-2">
+        <label>Encounter Date</label><br />
+        <mt-search-filter-daterange [startDate]="startDate" [endDate]="endDate" entity="Date"
+            (selectionChanged)="dateSelectionChanged($event)">
+        </mt-search-filter-daterange>
+    </div>
+    <div class="col-md-2"><button class="btn" (click)="clearFilters()">Clear filters</button></div>
+    <div class="col-md-2">
+        <button type="button" Class="btn btn-flat btn-success" (click)="resetPageAndGetEncounters()">
+            Apply
+        </button>
+    </div>
+</div>
+<br />
+
+<!-- Entity List -->
+<div>
+    <div class="list-controls" *ngIf="total > 0">
+        <div class="list-nav-controls">
+            <mt-entity-list-pagination [total]="total" [(currentPage)]="currentPage" [itemsPerPage]="itemsPerPage"
+                (pageChange)="getEncounters()" />
+            <div class="sort-controls">
+                <select class="form-control" (change)="onSortByChange($event)">
+                    <option *ngFor="let option of sortByOptions" [value]="option.Id">{{option.Name}}</option>
+                </select>
+                <button class="btn btn-default btn-flat sort-button" (click)="toggleSortDirection()"><span class="fa"
+                        [class.fa-arrow-up]="sortByDirection === 'asc'"
+                        [class.fa-arrow-down]="sortByDirection === 'desc'"></span></button>
+            </div>
+        </div>
+        <button class="btn btn-flat export-button" (click)="exportResults()">Export</button>
+    </div>
+    <mt-entity-list [entityListConfig]="entityListConfig" [entities]="encounters" [total]="total"
+        [(currentPage)]="currentPage" (pageChanged)="getEncounters()">
+        <ng-template mtEntityListHeader>
+            <th [style.width]="'15%'">
+                Student Info
+            </th>
+            <th [style.width]="'20%'">
+                Encounter Info
+            </th>
+            <th [style.width]="'20%'">
+                Other
+            </th>
+            <th [style.width]="'35%'">
+                Notes
+            </th>
+            <th [style.width]="'10%'" class="text-center">
+                Actions
+            </th>
+        </ng-template>
+        <ng-template mtEntityListItem let-columns="columns" let-entity>
+            <tr [style.cursor]="'default'">
+                <td [style.width]="'15%'">
+                    <label>Name: </label> {{ entity.StudentName }} <br />
+                    <label>District: </label> {{ entity.SchoolDistrict }} <br />
+                    <label>Provider: </label> {{ entity.ProviderName }} <br />
+                    <label>Medicaid #: </label> {{ entity.MedicaidNo }} <br />
+                </td>
+                <td [style.width]="'15%'">
+                    <label>Encounter #: </label> {{ entity.EncounterNumber }} <br />
+                    <label>Claim Id: </label> {{ entity.ClaimId }} <br />
+                    <label>Status: </label> <a (click)="encounterStatusLogSelected(entity)">{{ entity.CurrentStatus
+                        }}</a> <br />
+                    <label>Date: </label> {{ entity.EncounterDate | date: 'mediumDate' }} <br />
+                    <label>Start: </label> {{ entity.StartDateTime | date: 'shortTime' }} <br />
+                    <label>End: </label> {{ entity.EndDateTime | date: 'shortTime' }} <br />
+                    <label>Total Minutes: </label> {{ getSessionMinutes(entity) }} minutes<br />
+                    <label>Grouping: </label> {{ entity.NumStudentsInEncounter }} <br />
+                    <label>Is Telehealth: </label> {{ entity.IsTelehealth ? 'Yes' : 'No' }} <br />
+                </td>
+                <td [style.width]="'20%'">
+                    <label>Service Areas: </label> {{ entity.ServiceArea }} <br />
+                    <label>Reason For Service: </label> {{ entity.ReasonForService }} <br />
+                    <label>CPT Code (Procedure Code): </label>
+                    <p>{{ convertCptCodesToCommaSeparatedList(entity.CptCodes) }}</p>
+                    <label>Methods: </label> {{ convertMethodsToCommaSeparatedList(entity.Methods) }} <br />
+                    <label>Plan Goals: </label> {{ convertItemsToCommaSeparatedList(entity.Goals) }} <br />
+                </td>
+                <td [style.width]="'25%'">
+                    <label>Treatment Notes: </label> {{ entity.TreatmentNotes }} <br />
+                    <label>Supervisor Comments: </label>
+                    <i *ngIf="entity.SupervisorComments && entity.SupervisorComments.length > 50" data-toggle="tooltip"
+                        [title]="entity.SupervisorComments">
+                        {{ getAbbrigedComments(entity.SupervisorComments) }}
+                    </i>
+                    <span *ngIf="entity.SupervisorComments && entity.SupervisorComments.length <= 50">
+                        {{ entity.SupervisorComments }}
+                    </span>
+                    <br />
+                    <div *ngIf="entity.CurrentStatusId === encounterStatuses.Abandoned">
+                        <label>Notes for Abandonment: </label> {{ entity.AbandonmentNotes }} <br />
+                    </div>
+                </td>
+                <td [style.width]="'15%'">
+                    <mt-dynamic-field *ngIf="statuses && statuses.length" [field]="getStatusUpdateField()"
+                        (valueChanges)="encounterStatusSelected(entity, $event)"></mt-dynamic-field>
+                    <mt-dynamic-field *ngIf="entity.CurrentStatus.Id === encounterStatuses.Abandoned"
+                        [field]="abandonedNotesField">
+                    </mt-dynamic-field>
+                </td>
+            </tr>
+        </ng-template>
+    </mt-entity-list>
+</div>
+
+<mt-modal-wrapper *ngIf="showEsignModal" [options]="modalOptions" (cancelClick)="toggleEsignModal()">
+    <h4>Reason for Return Must Be Provided</h4>
+    <mt-dynamic-field [field]="getReasonForReturnCategoryField()"
+        (valueChanges)="handleCategorySelection($event)"></mt-dynamic-field>
+    <label *ngIf="selectedCategoryId">Select Reason</label>
+    <select [(ngModel)]="reasonSelected" [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="insertReasonText($event)" *ngIf="selectedCategoryId" class="form-control">
+        <option *ngFor="let reason of selectedReasons" [ngValue]="reason">
+            {{ reason.Name }}
+        </option>
+    </select>
+    <br />
+    <mt-dynamic-field [field]="getReasonForReturnField()"
+        (controlCreated)="reasonForReturnControl = $event"></mt-dynamic-field>
+    <br />
+    <button type="button" class="btn btn-success" [disabled]="reasonForReturnControl.invalid" mt-doubleClickDisabled
+        [(doubleClickIsDisabled)]="doubleClickDisabled" (click)="updateEncounterStatus(encounterStudentIdForModal)">
+        Save Encounter
+    </button>
+    <button type="button" class="btn btn-default" (click)="toggleEsignModal()">Cancel</button>
+</mt-modal-wrapper>
+
+<mt-modal-wrapper *ngIf="showAbandonedNotesModal" [options]="modalOptions" (cancelClick)="toggleAbandonedNotesModal()">
+    <h4>Reason for Abandonment</h4>
+    <mt-dynamic-field [field]="abandonedNotesField"
+        (controlCreated)="reasonForAbandonmentControl = $event"></mt-dynamic-field>
+    <button type="button" class="btn btn-success" [disabled]="reasonForAbandonmentControl.invalid"
+        mt-doubleClickDisabled [(doubleClickIsDisabled)]="doubleClickDisabled"
+        (click)="updateEncounterStatus(encounterStudentIdForModal)">
+        Save Encounter
+    </button>
+    <button type="button" class="btn btn-default" (click)="toggleAbandonedNotesModal()">Cancel</button>
+</mt-modal-wrapper>
+
+<mt-modal-wrapper *ngIf="showStatusesModal" [options]="modalOptions" (cancelClick)="toggleStatusModal()">
+    <h4>Encounter Status Log</h4>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Encounter Status</th>
+                    <th>Date</th>
+                    <th>Changed By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let status of encounterStudentStatusesForModal">
+                    <td class="text-left">
+                        {{ status.StatusName }}
+                    </td>
+                    <td class="text-left">
+                        {{ status.DateCreated | date: 'mediumDate' }}
+                    </td>
+                    <td class="text-left">
+                        {{ status.CreatedBy }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <button type="button" class="btn btn-default" (click)="toggleStatusModal()">Close</button>
+</mt-modal-wrapper>

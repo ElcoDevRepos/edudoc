@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>
+            Medicaid Provider Status<span *ngIf="escName">: {{ escName }} </span>
+            <button *ngIf="escId" (click)="goBackToEsc()" class="btn btn-primary">Go Back to ESC</button>
+        </h2>
+    </div>
+</div>
+<div>
+    <div class="input-group">
+        <input type="text" [formControl]="searchControl" [(ngModel)]="query" class="form-control" placeholder="Search" />
+        <span class="input-group-btn">
+            <button type="button" (click)="clearSearch()" class="btn btn-default btn-nohover btn-flat">
+                <i class="fa"></i>
+                <i class="fa fa-remove" aria-hidden="true"></i>
+                <i class="fa"></i>
+            </button>
+        </span>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-2">
+        <label>School Districts</label>
+        <mt-virtual-type-ahead
+            [getItems]="getSchoolDistricts"
+            [placeholder]="'Begin typing...'"
+            (selectionChanged)="handleDistrictSelection($event)"
+            (ready)="virtualTypeAheadControlReady($event)"
+        ></mt-virtual-type-ahead>
+    </div>
+    <div class="col-md-2">
+        <label>Selected District: </label> {{ selectedDistrictName }}
+    </div>
+    <div class="col-md-2">
+        <label>Medicaid Status</label><br />
+        <mt-search-filter-select
+            [items]="medicaidStatuses"
+            entity="Medicaid Status"
+            [maxToShowInSelectedText]="1"
+            (selectionChanged)="filterSelectionChanged()"
+        ></mt-search-filter-select>
+    </div>
+</div>
+<br />
+<mt-entity-list
+    [entities]="providers"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    (itemSelectedEvent)="providerSelected($event)"
+    (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="providerEntityListConfig"
+    (pageChanged)="getProviders()"
+></mt-entity-list>

@@ -1,0 +1,30 @@
+<div *ngIf="userRole && userRole.Id > 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-user-role-basic-info [userRole]="userRole" [canEdit]="canEdit"></app-user-role-basic-info>
+            <br />
+            <a routerLink="/roles" class="btn btn-default">Close</a>
+            <button *ngIf="userRole.IsEditable" class="btn btn-flat pull-right btn-danger" (mtConfirm)="deleteRole()">Delete Role</button>
+        </div>
+        <div class="col-md-6">
+            <app-user-role-permissions
+                [permissions]="permissions"
+                [canEdit]="canEditPermission"
+                [claimValues]="claimValues"
+                (onPermissionUpdated)="savePermission($event)"
+            ></app-user-role-permissions>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-6">
+            
+        </div>
+    </div>
+</div>
+<div *ngIf="userRole && userRole.Id === 0">
+    <div class="row">
+        <div class="col-md-4">
+            <app-user-role-basic-info [userRole]="userRole" [canEdit]="canEdit"></app-user-role-basic-info>
+        </div>
+    </div>
+</div>

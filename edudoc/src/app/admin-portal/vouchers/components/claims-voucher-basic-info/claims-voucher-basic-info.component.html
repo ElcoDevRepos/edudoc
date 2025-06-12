@@ -1,0 +1,38 @@
+<div class="miles-editable miles-card padded" *ngIf="!isEditing && claimsEncounter.Id > 0" (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false" (click)="edit()" [style.cursor]="canEdit ? 'pointer' : 'default'">
+    <h4>
+        Claims Voucher Info
+        <span class="pull-right" *ngIf="canEdit" [hidden]="!isHovered">
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+    <div>
+        <label>CLAIM AMOUNT: </label> ${{ claimsEncounter.ClaimAmount }}
+        <br/>
+        <label>PAID AMOUNT: </label> ${{ claimsEncounter.PaidAmount }}
+        <br/>
+        <label>VOUCHER DATE: </label> {{ claimsEncounter.ServiceDate | date }}
+        <br/>
+        <label>SERVICE AREA: </label> {{ claimsEncounter.EncounterStudent.Encounter.Provider.ProviderTitle.ServiceCode.Name }}
+        <br/>
+        <label>SCHOOL YEAR: </label> {{ claimsEncounter.ServiceDate | date:'yyyy' }}
+        <br/>
+        <label>SCHOOL DISTRICT: </label> {{ schoolDistrictName }}
+        <br/>
+    </div>
+</div>
+<div *ngIf="isEditing" class="miles-form padded">
+    <h4>Claims Voucher Info</h4>
+    <mt-dynamic-form [config]="formObject" ([isEditing])="isEditing" (submitted)="formSubmitted($event)">
+        <mt-dynamic-field [field]="schoolYearField" (valueChanges)="schoolYearChanged($event)"></mt-dynamic-field>
+        <mt-dynamic-field [field]="serviceCodeField" (valueChanges)="serviceCodeChanged($event)"></mt-dynamic-field>
+        <mt-dynamic-field [field]="schoolDistrictField" (valueChanges)="schoolDistrictChanged($event)"></mt-dynamic-field>
+        <button type="submit" mtDisableClickDuringHttpCalls
+            Class="btn btn-flat btn-success">
+            Save
+        </button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </mt-dynamic-form>
+</div>

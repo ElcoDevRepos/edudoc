@@ -1,0 +1,12 @@
+<div class="miles-form padded" *ngIf="form">
+    <h4>ACCESS REVOCATION REASON</h4>
+    <form [formGroup]="form" (ngSubmit)="formSubmitted()">
+        <mt-dynamic-field [field]="doNotBillReasonsField" [form]="form" (controlCreated)="doNotBillReasonsDropdownCreated($event)"></mt-dynamic-field>
+        <div *ngIf="selectedDoNotBillReason === otherReason">
+            <mt-dynamic-field [field]="reasonTextField" [form]="form"></mt-dynamic-field>
+        </div>
+        <mt-dynamic-field [field]="revokeDateField" [form]="form"></mt-dynamic-field>
+        <button type="submit" class="btn btn-flat btn-success">Submit</button>
+        <button type="button" class="btn btn-flat btn-default" (click)="submitOrCancelClicked.emit(false)">Cancel</button>
+    </form>
+</div>

@@ -1,0 +1,66 @@
+<div
+    class="miles-editable miles-card padded"
+    *ngIf="!isEditing && goal.Id > 0"
+    (mouseenter)="isHovered = true"
+    (mouseleave)="isHovered = false"
+    (click)="edit()"
+    [style.cursor]="canEdit ? 'pointer' : 'default'"
+>
+    <h4>
+       GOAL INFO
+        <span class="pull-right" *ngIf="canEdit">
+            <i class="fa fa-lg fa-edit"></i>
+        </span>
+    </h4>
+    <mt-dynamic-view [config]="viewOnly"></mt-dynamic-view>
+    <div style="padding-left: 5px;">
+        <label>SERVICE CODES: </label>
+        <span> {{ serviceCodeList }}</span>
+    </div>
+    <div style="padding-left: 5px;">
+        <label>NURSING RESPONSE: </label>
+        <span> {{ nursingGoalResponse }}</span>
+    </div>
+</div>
+<div *ngIf="isEditing && serviceCodes" class="miles-form padded">
+    <h4>GOAL INFO</h4>
+    <mt-dynamic-form (valueChanges)="setNursingGoalResponse()" [config]="formObject" (formCreated)="formGroup = $event" ([isEditing])="(isEditing)" (submitted)="formSubmitted($event)">
+        <multiselect-table-control
+            [required]="true"
+            [valid]="goal.ServiceCodes && goal.ServiceCodes.length"
+            [allItems]="serviceCodes"
+            [currentItems]="goal.ServiceCodes"
+            idProperty="Id"
+            itemType="Service Codes"
+            (onItemSelected)="addServiceCode($event)"
+            (onItemRemoved)="removeServiceCode($event)"
+        >
+        </multiselect-table-control>
+
+        <mt-dynamic-field
+            [field]="getNursingGoalResponseField()"
+            (valueChanges)="setNursingGoalResponse($event)"
+        ></mt-dynamic-field>
+
+        <div *ngIf="responseNoteLabel.length > 0">
+            <label>Special Nursing Information:</label> {{responseNoteLabel}}
+            <br/>
+        </div>
+
+        <multiselect-table-control
+            [allItems]="results"
+            [currentItems]="selectedResults"
+            idProperty="Id"
+            itemType="Nursing Goal Results"
+            (onItemSelected)="addNursingGoalResult($event)"
+            (onItemRemoved)="removeNursingGoalResult($event)"
+        >
+        </multiselect-table-control>
+        <button type="submit" mtDisableClickDuringHttpCalls Class="btn btn-flat btn-success">
+            Save
+        </button>
+        <button type="button" Class="btn btn-flat btn-default" (click)="cancelClick()">
+            Cancel
+        </button>
+    </mt-dynamic-form>
+</div>

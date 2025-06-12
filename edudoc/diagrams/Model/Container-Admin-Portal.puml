@@ -1,0 +1,40 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Container.puml
+
+
+
+
+title Container-Diagram-for-Admin
+
+Person(HCPCAdminUsers, "HCPC Admin",  "The user that visits the website to manage ESC, District, and School setup, as well as billing, audits/revision and viewing detailed reports.")
+
+
+System_Ext(npmpackages, "NPM Packages", "Front end packages")
+System_Ext(nugetpackages, "Nuget Packages", "Back end packages")
+System_Boundary(Core, "Admin Portal Eco System"){
+    System(HCPCAdminWebPortal, "Admin Portal", "provides interface to manage provider, districts, billing, certain aspect related to encounters and other admin stuffs")
+    System(BreckAPI, "Breck API (.NET Core)", "API used for handling business logic and synching of information between the portals and the database")  
+   
+    
+    Container(servicelayer, "Service Layer", ".Net Core", "Service layer for business logic")
+    Container(modellayer, "Model Layer", ".Net Core", "Code representation of the database for EntityFramework")   
+    ContainerDb(BreckDB, "HCPC Database", "MS SQL Server", "Database used by the applications")
+
+}
+
+
+
+
+Rel(HCPCAdminUsers, HCPCAdminWebPortal, "uses")
+Rel(HCPCAdminWebPortal, BreckAPI, "uses")
+Rel(BreckAPI, servicelayer, "provides abstraction to business logic")
+Rel_Back(modellayer, servicelayer, "provide DB representation in models")
+Rel_Back(modellayer, BreckAPI, "provide DB representation in models")
+Rel(servicelayer, BreckDB, "Command/Query DB")
+Rel(npmpackages, HCPCAdminWebPortal, "Provide shared front end logic")
+Rel(nugetpackages, BreckAPI, "Provide shared API logic")
+Rel(nugetpackages, servicelayer, "Provide shared Service logic")
+Rel(nugetpackages, modellayer, "Provide shared API logic")
+
+
+@enduml

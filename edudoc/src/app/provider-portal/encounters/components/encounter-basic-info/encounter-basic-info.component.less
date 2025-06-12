@@ -1,0 +1,94 @@
+#text {
+    color: #8b0000;
+}
+
+app-encounter-basic-info
+    > div
+    > div:nth-child(2)
+    mt-dynamic-field:nth-child(2)
+    mt-timepicker
+    > fieldset
+    > div
+    > div.ngb-tp-meridian.ng-star-inserted {
+    background-color: #8b0000 !important;
+}
+
+/* CSS class for the container */
+.inputs-side-by-side {
+    margin: 0.05em 0em;
+    display: flex;
+    justify-content: flex-start;
+    column-gap: 30px;
+    padding-top: 0.3em;
+    flex-wrap: wrap;
+
+}
+
+.time-label {
+    width: 110px;
+}
+
+/* Ensure the dynamic fields do not take full width */
+mt-dynamic-field {
+    flex: 1; /* This allows the inputs to grow and take up equal space */
+    margin-right: 10px; /* Optional: adds some space between the inputs */
+}
+
+/* Last child should not have a margin on the right */
+.inputs-side-by-side mt-dynamic-field:last-child {
+    margin-right: 0;
+}
+
+div.col-md-6.encounter-basic-info {
+    border-right: 0.5px #007bc1 solid;
+}
+
+span.encounter-basic-info.edit-icon {
+    cursor: pointer;
+    margin-right: 0.3em;
+}
+
+div.inputs-side-by-side div.time-view {
+    margin-right: 16.8em;
+}
+
+div.inputs-side-by-side div.group-view {
+    margin-right: 15em;
+}
+
+div.col-md-6.encounter-basic-info-student {
+    padding-left: 2em;
+}
+
+div.student-field {
+    margin: 0.2em 0em;
+}
+
+.selection-box {
+    margin-bottom: 130px;
+}
+
+.row {
+    margin-top: 10px;
+}
+
+::ng-deep .selection-box .ng-dropdown-panel-items {
+    max-height: 130px !important;
+}
+
+mt-dynamic-field.encounter-date-field {
+    display: inline-block;
+}
+
+mt-dynamic-field.time-field ::ng-deep mt-timepicker fieldset .ngb-tp-input-container {
+    width: 4em;
+}
+
+@media (max-width: 1699px) {
+    .encounter-basic-info ::ng-deep {
+        label,
+        span {
+            font-size: 75%;
+        }
+    }
+}

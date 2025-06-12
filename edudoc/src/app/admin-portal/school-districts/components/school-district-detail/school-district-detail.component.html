@@ -1,0 +1,51 @@
+<div *ngIf="schoolDistrict && schoolDistrict.Id > 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-school-district-basic-info [schoolDistrict]="schoolDistrict" [canEdit]="canEdit"> </app-school-district-basic-info><br />
+            <app-school-district-esc-component
+                *ngIf="canChangeESC"
+                [entity]="schoolDistrict"
+                [escSchoolDistricts]="escSchoolDistricts"
+                [service]="escService"
+                [escOrSchoolDistrict]="schoolDistrictEscComponentModeEnums.SCHOOL_DISTRICT"
+                (onSave)="getEscSchoolDistricts()"
+            >
+            </app-school-district-esc-component>
+            <br />
+            <app-school-basic-info [schoolDistrictId]="schoolDistrict.Id" [canEdit]="canEdit" [schools]="schools"> </app-school-basic-info>
+            <br />
+        </div>
+        <div class="col-md-6">
+            <app-overridden-common-documents-mer
+                *ngIf="showMERDocumentsCard"
+                [canEdit]="canEdit"
+                [districtId]="schoolDistrict.Id"
+                headerTitle="MER FILE"
+            ></app-overridden-common-documents-mer>
+            <br />
+            <app-common-addresses-with-county
+                [canEdit]="canEdit"
+                [requireCounty]="true"
+                [address]="schoolDistrict.Address"
+                (onSave)="saveAddress($event)"
+                (onDelete)="deleteAddress($event)"
+            >
+            </app-common-addresses-with-county>
+            <br />            
+            <app-school-district-admin-info [schoolDistrict]="schoolDistrict" [canEdit]="canEdit"></app-school-district-admin-info>
+            <br />
+            <app-school-district-admin-assignment [canEdit]="canEdit" [district]="schoolDistrict"></app-school-district-admin-assignment>
+            <br />
+            <mt-shared-entities #contactsComponent [sharedEntityId]="schoolDistrictSharedEntityId" [canEdit]="canEdit" [canAdd]="canAdd">
+            </mt-shared-entities>
+        </div>
+    </div>
+    <a routerLink="/school-districts" class="btn btn-default">Close</a>
+</div>
+<div *ngIf="schoolDistrict && schoolDistrict.Id === 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-school-district-basic-info [schoolDistrict]="schoolDistrict"></app-school-district-basic-info>
+        </div>
+    </div>
+</div>

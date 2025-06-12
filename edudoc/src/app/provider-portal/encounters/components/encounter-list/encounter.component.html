@@ -1,0 +1,38 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>{{pageTitle}}</h2>
+    </div>
+</div>
+<div class="row" style="padding-bottom: 5px;">
+    <div class="col-md-10">
+        <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+    </div>
+    <br />
+</div>
+<div class="row" style="padding-bottom: 5px;">
+    <div class="col-md-3 filters">
+        <mt-search-filter-daterange
+        [startDate]="startDate" [endDate]="endDate" entity="Encounter Date"
+        (selectionChanged)="dateSelectionChanged($event)"
+        ></mt-search-filter-daterange>
+        <mt-search-filter-select [items]="districts" (selectionChanged)="districtsChanged()" entity="School District"/>
+    </div>
+    <br />
+</div>
+<br />
+
+<div class="delete-button-container">
+    <button [disabled]="!(encounter && encounter.length)" class="btn btn-danger btn-flat" (click)="archiveAll()">Delete All</button>
+</div>
+<mt-entity-list
+    *ngIf="entityListConfig"
+    [entities]="encounter"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    (pageChanged)="getEncounters()"
+    (itemSelectedEvent)="encounterSelected($event)"
+    (columnSortedEvent)="columnSorted($event)"
+    (itemDeletedEvent)="archiveEncounter($event)"
+    [entityListConfig]="entityListConfig"
+>
+</mt-entity-list>

@@ -1,0 +1,65 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>Billing Files</h2>
+    </div>
+</div>
+<div>
+    <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+<br>
+<button type="button" (click)="toggleResponseModal()" class="btn btn-flat btn-success">
+    Upload Response File
+</button>
+<button type="button" (click)="toggleUploadFileHistoryModal()" class="btn btn-flat btn-success">
+    Upload File History
+</button>
+</div>
+<br />
+
+<mt-entity-list
+    [entities]="billingFiles"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    [(itemsPerPage)]="itemsPerPage"
+    (pageChanged)="getBillingFiles()"
+    (columnSortedEvent)="columnSorted($event)"
+    (itemDeletedEvent)="downloadFile($event)"
+    [entityListConfig]="entityListConfig">
+</mt-entity-list>
+
+<mt-modal-wrapper *ngIf="showResponseModal" [options]="modalOptions">
+    <h4>Upload Billing Response File</h4>
+    <br />
+    <file-uploader
+    	[multiUpload]="true"
+        [allowedMimeTypes]="allowedMimeType"
+        [maxSizeMb]="maxFileSizeMb"
+        (onCreate)="onUploadQueueCreate($event)"
+    ></file-uploader>
+    <button
+        type="button"
+        class="btn btn-danger"
+        mtDisableClickDuringHttpCalls
+        (click)="uploadResponse()"
+    >
+        Save
+    </button>
+    <button type="button" class="btn btn-default" (click)="toggleResponseModal()">Cancel</button>
+</mt-modal-wrapper>
+
+<!--  Upload File History Modal -->
+<mt-modal-wrapper [options]="modalOptions" *ngIf="showUploadFileHistoryModal">
+    <h4> Upload File History</h4>
+    <br />
+    <div>
+        <mt-entity-list 
+            [entities]="billingResponseFiles"
+            [total]="billingResponseFilesTotal"
+            [(currentPage)]="billingResponseFilesCurrentPage"
+            [(itemsPerPage)]="billingResponseFilesItemsPerPage"
+            (pageChanged)="getBillingResponseFiles()"
+            [entityListConfig]="billingResponseFilesEntityListConfig"
+            class="text-left">
+        </mt-entity-list>
+    </div>
+    <button type="button" class="btn btn-default" (click)="toggleUploadFileHistoryModal()">Cancel</button>
+</mt-modal-wrapper>

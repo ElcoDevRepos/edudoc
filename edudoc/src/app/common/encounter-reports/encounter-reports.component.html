@@ -1,0 +1,82 @@
+<h3 mtSetTitle>Encounter Reports</h3>
+<div class="miles-card padded">
+    <h4>ENCOUNTER REPORTS</h4>
+
+    <div *ngIf="schoolDistricts?.length || serviceCodes?.length">
+        <!-- Filters -->
+        <div class="row">
+            <div class="col-md-12">
+                <ng-container *ngIf="!isDistrictAdminReport && schoolDistricts?.length">
+                    <label>School Districts</label>
+                    <mt-search-filter-select [items]="schoolDistricts" entity="Districts" [maxToShowInSelectedText]="1"
+                        (selectionChanged)="getFilteredStudents()"></mt-search-filter-select>
+                </ng-container>
+                <ng-container *ngIf="isDistrictAdminReport && serviceCodes?.length">
+                    <label>Service Areas</label>
+                    <mt-search-filter-select [items]="serviceCodes" entity="ServiceCodes" [maxToShowInSelectedText]="1"
+                        (selectionChanged)="getFilteredStudents()"></mt-search-filter-select>
+                </ng-container>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-4" *ngIf="providers && providers.length">
+                <label>Providers</label><br />
+                <mt-search-filter-select [items]="providers" entity="Providers"
+                    [maxToShowInSelectedText]="1"></mt-search-filter-select>
+            </div>
+            <div class="col-md-4">
+                <label>Encounter Date</label><br />
+                <mt-search-filter-daterange [startDate]="startDate" [endDate]="endDate" entity="Date"
+                    (selectionChanged)="dateSelectionChanged($event)">
+                </mt-search-filter-daterange>
+            </div>
+            <div class="col-md-4" *ngIf="serviceTypes && serviceTypes.length">
+                <label>Service Type</label><br />
+                <mt-search-filter-select [items]="serviceTypes" entity="ServiceTypes" [maxToShowInSelectedText]="1"
+                    (selectionChanged)="getFilteredStudents()"></mt-search-filter-select>
+            </div>
+        </div>
+        <br />
+
+        <div class="row">
+            <div class="col-md-4" *ngIf="studentOptions && studentOptions.length">
+                <label>Students</label>
+                <mt-search-filter-select [items]="studentOptions" entity="Students"
+                    [maxToShowInSelectedText]="1"></mt-search-filter-select>
+            </div>
+            <div class="col-md-4" *ngIf="!studentOptions || !studentOptions.length">
+                <label>Students</label><br />No students have received services within the filters selected.
+            </div>
+            <div class="col-md-4">
+                <mt-dynamic-field *ngIf="!hideOtherDistrictProvidersButton" [field]="getOtherProvidersField()"
+                    (valueChanges)="otherProviders = $event; getFilteredStudents()"> </mt-dynamic-field>
+            </div>
+        </div>
+        <br />
+
+        <!-- Buttons -->
+        <div class="row">
+            <div class="col-md-3">
+                <button type="button" class="btn btn-info" (click)="getBasicEncounterReport()">Get Basic Report</button>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-info" (click)="getBasicEncounterReportCsv()">Get Basic Report
+                    CSV</button>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-success" (click)="getDetailedEncounterReport()">Get Detailed
+                    Report</button>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-success" (click)="getDetailedEncounterReportCsv()">Get Detailed
+                    Report CSV</button>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!schoolDistricts?.length && !serviceCodes?.length">
+        <h3 style="text-align: center;">THERE ARE NO SCHOOL DISTRICTS OR SERVICE CODES ASSIGNED TO YOU.</h3>
+    </div>
+</div>
+<br />
+<ngx-extended-pdf-viewer *ngIf="pdfBlob" [src]="pdfBlob" height="80vh" />

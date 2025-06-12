@@ -1,0 +1,20 @@
+<h1 mtSetTitle>App Settings</h1>
+<div *ngIf="settings.length">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="miles-card padded" [formGroup]="form">
+                <div class="form-group" [formArrayName]="'Settings'">
+                    <h4>SETTINGS</h4>
+                    <div *ngFor="let item of currentFormArray.controls; let i = index" [formGroupName]="i" class="input-group">
+                        <span class="input-group-addon">{{ getLabel(item) }}</span>
+                        <mt-dynamic-field [field]="getField(item)" [form]="item" [overrideForm]="true"></mt-dynamic-field>
+                    </div>
+                    <br />
+                    <button type="submit" class="btn btn-success" (click)="save()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<a routerLink="/admin" class="btn btn-default btn-flat">Close</a>

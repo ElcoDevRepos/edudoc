@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-md-6">
+        <app-service-unit-rule-basic-info
+            [canEdit]="canEdit"
+            [showCrossoverModal]="addingCrossover"
+            (onCancelCrossover)="handleCancelCrossover()"
+        ></app-service-unit-rule-basic-info>
+        <br />
+
+        <div *ngIf="serviceUnitRuleId && serviceUnitRuleId > 0">
+            <app-service-unit-time-segments
+                [isCrossover]="false"
+                [canEdit]="canEdit"
+            ></app-service-unit-time-segments>
+            <br />
+
+            <button *ngIf="canAddCrossover && !hasCrossover" type="button" Class="btn btn-flat btn-success" (click)="addCrossover()">
+                Add Crossover
+            </button>
+    
+            <app-service-unit-time-segments
+                *ngIf="hasCrossover"
+                [isCrossover]="true"
+                [canEdit]="canEdit"
+            ></app-service-unit-time-segments>
+            <br />
+        </div>
+
+    </div>
+    <div class="col-md-6">
+        <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+        <br />
+        <div *ngIf="serviceUnitRules && serviceUnitRules.length > 0">
+            <mt-entity-list
+                *ngIf="serviceUnitRules && serviceUnitRules.length > 0"
+                [entities]="serviceUnitRules"
+                [total]="total"
+                [(currentPage)]="currentPage"
+                [(itemsPerPage)]="itemsPerPage"
+                (pageChanged)="getAllServiceUnitRules()"
+                (itemSelectedEvent)="serviceUnitRuleSelected($event)"
+                [entityListConfig]="entityListConfig"
+                (itemDeletedEvent)="onItemDeleted($event)"
+            >
+            </mt-entity-list>
+        </div>
+
+        <div *ngIf="noServiceUnitRules">
+            <h3 style="text-align: center;">No data to display.</h3>
+        </div>
+
+        <div *ngIf="canAdd" class="fab-wrap-b-r">
+            <a class="btn btn-primary btn-fab-lg" (click)="createEmptyServiceUnitRule()">
+                <span class="fa fa-plus"></span>
+            </a>
+        </div>
+    </div>
+</div>

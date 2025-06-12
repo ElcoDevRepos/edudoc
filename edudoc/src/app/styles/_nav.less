@@ -1,0 +1,67 @@
+@navBackgroundColor: #2f2b5c;
+@navHoverColor: #007bc1;
+@navHoverBackgroundColor: #fff;
+@navDarkBackgroundColor: #190a2e;
+@navDarkColor: #102633;
+@mainHeaderColor: rgb(77, 71, 151);
+@mainHeaderTextColor: rgb(247, 247, 248);
+
+.skin-blue .main-sidebar {
+    background-color: @navBackgroundColor;
+}
+
+.skin-blue .sidebar a {
+    color: #fff;
+}
+
+.skin-blue .sidebar-menu > li:hover > mt-nav-menu-item > a,
+.skin-blue .sidebar-menu > li.active > mt-nav-menu-item > a,
+.skin-blue .sidebar-menu > li:hover > mt-nav-menu-item > a,
+.skin-blue .sidebar-menu > li.active > mt-nav-menu-item > a {
+    color: @navHoverBackgroundColor;
+    background: @navHoverColor;
+    border-left-color: #52636d;
+}
+
+.skin-blue .sidebar-menu > li > .treeview-menu,
+.skin-blue .sidebar-menu > li > .treeview-menu {
+    margin: 0 1px;
+    background: @navDarkBackgroundColor;
+}
+
+.skin-blue .sidebar-menu > li.header {
+    background: @navDarkBackgroundColor;
+}
+
+.skin-blue .main-header > .logo:hover {
+    background-color: @mainHeaderColor;
+}
+
+.skin-blue .main-header > .logo {
+    background-color: @mainHeaderColor;
+    color: @mainHeaderTextColor;
+    border-bottom: 0 solid transparent;
+}
+
+.skin-blue .main-header > .navbar {
+    background-color: @mainHeaderColor;
+}
+
+.sidebar-menu .treeview-menu>li>mt-nav-menu-item>a {
+    padding: 5px 5px 5px 15px;
+    display: block;
+    font-size: 12px;
+}
+
+.menu-title {
+    font-weight: bold;
+}
+
+.pull-left.image {
+    display: none;
+}
+
+.pull-left.info {
+    position: static;
+    inline-size: 50px;
+}

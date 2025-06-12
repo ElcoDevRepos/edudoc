@@ -1,0 +1,50 @@
+<div *ngIf="esc && esc.Id > 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-esc-basic-info [esc]="esc" [canEdit]="canEdit"></app-esc-basic-info><br />
+            <app-mini-dashboard-list
+                [canEdit]="false"
+                noOfItemsToShow="5"
+                [labelGenerator]="providerLabelGenerator"
+                [totalItems]="providerLoadCount"
+                cardName="PROVIDERS"
+                [items]="providers"
+                (onSelectItem)="selectProvider($event)"
+                (onSeeAll)="seeAllProviders()"
+            >
+            </app-mini-dashboard-list>
+        </div>
+        <div class="col-md-6">
+            <app-common-addresses-with-county
+                [canEdit]="canEdit"
+                [requireCounty]="true"
+                [address]="esc.Address"
+                (onSave)="saveAddress($event)"
+                (onDelete)="deleteAddress($event)"
+            >
+            </app-common-addresses-with-county>
+            <br />
+            <app-school-district-esc-component
+                *ngIf="showDistricts"
+                [entity]="esc"
+                [escSchoolDistricts]="escSchoolDistricts"
+                [service]="schoolDistrictService"
+                (onSave)="handleSchoolDistrictSave()"
+                [escOrSchoolDistrict]="schoolDistrictEscComponentModeEnums.ESC"
+            >
+            </app-school-district-esc-component>
+            <br />
+            <mt-shared-entities #contactsComponent [sharedEntityId]="escSharedEntityId" [canEdit]="canEdit" [canAdd]="false">
+            </mt-shared-entities>
+        </div>
+    </div>
+    <br />
+    <a routerLink="/escs" class="btn btn-default">Close</a>
+</div>
+<div *ngIf="esc && esc.Id === 0">
+    <div class="row">
+        <div class="col-md-6">
+            <app-esc-basic-info [esc]="esc"></app-esc-basic-info>
+        </div>
+    </div>
+</div>

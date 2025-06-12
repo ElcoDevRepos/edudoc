@@ -1,0 +1,122 @@
+<h2 mtSetTitle>Managed List Items</h2>
+<div *ngIf="isLoaded">
+    <div class="row">
+        <div class="col-md-6">
+            <select [(ngModel)]="selectedManagedList" [ngModelOptions]="{ standalone: true }" class="form-control">
+                <option *ngFor="let list of managedListArr" [ngValue]="list">
+                    {{ list.Name }}
+                </option>
+            </select>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <mt-meta-item-managed-list
+                [service]="contactRoleService"
+                [dynamicForm]="contactRoleForm"
+                [canAdd]="true"
+                [canRemove]="true"
+                componentTitle="Contact Role"
+                [addToTop]="true"
+                *ngIf="selectedManagedList?.Id === contactRoleTypeId"
+            ></mt-meta-item-managed-list>
+            <ng-container *ngIf="selectedManagedList?.Id === providerAgencyTypeId">
+                <mt-search-bar (searched)="search($event)" (ready)="searchControlReady($event)"></mt-search-bar>
+                <br />
+                <mt-managed-list
+                    [items]="filteredProviderAgencies"
+                    [dynamicForm]="providerAgencyForm"
+                    [canAdd]="true"
+                    [canRemove]="true"
+                    [addToTop]="true"
+                    componentTitle="Provider Agency"
+                    (saved)="saveProviderAgency($event)"
+                    *ngIf="selectedManagedList?.Id === providerAgencyTypeId"
+                >
+                </mt-managed-list>
+            </ng-container>
+            <mt-meta-item-managed-list
+                [service]="encounterLocationService"
+                [dynamicForm]="encounterLocationForm"
+                [canAdd]="true"
+                [canRemove]="true"
+                componentTitle="Encounter Locations"
+                [addToTop]="true"
+                *ngIf="selectedManagedList?.Id === encounterLocationTypeId"
+            >
+            </mt-meta-item-managed-list>
+            <mt-meta-item-managed-list
+                [service]="methodService"
+                [dynamicForm]="methodForm"
+                [canAdd]="true"
+                [canRemove]="true"
+                componentTitle="Methods"
+                [addToTop]="true"
+                *ngIf="selectedManagedList?.Id === methodTypeId"
+            >
+            </mt-meta-item-managed-list>
+            <mt-meta-item-managed-list
+                [service]="returnReasonCategoryService"
+                [dynamicForm]="returnReasonCategoryForm"
+                [canAdd]="true"
+                [canRemove]="true"
+                componentTitle="Return Reason Categories"
+                [addToTop]="true"
+                *ngIf="selectedManagedList?.Id === returnReasonCategoryId"
+            >
+            </mt-meta-item-managed-list>
+            <mt-meta-item-managed-list
+                [service]="disabilityCodeService"
+                [dynamicForm]="disabilityCodeForm"
+                [canAdd]="true"
+                [canRemove]="true"
+                componentTitle="Disability Codes"
+                [addToTop]="true"
+                *ngIf="selectedManagedList?.Id === disabilityCodeId"
+            >
+            </mt-meta-item-managed-list>
+            <mt-meta-item-managed-list
+                [service]="studentDeviationReasonService"
+                [dynamicForm]="studentDeviationReasonForm"
+                [canAdd]="true"
+                [canRemove]="true"
+                componentTitle="Student Deviation Reasons"
+                [addToTop]="true"
+                *ngIf="selectedManagedList?.Id === studentDeviationReasonId"
+            >
+            </mt-meta-item-managed-list>
+            <mt-meta-item-managed-list
+                [service]="documentTypeService"
+                [dynamicForm]="documentTypeForm"
+                [canAdd]="true"
+                [canRemove]="true"
+                componentTitle="Document Type"
+                [addToTop]="true"
+                *ngIf="selectedManagedList?.Id === documentTypeId"
+            >
+            </mt-meta-item-managed-list>
+            <mt-meta-item-managed-list
+                [service]="nonMspServiceService"
+                [dynamicForm]="nonMspServiceForm"
+                [canAdd]="true"
+                [canRemove]="true"
+                componentTitle="Non-MSP Service"
+                [addToTop]="true"
+                *ngIf="selectedManagedList?.Id === nonMspServiceId"
+            >
+            </mt-meta-item-managed-list>
+            <mt-managed-list
+                [items]="voucherTypes"
+                [dynamicForm]="voucherTypeForm"
+                [canAdd]="true"
+                [canEdit]="true"
+                [canRemove]="true"
+                componentTitle="Voucher Type"
+                [fields]="voucherFields"
+                (saved)="saveVoucherTypes($event)"
+                *ngIf="selectedManagedList?.Id === voucherTypeId"
+            />
+        </div>
+    </div>
+</div>

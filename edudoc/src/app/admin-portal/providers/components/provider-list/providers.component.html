@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-md-7">
+        <h2 mtSetTitle>
+            Providers<span *ngIf="escName">: {{ escName }} </span>
+            <button *ngIf="escId" (click)="goBackToEsc()" class="btn btn-primary">Go Back to ESC</button>
+        </h2>
+    </div>
+</div>
+<div>
+    <div class="input-group">
+        <input type="text" [formControl]="searchControl" [(ngModel)]="query" class="form-control" placeholder="Search" />
+        <span class="input-group-btn">
+            <button type="button" (click)="clearSearch()" class="btn btn-default btn-nohover btn-flat">
+                <i class="fa"></i>
+                <i class="fa fa-remove" aria-hidden="true"></i>
+                <i class="fa"></i>
+            </button>
+        </span>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-2">
+        <label>School Districts</label>
+        <mt-virtual-type-ahead
+            [getItems]="getSchoolDistricts"
+            [placeholder]="'Begin typing...'"
+            (selectionChanged)="handleDistrictSelection($event)"
+            (ready)="virtualTypeAheadControlReady($event)"
+        ></mt-virtual-type-ahead>
+    </div>
+    <label>Selected District: </label> {{ selectedDistrictName }}
+    <div class="col-md-9"></div>
+    <div class="col-md-1 checkbox-div">
+        <mt-search-filter-checkbox (searchCheckboxChanged)="searchFilterChanged($event)" text="Include Archived"> </mt-search-filter-checkbox>
+    </div>
+</div>
+<br />
+<mt-entity-list
+    [entities]="providers"
+    [total]="total"
+    [(currentPage)]="currentPage"
+    (itemSelectedEvent)="providerSelected($event)"
+    (columnSortedEvent)="columnSorted($event)"
+    [entityListConfig]="providerEntityListConfig"
+    (pageChanged)="getProviders()"
+></mt-entity-list>
+
+<div *ngIf="canAddProvider" class="fab-wrap-b-r">
+    <a class="btn btn-primary btn-fab-lg" [routerLink]="['/providers', 'add']">
+        <span class="fa fa-plus"></span>
+    </a>
+</div>
