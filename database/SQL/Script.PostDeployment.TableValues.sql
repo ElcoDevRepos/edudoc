@@ -12,9 +12,6 @@ Post-Deployment Script Template
 This file should include any data that is required for the project and will not be
 altered by the user.
 
-If you would like to include dummy data, there is a separate file for that which is
-conditionally executed based on the value of SQLCMD variable IncludeDummyData.
-
 */
 
 
@@ -410,7 +407,7 @@ SET IDENTITY_INSERT [AuthUsers] ON;
 MERGE INTO [AuthUsers] AS Target
 USING (
 VALUES
-	( 1 ,'admin' ,@saltedHash ,@salt ,0x,1, 0, 1)
+	( 1 ,'admin' ,@saltedHash ,@salt ,0x, 1, 0, 0)
 	 ) AS Source ( [Id], [Username], [Password], [Salt], [ResetKey], [RoleId], [IsEditable], [HasAccess] )
 ON ( Target.[Id] = Source.[Id] )
 WHEN MATCHED THEN
@@ -2045,8 +2042,3 @@ WHEN NOT MATCHED BY TARGET THEN
 	VALUES (Source.Id, Source.Name)
 WHEN NOT MATCHED BY SOURCE THEN DELETE;
 SET IDENTITY_INSERT AnnualEntryStatuses OFF;
-
-IF ('$(IncludeDummyData)' = 'True')
-BEGIN
-:r ./IncludeDummyData.sql
-END

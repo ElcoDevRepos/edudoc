@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "src\API\API.csproj", "{8B990794-3B0C-44A6-B010-B558530A72BA}"
-	ProjectSection(ProjectDependencies) = postProject
-		{30AB0F33-A1D8-4AA3-8BFC-D600A8A21D04} = {30AB0F33-A1D8-4AA3-8BFC-D600A8A21D04}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "src\Service\Service.csproj", "{9E9EEAEC-0E46-4FA0-848F-93EFB2114C2C}"
 EndProject
@@ -18,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8A5096
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL", "src\SQL\SQL.sqlproj", "{30AB0F33-A1D8-4AA3-8BFC-D600A8A21D04}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RosterUploadJob", "src\RosterUploadJob\RosterUploadJob.csproj", "{4FAA67F8-811A-4B69-880B-AB7A4BCB1986}"
 EndProject
@@ -35,8 +30,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		src\API\Wkhtmltopdf\Windows\wkhtmltopdf.exe = src\API\Wkhtmltopdf\Windows\wkhtmltopdf.exe
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQL.Build", "src\SQL.Build\SQL.Build.csproj", "{F657B960-4720-4556-A905-7A80DDFAF092}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnnualTrainingsJob", "src\AnnualTrainingsJob\AnnualTrainingsJob.csproj", "{464CFFFE-F18E-40EE-B4FD-B1D1D16B7748}"
 EndProject
@@ -101,13 +94,6 @@ Global
 		{FAC5E7D0-1084-463F-9FBE-18F54C8F0E6F}.Staging|Any CPU.Build.0 = Release|Any CPU
 		{FAC5E7D0-1084-463F-9FBE-18F54C8F0E6F}.Testing|Any CPU.ActiveCfg = Release|Any CPU
 		{FAC5E7D0-1084-463F-9FBE-18F54C8F0E6F}.Testing|Any CPU.Build.0 = Release|Any CPU
-		{30AB0F33-A1D8-4AA3-8BFC-D600A8A21D04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30AB0F33-A1D8-4AA3-8BFC-D600A8A21D04}.Production|Any CPU.ActiveCfg = Production|Any CPU
-		{30AB0F33-A1D8-4AA3-8BFC-D600A8A21D04}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30AB0F33-A1D8-4AA3-8BFC-D600A8A21D04}.Review|Any CPU.ActiveCfg = Review|Any CPU
-		{30AB0F33-A1D8-4AA3-8BFC-D600A8A21D04}.Security|Any CPU.ActiveCfg = Security|Any CPU
-		{30AB0F33-A1D8-4AA3-8BFC-D600A8A21D04}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
-		{30AB0F33-A1D8-4AA3-8BFC-D600A8A21D04}.Testing|Any CPU.ActiveCfg = Testing|Any CPU
 		{4FAA67F8-811A-4B69-880B-AB7A4BCB1986}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4FAA67F8-811A-4B69-880B-AB7A4BCB1986}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FAA67F8-811A-4B69-880B-AB7A4BCB1986}.Production|Any CPU.ActiveCfg = Release|Any CPU
@@ -178,20 +164,6 @@ Global
 		{D99CA9DA-C24A-4646-918E-1611155E3252}.Staging|Any CPU.Build.0 = Debug|Any CPU
 		{D99CA9DA-C24A-4646-918E-1611155E3252}.Testing|Any CPU.ActiveCfg = Debug|Any CPU
 		{D99CA9DA-C24A-4646-918E-1611155E3252}.Testing|Any CPU.Build.0 = Debug|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Production|Any CPU.ActiveCfg = Debug|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Production|Any CPU.Build.0 = Debug|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Review|Any CPU.ActiveCfg = Debug|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Review|Any CPU.Build.0 = Debug|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Security|Any CPU.ActiveCfg = Debug|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Security|Any CPU.Build.0 = Debug|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Staging|Any CPU.ActiveCfg = Debug|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Staging|Any CPU.Build.0 = Debug|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Testing|Any CPU.ActiveCfg = Debug|Any CPU
-		{F657B960-4720-4556-A905-7A80DDFAF092}.Testing|Any CPU.Build.0 = Debug|Any CPU
 		{464CFFFE-F18E-40EE-B4FD-B1D1D16B7748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{464CFFFE-F18E-40EE-B4FD-B1D1D16B7748}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{464CFFFE-F18E-40EE-B4FD-B1D1D16B7748}.Production|Any CPU.ActiveCfg = Production|Any CPU

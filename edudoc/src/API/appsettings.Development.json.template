@@ -1,0 +1,39 @@
+{
+    "Logging": {
+        "LogLevel": {
+            "Default": "Information",
+            "Microsoft": "Warning",
+            "Microsoft.Hosting.Lifetime": "Information"
+        }
+    },
+    "EmailConfiguration": {
+        "TestEmail": "<DevEmail>",
+        "SmtpServer": "outbound01.4miles.com",
+        "Port": 25,
+        "CompanyName": "Edu Doc"
+    },
+    "AdminSite": "http://localhost:4200",
+    "AllowedHosts": "*",
+    "MobileOrigins": "http://localhost,http://localhost:8100,ionic://localhost,https://localhost,ionic://localhost:8100,https://localhost:8100",
+    "ResetEndpoint": "/#/resetpassword",
+    "AdminAccessEndpoint": "/#/adminaccess",
+    "DocsRootDir": "../../../docs/",
+    "ImageDir": "../../../docs/images/",
+    "DefaultEmailFrom": "no-reply@milesapp.com",
+    "GoogleApiKey": "219934546499-9esk11b9tro10r9ii94pbojgkqm9r5m3",
+    "jwtSettings": {
+        "JWTKey": "wwZpJHJOnkwWq2fnMLdOgFeCGcrVyPzOMfnPm0vVasmNl8HC0vg0Q4x7oITCQCHy",
+        "JWTIssuer": "self",
+        "JWTAccessMinutes": "480"
+    },
+    "SampleRosterDocumentFilename": "sample_student_roster.xlsx",
+    "SampleCaseloadUploadDocumentFilename": "sample_caseload_upload.xlsx",
+    "SystemErrorEmails": "sdougherty@milestechnologies.com,jcurtis@4miles.com, gchacko@4miles.com, ekhoo@4miles.com",
+    "BreckHtmlToPdf": {
+        "TemplatesRootDir": "./bin/Debug/net8.0/razor",
+        "BinaryDir": "./Wkhtmltopdf"
+    },
+    "ConnectionStrings": {
+        "Primary": "Server=(localdb)\\ProjectsV13;Database=edudoc.SQL;Trusted_Connection=True;MultipleActiveResultSets=true"
+    }
+}

@@ -56,7 +56,10 @@ DistrictResults AS (
         pa.DistrictName AS 'School District',
         pa.ServiceTypeName AS 'Service Type',
         m.MonthFormat AS 'Month',
-        COUNT(DISTINCT es.Id) AS 'Count'
+        COUNT(DISTINCT CASE 
+            WHEN s.DistrictId = pa.DistrictId THEN es.Id 
+            ELSE NULL 
+        END) AS 'Count'
     FROM
         ProviderAssignments pa
     CROSS JOIN
@@ -72,7 +75,6 @@ DistrictResults AS (
         AND es.EncounterStatusId NOT IN (12, 13, 14, 15, 26, 8)
     LEFT JOIN Students s ON 
         s.Id = es.StudentId 
-        AND s.DistrictId = pa.DistrictId
         AND s.Archived = 0
     GROUP BY
         pa.EscName,

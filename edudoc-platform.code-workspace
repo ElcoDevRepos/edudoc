@@ -1,0 +1,15 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "omnisharp.enableEditorConfigSupport": true,
+        "omnisharp.enableRoslynAnalyzers": true,
+        "omnisharp.solutions": [
+            "edudoc/Edudoc.sln",
+            "edudoc-v5/backend/EduDoc.sln"
+        ]
+    }
+} 

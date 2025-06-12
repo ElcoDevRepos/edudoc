@@ -1,2 +1,0 @@
-api:
-    base_build_image: 'mcr.microsoft.com/dotnet/sdk:8.0-nanoserver-1809'

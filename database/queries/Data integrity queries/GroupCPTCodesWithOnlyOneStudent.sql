@@ -36,10 +36,11 @@ WHERE
     AND es.ESignedById IS NOT NULL
     AND es.DateESigned IS NOT NULL
     AND es.StudentDeviationReasonId IS NULL
-    AND c.Code IN ('90853', '92508', '96164', '97150')
+    AND c.Code IN ('90853', '92508', '96164', '96165', '97150')
     AND ce.PaidAmount IS NOT NULL
-    AND ce.PaidAmount <> '0'
+    AND CAST(ce.PaidAmount AS decimal(10,2)) > 0
     AND d.Id != 125
+    AND est.Id NOT IN (31, 34)
     AND EXISTS (
         SELECT 1
         FROM dbo.EncounterStudents es2
@@ -49,8 +50,10 @@ WHERE
         GROUP BY es2.EncounterId
         HAVING COUNT(DISTINCT StudentId) = 1
     )
+    AND esc.Minutes IS NOT NULL
+    AND esc.Minutes > 0
 ORDER BY 
     d.Name,
     s.LastName,
     s.FirstName,
-    es.EncounterDate;
+    es.EncounterDate;

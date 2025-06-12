@@ -21,7 +21,3 @@ build/
 
 # SSDT schema compare
 *.scmp
-
-# Deployment profiles (usually contain sensitive info)
-*.publish.xml
-*.publish.sql 

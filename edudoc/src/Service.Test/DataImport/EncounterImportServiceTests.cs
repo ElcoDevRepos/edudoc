@@ -3736,7 +3736,7 @@ public class EncounterImportServiceTests : EncounterImportServiceTestBase
         var headers = errorLines[0].Split(',');
         var validationErrorsIndex = Array.IndexOf(headers, "ValidationErrors");
         var errorRow = errorLines[1].Split(',');
-        Assert.Contains($"This student already has an encounter with this provider on {DateTime.UtcNow:M/dd/yyyy} from 13:00:00 to 14:00:00.; Error creating data: Failed to create encounter data", errorRow[validationErrorsIndex]);
+        Assert.Contains($"This student already has an encounter with this provider on {DateTime.UtcNow:M/d/yyyy} from 13:00:00 to 14:00:00.; Error creating data: Failed to create encounter data", errorRow[validationErrorsIndex]);
     }
 
     [Fact]

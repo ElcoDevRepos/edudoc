@@ -16,7 +16,7 @@ namespace API
                 .ConfigureWebHostDefaults(webHostBuilder =>
                 {
                     webHostBuilder
-                        .UseKestrel().UseUrls("http://0.0.0.0:9000/")
+                        //.UseKestrel().UseUrls("http://0.0.0.0:9000/")
                         .UseStartup<Startup>();
                 }).Build().Run();
 

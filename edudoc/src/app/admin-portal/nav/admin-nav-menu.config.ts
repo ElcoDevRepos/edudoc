@@ -2,6 +2,7 @@ import { ClaimTypes } from '@model/ClaimTypes';
 import { ClaimValues } from '@mt-ng2/auth-module';
 import { KeyboardKeys } from '@mt-ng2/keyboard-shortcuts-module';
 import { NavSidebarRowItem, NavSidebarParentRowItem } from '@mt-ng2/nav-module';
+import { environment } from '@common/environments/environment';
 
 // tslint:disable:object-literal-sort-keys
 export const adminNavMenu: (NavSidebarRowItem | NavSidebarParentRowItem)[] = [
@@ -10,6 +11,13 @@ export const adminNavMenu: (NavSidebarRowItem | NavSidebarParentRowItem)[] = [
         icon: 'fa fa-fw fa-address-card',
         link: '/admin/my-profile',
     }),
+    ...(environment.production ? [] : [
+        new NavSidebarRowItem({
+            content: 'New App (v5)',
+            icon: 'fa fa-fw fa-rocket',
+            link: '/admin/v5-app',
+        })
+    ]),
     new NavSidebarParentRowItem({
         children: [
             new NavSidebarRowItem({

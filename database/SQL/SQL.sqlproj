@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{30ab0f33-a1d8-4aa3-8bfc-d600a8a21d04}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureDatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -17,7 +17,7 @@
     <ModelCollation>1033,CI</ModelCollation>
     <DefaultFileStructure>BySchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
@@ -317,17 +317,7 @@
     <RefactorLog Include="SQL.refactorlog" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SQL.Dev.publish.xml" />
-    <None Include="testserver.publish.xml" />
-    <None Include="staging.publish.xml" />
-    <None Include="IncludeDummyData.sql" />
-    <None Include="reviewbranch.publish.xml" />
-    <None Include="production.publish.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <SqlCmdVariable Include="IncludeDummyData">
-      <DefaultValue>False</DefaultValue>
-      <Value>$(SqlCmdVar__1)</Value>
-    </SqlCmdVariable>
+    <None Include="test.publish.xml" />
+    <None Include="local.publish.xml" />
   </ItemGroup>
 </Project>

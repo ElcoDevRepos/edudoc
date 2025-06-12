@@ -6,6 +6,7 @@ import { AdminNotFoundComponent } from './admin-common/admin-not-found/not-found
 import { AdminPortalGuard } from './admin-common/admin-portal.guard';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
+import { V5WrapperComponent } from './v5-wrapper/v5-wrapper.component';
 import { AnnualEntriesModule } from './annual-entries/annual-entries.module';
 import { AuditsModule } from './audits/audits.module';
 import { BillingFailuresModule } from './billing-failures/billing-failures.module';
@@ -45,7 +46,12 @@ import { NursingGoalResultModule } from './nurse-progress-quick-text/nursing-goa
 import { DataImportModule } from './data-import/data-import.module';
 
 @NgModule({
-    declarations: [AdminComponent, AppSettingsComponent, AdminNotFoundComponent],
+    declarations: [
+        AdminComponent, 
+        AppSettingsComponent, 
+        AdminNotFoundComponent,
+        V5WrapperComponent
+    ],
     imports: [
         CommonModule,
         UserRoleModule,

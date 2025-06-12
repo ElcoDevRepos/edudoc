@@ -44,6 +44,7 @@ import { userRoleRoutes } from './user-roles/user-role-routes.library';
 import { adminUserRoutes } from './users/admin-user-routes.library';
 import { voucherRoutes } from './vouchers/voucher-routes.library';
 import { dataImportRoutes } from './data-import/data-import-routes.library';
+import { V5WrapperComponent } from './v5-wrapper/v5-wrapper.component';
 
 const homeRoleGuard: IRoleGuarded = {
     claimType: ClaimTypes.Users,
@@ -58,6 +59,13 @@ const adminRoutes: Routes = [
             {
                 component: AppSettingsComponent,
                 path: appPaths.settings,
+            },
+            {
+                component: V5WrapperComponent,
+                path: 'v5-app',
+                data: {
+                    title: 'New App (v5)'
+                }
             },
             {
                 data: homeRoleGuard,
