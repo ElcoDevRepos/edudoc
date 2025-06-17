@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, TestResponse } from '../../services/auth.service';
 
 @Component({
   selector: 'app-auth-test',
@@ -10,8 +10,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./auth-test.component.scss']
 })
 export class AuthTestComponent implements OnInit {
-  publicResult: any = null;
-  authenticatedResult: any = null;
+  publicResult: TestResponse | null = null;
+  authenticatedResult: TestResponse | null = null;
   error: string | null = null;
   loading = false;
   currentUser: { name: string, email: string } | null = null;

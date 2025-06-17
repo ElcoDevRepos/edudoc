@@ -5,6 +5,7 @@ import { ILoginResponse } from '@mt-ng2/auth-module';
 
 export const loginSuccessHandler = function (config: { router: Router; returnUrl?: string; loginResponse: ILoginResponse }): void {
     const { router, returnUrl, loginResponse } = config;
+
     if (returnUrl) {
         void router.navigateByUrl(returnUrl);
     } else {

@@ -3,19 +3,21 @@
 // `ng build --env=testing` then `environment.testing.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
+const baseUrl = 'https://hpc-edudoc-test.net/v4';
+
 export const environment = {
     apiVersion: '1',
-    appName: 'Edu-Doc 4.0 \u00A9',
+    appName: 'EduDoc',
     appVersion: '1.0.0',
     assetsPath: 'assets/',
     authClientId: 1,
     authSecretVariable: 'verysecret',
-    baseApiUrl: '',
-    docPath: 'docs/',
-    googleApiKey: '', // Empty this string to disable google login
-    imgPath: 'docs/images/',
-    logger: false,
+    baseApiUrl: baseUrl,
+    docPath: `${baseUrl}/docs/`,
+    imgPath: `${baseUrl}/docs/images/`,
+    logger: true, // Enable logging in test environment
     production: false,
     siteName: 'edudoc',
-    submitHelpUrl: 'http://submit-help.testing.milesapp.com',
+    submitHelpUrl: '',
+    v5FrontendUrl: 'https://hpc-edudoc-test.net/v5'
 };

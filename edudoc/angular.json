@@ -11,6 +11,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "baseHref": "/v4/",
+            "deployUrl": "/v4/",
             "outputPath": "dist/src/app",
             "index": "./src/app/index.html",
             "main": "./src/app/main.ts",
@@ -24,6 +26,7 @@
             "assets": [
               "src/app/assets",
               "src/app/robots.txt",
+              "src/app/web.config",
               {
                 "glob": "**/*",
                 "input": "node_modules/ngx-extended-pdf-viewer/assets/",
@@ -48,6 +51,14 @@
           },
           "configurations": {
             "test": {
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "namedChunks": true,
+              "extractLicenses": false,
+              "vendorChunk": true,
+              "buildOptimizer": false,
+              "aot": true,
               "fileReplacements": [
                 {
                   "replace": "./src/app/common/environments/environment.ts",

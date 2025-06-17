@@ -6,10 +6,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const cookieService = inject(CookieService);
   
   // Get the XSRF token from the cookie
-  const xsrfToken = cookieService.get('Edu-Doc 4.0 ©-1.0.0-XSRF-TOKEN');
+  const xsrfToken = cookieService.get('EduDoc-1.0.0-XSRF-TOKEN');
 
   // Get the JWT from the cookie
-  const jwtCookie = cookieService.get('Edu-Doc 4.0 ©-1.0.0-jwt');
+  const jwtCookie = cookieService.get('EduDoc-1.0.0-jwt');
 
   if (jwtCookie) {
     try {

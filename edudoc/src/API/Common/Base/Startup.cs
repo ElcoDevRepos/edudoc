@@ -2,6 +2,7 @@ using API.RoleManager;
 using Autofac;
 using BreckAPIBase.Startup;
 using BreckAzureBase.Startup;
+
 using BreckServiceBase.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -84,10 +85,8 @@ namespace API
 
             app.UseResponseCompression();
 
-            // sets up doc serving
-            // app.UseStaticFiles(GetStaticFileOpts(Configuration));
-            app.UseBreckenridgeAzure(Configuration);
-
+            // Sets up document serving (local files for now, can add Azure blob later)
+            app.UseStaticFiles(GetStaticFileOpts(Configuration));
         }
 
         /// <summary>
@@ -103,8 +102,5 @@ namespace API
             };
             return options;
         }
-
-
-
     }
 }

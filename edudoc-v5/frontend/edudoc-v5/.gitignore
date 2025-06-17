@@ -1,4 +1,6 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# =============================================================================
+# EduDoc V5 - Angular Frontend Project
+# =============================================================================
 
 # Compiled output
 /dist

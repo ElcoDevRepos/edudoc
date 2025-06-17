@@ -20,7 +20,6 @@
     "DocsRootDir": "../../../docs/",
     "ImageDir": "../../../docs/images/",
     "DefaultEmailFrom": "no-reply@milesapp.com",
-    "GoogleApiKey": "219934546499-9esk11b9tro10r9ii94pbojgkqm9r5m3",
     "jwtSettings": {
         "JWTKey": "wwZpJHJOnkwWq2fnMLdOgFeCGcrVyPzOMfnPm0vVasmNl8HC0vg0Q4x7oITCQCHy",
         "JWTIssuer": "self",

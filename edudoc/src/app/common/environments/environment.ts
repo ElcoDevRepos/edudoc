@@ -5,17 +5,17 @@
 
 export const environment = {
     apiVersion: '1',
-    appName: 'Edu-Doc 4.0 \u00A9',
+    appName: 'EduDoc',
     appVersion: '1.0.0',
     assetsPath: 'assets/',
     authClientId: 1,
     authSecretVariable: 'verysecret',
     baseApiUrl: 'http://localhost:9000',
     docPath: 'http://localhost:9000/docs/',
-    googleApiKey: '224393687960-2q095n40r5n9hnt6amuuiveh9ss90d1q',
     imgPath: 'http://localhost:9000/docs/images/',
     logger: true,
     production: false,
     siteName: 'edudoc',
-    submitHelpUrl: 'http://submit-help.testing.milesapp.com',
+    submitHelpUrl: '',
+    v5FrontendUrl: 'http://localhost:4201/auth-test'
 };

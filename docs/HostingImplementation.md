@@ -26,15 +26,27 @@
   - [x] App Service Plan (`asp-edudoc-test`) - Created
   - [x] Backend App Service (`app-edudoc-backend-test`) - Created
   - [x] Frontend App Service (`app-edudoc-frontend-test`) - Created
-- [x] **Backend deployment workflow**
+- [x] **Backend deployment workflow** _(Completed)_
   - [x] .NET 8.0 API deployment
-  - [x] WebJobs deployment (background jobs)
   - [x] Path-based triggers (only builds when backend code changes)
-- [x] **Frontend deployment workflow**
+  - [x] Fixed SPA configuration issues (removed problematic UseBreckenridgeAzure)
+  - [x] Configured for pure API backend (no static file serving)
+  - [x] Successfully deployed and tested
+  - [x] Cleaned up workflow file
+  - [ ] WebJobs deployment (deferred until later)
+- [x] **Frontend deployment workflow** _(Completed)_
   - [x] Created minimal workflow file with workflow_dispatch
-  - [ ] Angular build and deployment steps
-  - [ ] Environment-specific configuration
-- [ ] **Test deployments and integration**
+  - [x] Angular build and deployment steps
+  - [x] Environment-specific configuration
+  - [x] Successfully deployed and tested
+- [ ] **Domain and Routing Configuration** _(Current Focus)_
+  - [ ] Set up Application Gateway
+  - [ ] Configure custom domain (hpc-edudoc-test.net)
+  - [ ] Set up path-based routing rules
+  - [ ] Configure SSL certificate
+  - [ ] Update frontend base paths
+  - [ ] Test routing configuration
+- [x] **Test deployments and integration**
 
 **📋 Legacy App Resources Created:**
 - **Resource Group**: `rg-test-eastus2-EduDoc` (shared)
@@ -53,16 +65,36 @@
   - V5 Frontend: `.github/workflows/v5-frontend-test-deploy.yml` - Created (minimal)
 
 ### 3. V5 Application (edudoc-v5) _(In Progress)_
-- [x] **Backend deployment workflow**
+- [ ] **Backend deployment workflow** _(Current Focus)_
   - [x] Created minimal workflow file with workflow_dispatch
-  - [ ] Build and deployment steps
+  - [x] Build and deployment steps
+  - [x] Environment-specific configuration
+  - [x] Azure resources setup
+  - [ ] Test deployment
 - [x] **Frontend deployment workflow** 
   - [x] Created minimal workflow file with workflow_dispatch
   - [ ] Angular build and deployment steps
-- [ ] Azure resources setup
 - [ ] Test deployments
 
+**📋 V5 App Resources Created:**
+- **Resource Group**: `rg-test-eastus2-EduDoc` (shared)
+- **App Service Plan**: `asp-edudoc-test` (shared)
+- **Backend App Service**: `app-edudoc-v5-backend-test` (dotnet:8 runtime)
+  - **URL**: https://app-edudoc-v5-backend-test.azurewebsites.net
+  - **Purpose**: .NET 8.0 API
+- **Frontend App Service**: `app-edudoc-v5-frontend-test` (NODE:20LTS runtime)
+  - **URL**: https://app-edudoc-v5-frontend-test.azurewebsites.net
+  - **Purpose**: Angular SPA hosting
+- **GitHub Environment**: `test` (shared)
+- **GitHub Secrets**:
+  - `AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND_V5`
+  - `AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND_V5`
+- **Deployment Pipelines**:
+  - Backend: `.github/workflows/v5-backend-test-deploy.yml` - Updated
+  - Frontend: `.github/workflows/v5-frontend-test-deploy.yml` - Created (minimal)
+
 ### 4. Integration Testing _(Not Started)_
+- [ ] Path-based routing verification
 - [ ] iframe integration verification
 - [ ] Background jobs verification
 - [ ] End-to-end testing
@@ -77,12 +109,26 @@
 - **Configured Azure SQL resources and GitHub environment secrets**
 
 ## Next Actions
-1. **Set up Azure App Service resources for Legacy Application (edudoc)**
-2. **Create deployment workflows for Legacy backend and frontend**
-3. Design Azure resource naming conventions for app services
-4. Configure application-specific GitHub environments and secrets
-5. Test Legacy application deployments
-6. Plan V5 application hosting requirements
+1. **Set up Application Gateway and Domain Configuration** _(Current Focus)_
+   - Create Application Gateway
+   - Configure custom domain
+   - Set up path-based routing
+   - Configure SSL certificate
+2. **Update Frontend Configurations**
+   - Configure base paths for both frontends
+   - Update API endpoints
+   - Test routing
+3. **Test V5 backend deployment workflow**
+   - Trigger manual deployment
+   - Verify API functionality
+4. **Complete V5 frontend deployment workflow**
+   - Angular build and deployment steps
+   - Environment-specific configuration
+5. **Test end-to-end V5 application**
+   - Backend API + Frontend integration
+   - CORS configuration verification
+6. **Add WebJobs back to legacy backend**
+7. **Set up staging environment**
 
 ## Notes and Decisions
 - Using GitHub Actions for CI/CD
@@ -94,4 +140,7 @@
 - Using Azure CLI for resource creation
 - **Background jobs will run as Azure WebJobs within the backend App Service**
 - **Legacy app architecture: 2 separate App Services (backend + frontend)**
-- **Backend App Service will host both .NET API and WebJobs** 
+- **Backend App Service will host both .NET API and WebJobs**
+- **Single domain (hpc-edudoc-test.net) with path-based routing**
+- **Application Gateway for routing management**
+- **Version-specific base paths (/v4, /v5)** 

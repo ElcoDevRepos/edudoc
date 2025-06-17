@@ -21,61 +21,10 @@ export class LoginComponentLink {
     constructor(public linkHtml: string, public routerLinkPath: string) {}
 }
 
-/**
- * Interface representing the customizable properties
- * of the login screen.
- * @property message
- * @property signInButtonText
- * @property allowRememberMe
- * @property forgotPasswordMessage
- */
-// export interface ILoginConfig {
-//     message?: string;
-//     signInButtonText?: string;
-//     allowRememberMe?: boolean;
-//     forgotPasswordMessage?: string;
-//     googleAuthConfig?: GoogleAuthConfig;
-//     hideRegularSignIn?: boolean;
-//     passwordPattern: string;
-//     messageOverrides: IMessageOverrides,
-//     loginComponentLinks?: LoginComponentLink[];
-//     authServiceOverride?: any;
-// }
-
-// export class LoginConfig {
-//     message?: string;
-//     signInButtonText?: string;
-//     allowRememberMe?: boolean;
-//     forgotPasswordMessage?: string;
-//     googleAuthConfig?: GoogleAuthConfig;
-//     hideRegularSignIn?: boolean;
-//     passwordPattern: RegExp;
-//     messageOverrides: IMessageOverrides;
-//     loginComponentLinks: LoginComponentLink[];
-
-//     constructor(@Inject(LoginModuleConfigToken) private config: ILoginConfig) {
-//         this.message = config.message || 'Sign in to start your session';
-//         this.signInButtonText = config.signInButtonText || 'Sign In';
-//         this.allowRememberMe = typeof config.allowRememberMe !== 'undefined' && config.allowRememberMe !== null ? config.allowRememberMe : true;
-//         this.forgotPasswordMessage =
-//             config.forgotPasswordMessage ||
-//             'Provide the email associated with your account and click Submit. An email will be sent with a link to reset your password.';
-//         this.googleAuthConfig = config.googleAuthConfig || null;
-//         this.hideRegularSignIn = config.hideRegularSignIn || false;
-//         this.passwordPattern = new RegExp(config.passwordPattern);
-//         this.messageOverrides = config.messageOverrides;
-//         this.loginComponentLinks = config.loginComponentLinks || [new LoginComponentLink('<a>I forgot my password</a>', '/forgotpassword')];
-//     }
-// }
-
 @Component({
     selector: 'app-hcpc-login',
     styles: [
         `
-            .fa-google {
-                padding-right: 10px;
-            }
-
             .login-box {
                 margin-top: 4%;
                 margin-bottom: auto;
@@ -137,12 +86,6 @@ export class LoginComponentLink {
                         <span style="cursor: pointer;" [innerHtml]="link.linkHtml" [routerLink]="link.routerLinkPath"></span><br />
                     </ng-container>
                 </div>
-                <div class="text-center">
-                    <div *ngIf="hasGoogleAuthConfig">
-                        <br />
-                        <mt-google-login [config]="config"></mt-google-login>
-                    </div>
-                </div>
             </div>
             <div class="text-center" style="width: 390px;">
                 <h4>Healthcare Process Consulting, Inc.</h4>
@@ -172,10 +115,6 @@ export class HCPCLoginComponent implements OnInit {
     loginMessages: IMessageDto[] = [];
     loginMessagesLoaded = false;
 
-    get hasGoogleAuthConfig(): boolean {
-        return this.config.googleAuthConfig ? true : false;
-    }
-
     get rememberOption(): RememberOptions {
         return this.config.rememberFeature.rememberOptions;
     }
@@ -187,7 +126,7 @@ export class HCPCLoginComponent implements OnInit {
         private notificationsService: NotificationsService,
         private environmentService: EnvironmentService,
         private activatedRoute: ActivatedRoute,
-        private messageService: MessageService,
+        private messageService: MessageService
     ) {}
 
     ngOnInit(): void {
@@ -234,7 +173,7 @@ export class HCPCLoginComponent implements OnInit {
             this.authService.login((values.username as string), (values.password as string), (values.rememberMe as boolean)).subscribe(
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 ((successResponse: ILoginResponse) => {
-                    void loginSuccessHandler({ router: this.router, returnUrl: this.returnUrl, loginResponse: successResponse });
+                    this.handleLoginSuccess(successResponse);
                 }).bind(this),
                 (errorResponse: HttpErrorResponse) => {
                     if (errorResponse.status === 418) {
@@ -256,5 +195,9 @@ export class HCPCLoginComponent implements OnInit {
         } else {
             markAllFormFieldsAsTouched(this.loginForm);
         }
+    }
+
+    private handleLoginSuccess(loginResponse: ILoginResponse): void {
+        void loginSuccessHandler({ router: this.router, returnUrl: this.returnUrl, loginResponse: loginResponse });
     }
 }

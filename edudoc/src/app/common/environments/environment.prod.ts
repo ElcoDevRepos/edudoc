@@ -5,14 +5,13 @@
 
 export const environment = {
     apiVersion: '1',
-    appName: 'Edu-Doc 4.0 \u00A9',
+    appName: 'EduDoc',
     appVersion: '1.0.0',
     assetsPath: 'assets/',
     authClientId: 1,
     authSecretVariable: 'verysecret',
     baseApiUrl: '',
     docPath: 'docs/',
-    googleApiKey: '',
     imgPath: 'docs/images/',
     logger: false,
     production: true,

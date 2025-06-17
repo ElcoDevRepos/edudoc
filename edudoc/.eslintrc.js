@@ -11,11 +11,13 @@ module.exports = {
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
-        project: ['tsconfig.json'],
+        project: ['./tsconfig.json', './src/app/tsconfig.app.json', './src/app/tsconfig.spec.json'],
         sourceType: 'module',
+        tsconfigRootDir: __dirname,
     },
     plugins: ['eslint-plugin-jsdoc', 'eslint-plugin-no-null', '@typescript-eslint'],
     root: true,
+    ignorePatterns: ['.eslintrc.js', 'node_modules/', 'dist/'],
     rules: {
         '@typescript-eslint/no-unsafe-return': 'off',
         '@typescript-eslint/no-unsafe-call': 'off',
@@ -30,6 +32,5 @@ module.exports = {
             "varsIgnorePattern": "^_",
         }],
         "no-console": ["error", { "allow": ["warn", "error", "info"] }],
-
     },
 };

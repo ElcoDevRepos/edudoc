@@ -2,28 +2,34 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { environment } from '../../environments/environment';
+
+export interface TestResponse {
+  message: string;
+  timestamp: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'https://localhost:7118/api/TestAuth'; // Adjust this to match your backend URL
+  private baseUrl = `${environment.apiUrl}/TestAuth`;
 
   constructor(
     private http: HttpClient,
     private cookieService: CookieService
   ) { }
 
-  testPublicEndpoint(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/public`);
+  testPublicEndpoint(): Observable<TestResponse> {
+    return this.http.get<TestResponse>(`${this.baseUrl}/public`);
   }
 
-  testAuthenticatedEndpoint(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/authenticated`);
+  testAuthenticatedEndpoint(): Observable<TestResponse> {
+    return this.http.get<TestResponse>(`${this.baseUrl}/authenticated`);
   }
 
   getCurrentUser(): { name: string, email: string } | null {
-    const jwtCookie = this.cookieService.get('Edu-Doc 4.0 ©-1.0.0-jwt');
+    const jwtCookie = this.cookieService.get('EduDoc-1.0.0-jwt');
 
     if (jwtCookie) {
       try {

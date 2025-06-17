@@ -6,9 +6,11 @@ This document outlines the strategy for migrating hosting and deployment pipelin
 1. Legacy Application (edudoc)
    - .NET backend with background jobs
    - Angular frontend
+   - Served under /v4 path
 2. New Application (edudoc-v5)
    - Modern .NET backend
    - Angular frontend
+   - Served under /v5 path
    - Integrated via iframe into legacy application
 
 ## Technology Stack
@@ -19,7 +21,8 @@ This document outlines the strategy for migrating hosting and deployment pipelin
   - Azure SQL Database for MSSQL
   - Azure Application Insights for monitoring
   - Azure Key Vault for secrets
-  - Azure Front Door for routing (optional)
+  - Azure Application Gateway for path-based routing
+  - Custom domain (hpc-edudoc-test.net)
 
 ### Source Control and CI/CD
 - **GitHub**:
@@ -43,6 +46,12 @@ This document outlines the strategy for migrating hosting and deployment pipelin
 - Single deployment slot
 - Isolated from production data
 - Used for feature testing and integration validation
+- Single domain (hpc-edudoc-test.net) with path-based routing:
+  - /v4/api/* → Legacy backend
+  - /v4/docs/* → Legacy backend
+  - /v4/* → Legacy frontend
+  - /v5/api/* → V5 backend
+  - /v5/* → V5 frontend
 - Separate app services for each application component:
   - Legacy Backend + Jobs
   - Legacy Frontend
@@ -185,10 +194,12 @@ This document outlines the strategy for migrating hosting and deployment pipelin
 ## Key Considerations
 
 ### Application Integration
-- iframe communication and security
-- Version compatibility management
+- Path-based routing configuration
+- Version-specific base paths (/v4, /v5)
 - URL and routing coordination
 - Shared authentication/authorization
+- Cookie domain management
+- CORS configuration for path-based routing
 
 ### Background Jobs
 - Job continuity during deployments

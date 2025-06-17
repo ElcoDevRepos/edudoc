@@ -1,4 +1,4 @@
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { APP_BASE_HREF, PathLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -27,7 +27,6 @@ import { environment } from '@common/environments/environment';
 import { HCPCLoginComponent } from '@common/login/HCPC-login.component';
 import { AdminAccessComponent } from '@common/login/admin-access.component';
 import { ForgotPasswordComponent } from '@common/login/forgot-password.component';
-import { GoogleLoginComponent } from '@common/login/google-login.component';
 import { ResetPasswordComponent } from '@common/login/reset-password.component';
 import { SharedModule } from '@common/shared.module';
 import { EntityListModule, IEntityListModuleConfig, EntityListModuleConfigToken } from '@mt-ng2/entity-list-module';
@@ -48,7 +47,6 @@ export const entityListModuleConfig: IEntityListModuleConfig = {
     declarations: [
         AppComponent,
         HCPCLoginComponent,
-        GoogleLoginComponent,
         ForgotPasswordComponent,
         ResetPasswordComponent,
         AdminAccessComponent,
@@ -90,7 +88,8 @@ export const entityListModuleConfig: IEntityListModuleConfig = {
         ClaimsService,
         KeyboardShortcutService,
         { provide: ErrorHandler, useClass: BreckErrorHandler },
-        { provide: LocationStrategy, useClass: HashLocationStrategy },
+        { provide: LocationStrategy, useClass: PathLocationStrategy },
+        { provide: APP_BASE_HREF, useValue: '/v4/' },
         { provide: EntityListModuleConfigToken, useValue: entityListModuleConfig },
         { provide: LoginModuleOverrideAuthServiceToken, useValue: LoginConfigOverride },
         { provide: LoginModuleConfigToken, useValue: LoginConfigOverride },

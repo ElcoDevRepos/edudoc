@@ -1,7 +1,10 @@
-# SQL Server Database Project ignores
+# =============================================================================
+# Database - SQL Server Database Project
+# =============================================================================
+
+# SQL Server Database Project files
 *.dbmdl
 *.jfm
-*.user
 *.dacpac
 *.sqlproj.user
 
@@ -9,15 +12,19 @@
 [Dd]ebug/
 [Rr]elease/
 x64/
+x86/
 build/
 [Bb]in/
 [Oo]bj/
 
-# Visual Studio cache/options
-.vs/
-*.suo
-*.dtbcache
-*.dtbcache.json
-
 # SSDT schema compare
 *.scmp
+
+# SQL Server data files (if accidentally added)
+*.mdf
+*.ldf
+*.bak
+
+# SSMS temp files
+*.sql~
+*~

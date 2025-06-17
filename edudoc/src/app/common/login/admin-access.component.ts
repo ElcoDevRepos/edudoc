@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@mt-ng2/auth-module';
 import { NotificationsService } from '@mt-ng2/notifications-module';
 import { loginSuccessHandler } from './login.library';
+import { ILoginResponse } from '@mt-ng2/auth-module';
 
 @Component({
     selector: 'app-admin-access',
@@ -32,7 +33,7 @@ export class AdminAccessComponent implements OnInit {
         this.authService.adminAccess(this.resetKey).subscribe(
             (answer) => {
                 this.success();
-                loginSuccessHandler({ router: this.router, loginResponse: answer });
+                this.handleLoginSuccess(answer);
             },
             (error) => {
                 if (error.status === 418) {
@@ -60,5 +61,9 @@ export class AdminAccessComponent implements OnInit {
 
     success(): void {
         this.notificationsService.success('Welcome Miles User!');
+    }
+
+    private handleLoginSuccess(loginResponse: ILoginResponse): void {
+        void loginSuccessHandler({ router: this.router, loginResponse: loginResponse });
     }
 }
