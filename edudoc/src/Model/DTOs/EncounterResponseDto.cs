@@ -48,6 +48,7 @@ namespace Model.DTOs
         public string SupervisorName {get; set;}
         public string SupervisorTitle {get; set;}
         public string SupervisorLicenseNumber {get; set;}
+        public bool Archived { get; set; }
     }
 
     public class CptCodeWithMinutesDto
