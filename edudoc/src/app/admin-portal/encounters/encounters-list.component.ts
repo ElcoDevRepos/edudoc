@@ -259,6 +259,10 @@ export class EncounterComponent implements OnInit {
         return this.providerService
             .searchProviders({
                 query: searchText,
+                extraParams: [new ExtraSearchParams({
+                    name: 'archivedstatus',
+                    valueArray: [1, 0],
+                })]
             })
             .pipe(
                 debounceTime(300),
