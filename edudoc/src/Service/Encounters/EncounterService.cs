@@ -1,5 +1,4 @@
 using Service.Core.Utilities;
-using Service.Core.Utilities;
 using BreckServiceBase.Utilities.Interfaces;
 using DocumentFormat.OpenXml.ExtendedProperties;
 using FluentValidation;
@@ -19,6 +18,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Text;
+using Service.Common.SearchUtilities;
 
 namespace Service.Encounters
 {
@@ -114,7 +114,7 @@ namespace Service.Encounters
         public (IEnumerable<EncounterResponseDto> encounters, int count) SearchForEncounters(Model.Core.CRUDSearchParams csp, int? userId = null)
         {
             var serviceAreaWithMethods = new int[] { (int)ServiceCodes.Speech_Therapy, (int)ServiceCodes.Audiology };
-            var baseQuery = _context.EncounterStudents.Where(es => !es.Archived && !es.Encounter.Archived).AsQueryable();
+            var baseQuery = _context.EncounterStudents.Where(es => !es.Encounter.Archived).AsQueryable();
 
             if (!CommonFunctions.IsBlankSearch(csp.Query))
             {
@@ -135,6 +135,12 @@ namespace Service.Encounters
             if (!string.IsNullOrEmpty(csp.extraparams))
             {
                 var extras = System.Web.HttpUtility.ParseQueryString(WebUtility.UrlDecode(csp.extraparams));
+                var extraParamLists = SearchStaticMethods.GetBoolListFromExtraParams(csp.extraparams, "archivedstatus");
+
+                var accessStatusList = extraParamLists["archivedstatus"];
+
+                if (accessStatusList.Count > 0)
+                    baseQuery = baseQuery.Where(encounterStudent => accessStatusList.Contains(encounterStudent.Archived));
 
                 // if school district admin, only get encounters from that school district
                 var user = userId != null ? _context.Users.FirstOrDefault(u => u.Id == userId) : null;
@@ -329,6 +335,7 @@ namespace Service.Encounters
                             IsTelehealth = s.IsTelehealth,
                             DateESigned = s.DateESigned,
                             Location = s.EncounterLocation.Name,
+                            Archived = s.Archived
                         }
                     }).AsEnumerable().Select(s =>
                     {
