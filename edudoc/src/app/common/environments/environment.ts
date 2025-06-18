@@ -17,5 +17,5 @@ export const environment = {
     production: false,
     siteName: 'edudoc',
     submitHelpUrl: '',
-    v5FrontendUrl: 'http://localhost:4201/auth-test'
+    v5FrontendUrl: 'http://localhost:4201/v5'
 };

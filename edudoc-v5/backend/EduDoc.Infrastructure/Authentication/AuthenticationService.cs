@@ -21,14 +21,14 @@ namespace EduDoc.Infrastructure.Authentication
         public Task<ClaimsPrincipal?> ValidateTokenAsync(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtSettings.Key);
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.JWTKey);
 
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = true,
-                ValidIssuer = _jwtSettings.Issuer,
+                ValidIssuer = _jwtSettings.JWTIssuer,
                 ValidateAudience = false, // Legacy app doesn't validate audience
                 ClockSkew = TimeSpan.Zero
             };

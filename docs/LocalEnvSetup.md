@@ -101,22 +101,6 @@ npm install -g pnpm
    mkdir C:\Templates
    ```
 
-2. **Local Development Files Setup**
-   - Several files need specific configurations for local development. Check out these files from the `local-dev-setup` branch:
-     ```powershell
-     git checkout local-dev-setup -- edudoc/src/API/Common/Base/Startup.cs
-     git checkout local-dev-setup -- edudoc/src/API/Program.cs
-     git checkout local-dev-setup -- database/SQL/Script.PostDeployment.TableValues.sql
-     ```
-   - These files contain necessary modifications for running the application in a local development environment
-
-   Optional: If you don't want these files to show up in your git change history, you can tell git to ignore changes to them:
-     ```powershell
-     git update-index --skip-worktree edudoc/src/API/Common/Base/Startup.cs
-     git update-index --skip-worktree edudoc/src/API/Program.cs
-     git update-index --skip-worktree database/SQL/Script.PostDeployment.TableValues.sql
-     ```
-
 ### 9. Set Up Local Database Instance
 
 1. **Create LocalDB Instance**
@@ -203,7 +187,7 @@ npm install -g pnpm
 ### 13. Access and Test the Applications
 
 1. **Log into the Legacy Application**
-   - Navigate to http://localhost:4200 in your browser
+   - Navigate to http://localhost:4200/v4 in your browser
    - Log in with the following credentials:
      - Username: admin
      - Password: mN5)TV75K8[6v3y

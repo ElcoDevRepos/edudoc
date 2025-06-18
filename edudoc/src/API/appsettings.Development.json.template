@@ -14,14 +14,15 @@
     },
     "AdminSite": "http://localhost:4200",
     "AllowedHosts": "*",
-    "MobileOrigins": "http://localhost,http://localhost:8100,ionic://localhost,https://localhost,ionic://localhost:8100,https://localhost:8100",
+    "MobileOrigins": "http://localhost",
     "ResetEndpoint": "/#/resetpassword",
     "AdminAccessEndpoint": "/#/adminaccess",
     "DocsRootDir": "../../../docs/",
     "ImageDir": "../../../docs/images/",
     "DefaultEmailFrom": "no-reply@milesapp.com",
+    "KeyVaultUri": "",
     "jwtSettings": {
-        "JWTKey": "wwZpJHJOnkwWq2fnMLdOgFeCGcrVyPzOMfnPm0vVasmNl8HC0vg0Q4x7oITCQCHy",
+        "JWTKey": "aTVhzdvJrQkB6q0721OER+wljtVR6Dke4vJv/n5LTo8SjyttIw+koURJrf/VYeoLZrh9fnZvYPfcgobEm6Hj0g==",
         "JWTIssuer": "self",
         "JWTAccessMinutes": "480"
     },
