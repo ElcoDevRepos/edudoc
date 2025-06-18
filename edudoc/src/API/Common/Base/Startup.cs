@@ -66,9 +66,11 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            var adminSite = Configuration["AdminSite"];
+            string[] mobileOrigins = Configuration["MobileOrigins"].Split(',');
+            string[] adminSite = [Configuration["AdminSite"]];
+            string[] corsSites = [.. adminSite, .. mobileOrigins];
             app.UseCors(builder =>
-                        builder.WithOrigins(adminSite)
+                        builder.WithOrigins(corsSites)
                               .AllowAnyHeader()
                               .AllowAnyMethod()
                               .AllowCredentials()

@@ -181,5 +181,37 @@ By default, Azure App Services enable a feature called ARR Affinity (also known 
     *   Set the **Session affinity** option to **Off**.
     *   Click **Save**.
 
+### 13. Secure Backend App Services (IMPORTANT)
+To ensure that your backend App Services can only be reached through the Application Gateway, you must configure network access restrictions. This prevents users from bypassing the gateway and accessing the backend applications directly via their `*.azurewebsites.net` URLs.
+
+**1. Get the Application Gateway's Public IP Address**
+If you don't have it already, get the public IP of your gateway.
+```powershell
+az network public-ip show --name pip-appgateway-test --resource-group rg-test-eastus2-EduDoc --query ipAddress --output tsv
+```
+
+**2. Apply Access Restrictions**
+For **each of the four backend/frontend App Services**, perform the following steps. The example below uses the legacy backend (`app-edudoc-backend-test`).
+
+```powershell
+# Get the IP Address and add /32 to make it a valid CIDR block
+$AppGatewayIp = (az network public-ip show --name pip-appgateway-test --resource-group rg-test-eastus2-EduDoc --query ipAddress --output tsv)
+$AppGatewayCidr = "$AppGatewayIp/32"
+
+# Add a rule to ALLOW traffic from the Application Gateway IP
+# The priority 100 makes this rule evaluate first.
+az webapp config access-restriction add --resource-group rg-test-eastus2-EduDoc --name app-edudoc-backend-test --rule-name "Allow-AppGateway" --action Allow --ip-address $AppGatewayCidr --priority 100
+
+# NOTE: Azure automatically adds an implicit "Deny All" rule with the lowest priority.
+# By adding an "Allow" rule, you are implicitly denying all other traffic.
+# You must repeat this for all four App Services:
+# - app-edudoc-backend-test
+# - app-edudoc-frontend-test
+# - app-edudoc-v5-backend-test
+# - app-edudoc-v5-frontend-test
+```
+
+After applying these rules, any attempt to access an App Service directly via its `azurewebsites.net` URL will be blocked with a `403 Forbidden` error, while traffic flowing through the Application Gateway will be allowed.
+
 
 

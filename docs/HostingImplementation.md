@@ -39,6 +39,9 @@
   - [x] Angular build and deployment steps
   - [x] Environment-specific configuration
   - [x] Successfully deployed and tested
+- [ ] **Security and Configuration**
+  - [ ] Store `jwtSettings--JWTKey` for v4 backend in Azure Key Vault
+  - [ ] Configure v4 backend App Service to read secrets from Key Vault
 - [ ] **Domain and Routing Configuration** _(Current Focus)_
   - [ ] Set up Application Gateway
   - [ ] Configure custom domain (hpc-edudoc-test.net)
@@ -143,4 +146,5 @@
 - **Backend App Service will host both .NET API and WebJobs**
 - **Single domain (hpc-edudoc-test.net) with path-based routing**
 - **Application Gateway for routing management**
-- **Version-specific base paths (/v4, /v5)** 
+- **Version-specific base paths (/v4, /v5)**
+- **Application secrets (e.g., JWTKey) must be stored in Azure Key Vault, not in `appsettings.json`. Secret names in Key Vault should use a `Parent--Child` convention (e.g., `jwtSettings--JWTKey`) to map to nested JSON objects.** 

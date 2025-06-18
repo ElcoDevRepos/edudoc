@@ -1,11 +1,8 @@
 {
-  "ConnectionStrings": {
-    "DefaultConnection": ""
-  },
   "Logging": {
     "LogLevel": {
-      "Default": "Information",
-      "Microsoft": "Warning",
+      "Default": "Debug",
+      "Microsoft": "Information",
       "Microsoft.Hosting.Lifetime": "Information"
     },
     "ApplicationInsights": {
@@ -18,12 +15,13 @@
   "AllowedHosts": "*",
   "KeyVaultUri": "",
   "jwtSettings": {
-    "JWTKey": "",
+    "JWTKey": "aTVhzdvJrQkB6q0721OER+wljtVR6Dke4vJv/n5LTo8SjyttIw+koURJrf/VYeoLZrh9fnZvYPfcgobEm6Hj0g==",
     "JWTIssuer": "self",
-    "JWTAccessMinutes": "480"
+    "JWTAccessMinutes": 480
   },
   "CorsSettings": {
     "AllowedOrigins": [
+      "http://localhost:4201"
     ],
     "ExposedHeaders": [
       "X-List-Count",
@@ -31,6 +29,6 @@
     ]
   },
   "ApplicationInsights": {
-    "ConnectionString": "InstrumentationKey=2643e26d-0f8d-4df4-b953-c93dceb10b1c;IngestionEndpoint=https://eastus2-3.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus2.livediagnostics.monitor.azure.com/;ApplicationId=ed4462af-00fa-488c-a30b-627e62bec8f0"
+    "ConnectionString": "InstrumentationKey=03f4c24d-222c-4315-be9d-33e9b4cc9e8c;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/;ApplicationId=babf0dfe-667c-49e1-b73c-fc2a5c6220ee"
   }
 }

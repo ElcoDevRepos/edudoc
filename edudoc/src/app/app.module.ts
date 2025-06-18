@@ -60,7 +60,9 @@ export const entityListModuleConfig: IEntityListModuleConfig = {
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    CookieModule.forRoot(),
+    CookieModule.withOptions({
+        path: '/'
+    }),
     HttpClientModule,
     NgProgressModule.withConfig({
         color: '#ff8b56',

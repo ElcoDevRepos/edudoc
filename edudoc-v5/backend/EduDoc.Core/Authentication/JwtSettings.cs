@@ -4,10 +4,9 @@ namespace EduDoc.Core.Authentication
 {
     public class JwtSettings
     {
-        public required string Key { get; set; }
-        public required string Issuer { get; set; }
-        public required string Audience { get; set; }
-        public int AccessMinutes { get; set; }
+        public string JWTKey { get; set; } = string.Empty;
+        public string JWTIssuer { get; set; } = string.Empty;
+        public string JWTAccessMinutes { get; set; } = string.Empty;
 
         // Constants matching actual JWT claims from live application
         public static class ClaimTypes

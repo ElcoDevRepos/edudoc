@@ -13,7 +13,7 @@ export interface TestResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = `${environment.apiUrl}/TestAuth`;
+  private baseUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
@@ -21,11 +21,11 @@ export class AuthService {
   ) { }
 
   testPublicEndpoint(): Observable<TestResponse> {
-    return this.http.get<TestResponse>(`${this.baseUrl}/public`);
+    return this.http.get<TestResponse>(`${this.baseUrl}/TestAuth/public`);
   }
 
   testAuthenticatedEndpoint(): Observable<TestResponse> {
-    return this.http.get<TestResponse>(`${this.baseUrl}/authenticated`);
+    return this.http.get<TestResponse>(`${this.baseUrl}/TestAuth/authenticated`);
   }
 
   getCurrentUser(): { name: string, email: string } | null {
