@@ -128,6 +128,7 @@ namespace API.Providers
 
         [HttpGet]
         [Route("searchProviders")]
+        [Restrict(ClaimValues.ReadOnly | ClaimValues.FullAccess)]
         public IEnumerable<SelectOptions> SearchProviders([FromQuery] Model.Core.CRUDSearchParams csp)
         {
             var cspFull = new Model.Core.CRUDSearchParams<Provider>(csp);
@@ -157,11 +158,21 @@ namespace API.Providers
                 }
             }
 
-            if(!string.IsNullOrEmpty(csp.extraparams)) {
+            var user = Crudservice.GetById<User>(this.GetUserId());
+
+            var districtId = user.SchoolDistrictId;
+
+            if (districtId.HasValue)
+                cspFull.AddedWhereClause.Add(p =>
+                        p.ProviderUser.SchoolDistrictId == districtId ||
+                        p.ProviderEscAssignments.Any(pea => pea.ProviderEscSchoolDistricts.Any(peasd => peasd.SchoolDistrictId == districtId)));
+
+            if (!string.IsNullOrEmpty(csp.extraparams)) {
                 var extras = System.Web.HttpUtility.ParseQueryString(WebUtility.UrlDecode(csp.extraparams));
-                if(extras["districtIds"] != null) {
+                if(extras["districtIds"] != null && !districtId.HasValue) {
                     var districtIds = CommonFunctions.GetIntListFromExtraParams(csp.extraparams,"districtIds")["districtIds"];
                     cspFull.AddedWhereClause.Add(p =>
+                            (p.ProviderUser.SchoolDistrictId.HasValue && districtIds.Contains(p.ProviderUser.SchoolDistrictId.Value)) ||
                             p.ProviderEscAssignments.Any(pea =>
                                 pea.ProviderEscSchoolDistricts.Any(peasd => districtIds.Contains(peasd.SchoolDistrictId))));
                 }

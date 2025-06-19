@@ -14,6 +14,7 @@ import { IProviderAccessChangeRequest } from './libraries/dtos/revoke-access.dto
 import { ISchoolDistrictProviderCaseNote } from '@model/interfaces/school-district-provider-case-note';
 
 export const emptyProvider: IProvider = {
+    Name: '',
     Archived: null,
     CreatedById: 0,
     Id: 0,
