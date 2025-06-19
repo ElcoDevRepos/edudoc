@@ -19,7 +19,7 @@ build/
 
 # Visual Studio cache/options
 .vs/
-*.suoAdd commentMore actions
+*.suo
 *.dtbcache
 *.dtbcache.json
 
