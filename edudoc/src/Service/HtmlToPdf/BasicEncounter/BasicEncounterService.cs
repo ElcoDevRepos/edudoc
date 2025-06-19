@@ -105,10 +105,11 @@ namespace Service.HtmlToPdf
                 }
                 if (extras["IsDistrictAdminReport"] == "1")
                 {
-                    providerIds = _context.Providers
-                                    .Where(p => !p.Archived && serviceCodeIds.Contains(p.ProviderTitle.ServiceCodeId))
-                                    .Select(p => p.Id)
-                                    .ToList();
+                    if (!providerIds.Any())
+                        providerIds = _context.Providers
+                                        .Where(p => !p.Archived && serviceCodeIds.Contains(p.ProviderTitle.ServiceCodeId))
+                                        .Select(p => p.Id)
+                                        .ToList();
                     districtIds = new List<int>() { _context.Users.Where(u => u.Id == userId).Select(u => u.SchoolDistrictId).Single().Value };
                 }
 

@@ -71,18 +71,6 @@ export const schoolDistrictAdminNavMenu: (NavSidebarRowItem | NavSidebarParentRo
                 link: '/school-district-admin/activity-summary',
             }),
             new NavSidebarRowItem({
-                claimType: ClaimTypes.EncounterReportingByStudent,
-                content: 'Encounters By Student',
-                icon: 'fa fa-fw fa-list',
-                link: '/school-district-admin/encounters-by-student',
-            }),
-            new NavSidebarRowItem({
-                claimType: ClaimTypes.EncounterReportingByTherapist,
-                content: 'Encounters By Therapist',
-                icon: 'fa fa-fw fa-list',
-                link: '/school-district-admin/encounters-by-therapist',
-            }),
-            new NavSidebarRowItem({
                 claimType: ClaimTypes.DistrictActivitySummaryByServiceArea,
                 content: '90-Day MSP Progress Reports',
                 icon: 'fa fa-fw fa-list',
