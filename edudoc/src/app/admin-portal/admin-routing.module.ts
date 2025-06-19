@@ -23,13 +23,10 @@ import { escRoutes } from './escs/esc-routing.library';
 import { evaluationTypesRoutes } from './evaluation-type-management/evaluation-types-routing.library';
 import { goalRoutes } from './goals/goal-routing.library';
 import { managedListRoutes } from './managed-list-items/managed-list-items-routes.library';
-import { messageDocumentRoutes } from './message/message-documents/message-document-routing.library';
-import { messageLinkRoutes } from './message/message-links/message-link-routing.library';
 import { messageRoutes } from './message/messages/message-routing.library';
 import { myReasonsForReturnRoutes } from './my-reasons-for-return-management/my-reasons-for-return-routing.library';
 import { attestationsRoutes } from './provider-attestations/provider-attestations-routes.library';
 import { providerTitleRoutes } from './provider-titles/provider-title-routing.library';
-import { providerTrainingRoutes } from './provider-trainings/provider-trainings-routes.library';
 import { providerRoutes } from './providers/provider-routing.library';
 import { fiscalReportRoutes } from './reports/reports-routes.library';
 import { rosterValidationRoutes } from './roster-validations/roster-validation-routes.library';
@@ -80,14 +77,11 @@ const adminRoutes: Routes = [
                 redirectTo: appPaths.myProfile,
             },
             ...attestationsRoutes,
-            ...providerTrainingRoutes,
             ...cptCodeRoutes,
             ...diagnosisCodeRoutes,
             ...escRoutes,
             ...evaluationTypesRoutes,
             ...goalRoutes,
-            ...messageDocumentRoutes,
-            ...messageLinkRoutes,
             ...messageRoutes,
             ...providerTitleRoutes,
             ...providerRoutes,
