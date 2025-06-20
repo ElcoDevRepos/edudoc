@@ -21,14 +21,11 @@ import { EscModule } from './escs/esc.module';
 import { EvaluationTypesModule } from './evaluation-type-management/evaluation-types.module';
 import { GoalModule } from './goals/goal.module';
 import { ManagedListItemsModule } from './managed-list-items/managed-list-items.module';
-import { MessageDocumentModule } from './message/message-documents/message-document.module';
-import { MessageLinkModule } from './message/message-links/message-link.module';
 import { MessageModule } from './message/messages/messages.module';
 import { MyReasonsForReturnModule } from './my-reasons-for-return-management/my-reasons-for-return.module';
 import { AppNavModule } from './nav/admin-nav.module';
 import { ProviderAttestationsModule } from './provider-attestations/provider-attestations.module';
 import { ProviderTitleModule } from './provider-titles/provider-title.module';
-import { ProviderTrainingsModule } from './provider-trainings/provider-trainings.module';
 import { ProviderModule } from './providers/provider.module';
 import { ReportsModule } from './reports/reports.module';
 import { RosterValidationModule } from './roster-validations/roster-validation.module';
@@ -66,8 +63,6 @@ import { DataImportModule } from './data-import/data-import.module';
         BillingReversalsModule,
         AuditsModule,
         ManagedListItemsModule,
-        MessageLinkModule,
-        MessageDocumentModule,
         MessageModule,
         ProviderTitleModule,
         ProviderModule,
@@ -83,7 +78,6 @@ import { DataImportModule } from './data-import/data-import.module';
         AdminRoutingModule,
         ServiceUnitRuleModule,
         ProviderAttestationsModule,
-        ProviderTrainingsModule,
         AppNavModule.forRoot(),
         SharedModule,
         ReportsModule,
