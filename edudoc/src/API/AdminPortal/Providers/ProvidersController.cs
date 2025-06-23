@@ -67,18 +67,38 @@ namespace API.Providers
 
         [HttpGet]
         [Route("select-options/by-district/{districtId:int}")]
-        public IEnumerable<SelectOptions> GetSelectOptionsByDistrictId(int districtId)
+        [Restrict(ClaimValues.ReadOnly | ClaimValues.FullAccess)]
+        public IEnumerable<SelectOptions> GetSelectOptionsByDistrictId(int districtId, [FromQuery] Model.Core.CRUDSearchParams csp)
         {
-            var cspFull = new Model.Core.CRUDSearchParams<Provider>
+            var cspFull = new Model.Core.CRUDSearchParams<Provider>(csp)
             {
                 StronglyTypedIncludes = new Model.Core.IncludeList<Provider>
-            {
-                p => p.ProviderUser,
-            },
+                {
+                    p => p.ProviderUser,
+                },
                 DefaultOrderBy = "ProviderUser.LastName"
             };
-            cspFull.AddedWhereClause.Add(provider => provider.ProviderEscAssignments.Any(pe => pe.ProviderEscSchoolDistricts
-                .Any(pesd => pesd.SchoolDistrictId == districtId) && !pe.Archived));
+
+            cspFull.AddedWhereClause.Add(provider =>
+                provider.ProviderUser.SchoolDistrictId == districtId ||
+                provider.ProviderEscAssignments.Any(pe => pe.ProviderEscSchoolDistricts
+                .Any(pesd => pesd.SchoolDistrictId == districtId)));
+
+            var archivedStatusFiltered = false;
+            if (!string.IsNullOrEmpty(csp.extraparams))
+            {
+                var extras = System.Web.HttpUtility.ParseQueryString(WebUtility.UrlDecode(csp.extraparams));
+                var extraParamLists = SearchStaticMethods.GetBoolListFromExtraParams(csp.extraparams, "archivedstatus");
+
+                var accessStatusList = extraParamLists["archivedstatus"];
+
+                archivedStatusFiltered = accessStatusList.Count > 0;
+                if (archivedStatusFiltered)
+                    cspFull.AddedWhereClause.Add(p => accessStatusList.Contains(p.Archived));
+            }
+
+            if (!archivedStatusFiltered)
+                cspFull.AddedWhereClause.Add(p => !p.Archived); //Default provider search behavior
 
             return Crudservice.GetAll(cspFull).Select(provider =>
                 new SelectOptions
@@ -158,18 +178,9 @@ namespace API.Providers
                 }
             }
 
-            var user = Crudservice.GetById<User>(this.GetUserId());
-
-            var districtId = user.SchoolDistrictId;
-
-            if (districtId.HasValue)
-                cspFull.AddedWhereClause.Add(p =>
-                        p.ProviderUser.SchoolDistrictId == districtId ||
-                        p.ProviderEscAssignments.Any(pea => pea.ProviderEscSchoolDistricts.Any(peasd => peasd.SchoolDistrictId == districtId)));
-
             if (!string.IsNullOrEmpty(csp.extraparams)) {
                 var extras = System.Web.HttpUtility.ParseQueryString(WebUtility.UrlDecode(csp.extraparams));
-                if(extras["districtIds"] != null && !districtId.HasValue) {
+                if(extras["districtIds"] != null) {
                     var districtIds = CommonFunctions.GetIntListFromExtraParams(csp.extraparams,"districtIds")["districtIds"];
                     cspFull.AddedWhereClause.Add(p =>
                             (p.ProviderUser.SchoolDistrictId.HasValue && districtIds.Contains(p.ProviderUser.SchoolDistrictId.Value)) ||

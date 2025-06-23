@@ -14,7 +14,6 @@ import { IProviderAccessChangeRequest } from './libraries/dtos/revoke-access.dto
 import { ISchoolDistrictProviderCaseNote } from '@model/interfaces/school-district-provider-case-note';
 
 export const emptyProvider: IProvider = {
-    Name: '',
     Archived: null,
     CreatedById: 0,
     Id: 0,
@@ -93,8 +92,8 @@ export class ProviderService extends BaseService<IProvider> {
         return this.http.post<ISelectOptions[]>(`/providers/select-options/by-escs`, escIds).pipe(catchError((err, caught) => this.handleError(err as Response, caught)));
     }
 
-    getSelectOptionsByDistrictId(districtId: number): Observable<ISelectOptions[]> {
-        return this.http.get<ISelectOptions[]>(`/providers/select-options/by-district/${districtId}`).pipe(catchError((err, caught) => this.handleError(err as Response, caught)));
+    getSelectOptionsByDistrictId(districtId: number, csp?: SearchParams): Observable<ISelectOptions[]> {
+        return this.http.get<ISelectOptions[]>(`/providers/select-options/by-district/${districtId}`, csp ? { params: this.getHttpParams(csp) } : {}).pipe(catchError((err, caught) => this.handleError(err as Response, caught)));
     }
 
     setSearchEntity(search: IEntitySearchParams): void {

@@ -29,7 +29,6 @@ import { IProviderTitle } from './provider-title';
 import { IUser } from './user';
 
 export interface IProvider extends IEntity {
-    Name: string;
     ProviderUserId: number;
     TitleId: number;
     VerifiedOrp: boolean;
