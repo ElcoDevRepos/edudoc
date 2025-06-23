@@ -335,6 +335,7 @@ namespace API.SchoolDistricts
             return Ok(_schoolDistrictService.UpdateCaseNotesRequired(districtId, providerTitleIds));
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
 
         [HttpGet("{id}")]
         public IActionResult GetSchoolDistrictById(int id)

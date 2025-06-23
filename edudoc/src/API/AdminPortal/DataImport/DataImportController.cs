@@ -92,6 +92,8 @@ namespace API.AdminPortal.DataImport
 
         [HttpPost]
         [Route("convert")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+
         public async Task<IActionResult> ConvertPartnerFiles([FromQuery] string partner, [FromForm] IFormFile studentFile, [FromForm] IFormFile serviceFile)
         {
             if (string.IsNullOrWhiteSpace(partner))

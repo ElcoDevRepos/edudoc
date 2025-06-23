@@ -1,4 +1,39 @@
 /* You can add global styles to this file, and also import other style files */
 
+// Design tokens - import first so they're available everywhere
+@use 'styles/design-tokens' as *;
+
+// Quill editor styles
+@use 'quill/dist/quill.core.css' as quill-core;
+@use 'quill/dist/quill.snow.css' as quill-snow;
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// Custom Quill editor styling
+.case-notes-quill {
+  .ql-editor {
+    min-height: 120px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  .ql-toolbar {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    background-color: #f8f9fa;
+  }
+  
+  .ql-container {
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+  }
+  
+  .ql-editor.ql-blank::before {
+    color: #999;
+    font-style: italic;
+  }
+}

@@ -13,6 +13,7 @@ import { EncounterService } from './services/encounter.service';
 import { ReturnEncountersComponent } from './components/return-encounters/return-encounters.component';
 import { EvaluationHeaderComponent } from './components/evaluations/evaluation-header/evaluation-header.component';
 import { EvaluationDetailComponent } from './components/evaluations/evaluation-detail/evaluation-detail.component';
+import { V5WrapperComponent } from '../../admin-portal/v5-wrapper/v5-wrapper.component';
 
 const encounterEntityConfig = {
     claimType: ClaimTypes.Encounters,
@@ -101,6 +102,7 @@ export const encountersPaths = {
 
 export const encounterTreatmentTherapyPaths = {
     add: `encounters/treatment-therapy`,
+    addV5: `encounters/new-treatment-therapy`,
     header: `encounters/treatment-therapy/:${encounterEntityConfig.entityIdParam}`,
     landing: `encounters/treatment-therapy/success/:${encounterEntityConfig.entityIdParam}`
 }
@@ -287,6 +289,12 @@ export const encounterTreatmentTherapyRoutes: Routes = [
         component: EncounterHeaderComponent,
         data: encounterAddTreatmentTherapyRoleGuard,
         path: encounterTreatmentTherapyPaths.add,
+    },
+    {
+        canActivate: [AuthGuard],
+        component: V5WrapperComponent,
+        data: encounterAddTreatmentTherapyRoleGuard,
+        path: encounterTreatmentTherapyPaths.addV5,
     },
     {
         canActivate: [AuthGuard],
