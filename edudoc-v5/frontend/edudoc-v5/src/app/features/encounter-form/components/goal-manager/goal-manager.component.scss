@@ -1,0 +1,252 @@
+@use '../../../../../styles/design-tokens' as *;
+
+.goal-manager-dialog {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .goal-manager-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-md $spacing-lg;
+    border-bottom: 1px solid $border-color;
+    background-color: $background-white;
+
+    .close-button {
+      margin-left: $spacing-md;
+      flex-shrink: 0;
+    }
+  }
+
+  .dialog-content {
+    flex: 1;
+    padding: 0 !important;
+    overflow: hidden;
+
+    .single-column-layout {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .search-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: $spacing-lg $spacing-xl 0;
+        border-bottom: 1px solid $border-color;
+        background-color: $background-light;
+
+        .search-field {
+          flex: 1;
+          max-width: 400px;
+          margin-right: $spacing-md;
+        }
+
+        .selected-summary {
+          display: flex;
+          align-items: center;
+          gap: $spacing-xs;
+          color: #2e7d32;
+          font-weight: $font-weight-medium;
+          padding-bottom: $spacing-lg;
+
+          mat-icon {
+            color: #4caf50;
+          }
+        }
+      }
+
+      .goals-container {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: $spacing-md $spacing-lg;
+        min-height: 0; // This ensures flex child can shrink
+        max-height: calc(100vh - 160px); // Reserve space for header and footer
+
+        .goal-card {
+          margin-bottom: $spacing-sm;
+          transition: all 0.3s ease;
+          border: 1px solid $border-color;
+          border-radius: $border-radius;
+          background-color: $background-white;
+          overflow: hidden;
+          
+          &:hover {
+            border-color: #ccc;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          }
+          
+          &.selected {
+            border-left: 4px solid $primary-blue;
+            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+            
+            .goal-header {
+              background-color: #f3f8ff;
+            }
+          }
+          
+          .goal-header {
+            display: flex;
+            align-items: center;
+            padding: $spacing-md;
+            cursor: default;
+            transition: $transition-fast;
+            
+            .goal-checkbox {
+              margin-right: $spacing-md;
+              flex-shrink: 0;
+            }
+            
+            .goal-content {
+              flex: 1;
+              display: flex;
+              align-items: center;
+              min-height: $spacing-xl;
+              
+              .goal-description {
+                font-size: $font-size-md;
+                font-weight: $font-weight-medium;
+                line-height: $line-height-tight;
+                color: #333;
+                margin: 0;
+                word-wrap: break-word;
+              }
+            }
+          }
+          
+          .goal-form-section {
+            border-top: 1px solid $border-color;
+            background-color: #f9f9f9;
+            
+            .form-fields {
+              padding: $spacing-lg;
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: $spacing-md;
+              
+              .notes-field {
+                grid-column: 1 / -1;
+              }
+              
+              mat-form-field {
+                width: 100%;
+              }
+            }
+          }
+        }
+
+        .empty-state {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          height: 200px;
+          text-align: center;
+          color: $text-disabled;
+
+          mat-icon {
+            font-size: 48px;
+            width: 48px;
+            height: 48px;
+            margin-bottom: $spacing-md;
+            color: #ccc;
+          }
+
+                      p {
+              margin: $spacing-xs 0;
+              font-size: $font-size-md;
+
+              &.help-text {
+                font-size: $font-size-base;
+                color: #bbb;
+              }
+            }
+        }
+      }
+    }
+  }
+
+  .dialog-actions {
+    padding: $spacing-sm $spacing-lg !important;
+    border-top: 1px solid $border-color;
+    background-color: $background-white;
+    margin: 0;
+
+    button {
+      margin-left: $spacing-sm;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+// Responsive design for smaller screens
+@media (max-width: $breakpoint-tablet) {
+  .goal-manager-dialog {
+    .dialog-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-sm;
+      padding: $spacing-md $spacing-lg;
+      
+      .close-button {
+        align-self: flex-end;
+        position: absolute;
+        top: $spacing-xs;
+        right: $spacing-xs;
+        margin-left: 0;
+      }
+    }
+    
+    .dialog-content {
+      .single-column-layout {
+        .search-header {
+          flex-direction: column;
+          align-items: stretch;
+          padding: $spacing-md $spacing-lg $spacing-sm;
+
+          .search-field {
+            max-width: none;
+            margin-right: 0;
+          }
+
+          .selected-summary {
+            justify-content: center;
+            padding-bottom: 0;
+          }
+        }
+
+        .goals-container {
+          padding: $spacing-sm $spacing-md;
+          max-height: calc(100vh - 200px); // Adjust for mobile header
+
+          .goal-card {
+            .goal-form-section {
+              .form-fields {
+                grid-template-columns: 1fr;
+                padding: $spacing-md;
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    .dialog-actions {
+      padding: $spacing-sm $spacing-md;
+    }
+  }
+}
+

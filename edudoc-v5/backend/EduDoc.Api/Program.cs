@@ -1,7 +1,6 @@
 using Azure.Identity;
-using EduDoc.Api.Configuration;
-using EduDoc.Core.Authentication;
-using EduDoc.Infrastructure.Authentication;
+using EduDoc.Api.Infrastructure.Auth;
+using EduDoc.Api.Infrastructure.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -9,6 +8,13 @@ using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using EduDoc.Api.Endpoints.Encounters.Repositories;
+using MediatR;
+using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
+using EduDoc.Api.Endpoints.Encounters;
+using EduDoc.Api.Endpoints.Encounters.Queries;
+using EduDoc.Api.EF;
 
 try
 {
@@ -27,6 +33,10 @@ try
 
     var loggerFactory = LoggerFactory.Create(logging =>
     {
+        logging.Configure(options =>
+        {
+            options.ActivityTrackingOptions = ActivityTrackingOptions.TraceId | ActivityTrackingOptions.SpanId;
+        });
         logging.AddConsole();
         logging.SetMinimumLevel(LogLevel.Debug);
         logging.AddApplicationInsights(
@@ -47,10 +57,20 @@ try
     builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
     builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
+    // Register MediatR
+    builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetEncounterByIdQuery).Assembly));
+
     // Add health checks
     builder.Services.AddHealthChecks();
 
-    var logger = loggerFactory.CreateLogger("Startup");
+    if (builder.Environment.EnvironmentName != "IntegrationTest")
+    {
+        builder.Services.AddDbContext<EdudocSqlContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    }
+
+    // Add application services
+    builder.Services.AddScoped<IEncounterRepository, EncounterRepository>();
 
     builder.Services.AddAuthentication(options =>
     {
@@ -62,32 +82,22 @@ try
         var jwtSettings = builder.Configuration.GetSection("jwtSettings").Get<JwtSettings>() 
             ?? throw new InvalidOperationException("JWT settings are not configured");
 
-        // --- START DEBUG: Log JWT settings to verify Key Vault connection ---
-        if (!string.IsNullOrEmpty(jwtSettings.JWTKey))
-        {
-            logger.LogWarning("JWTKey loaded with length: {KeyLength}", jwtSettings.JWTKey.Length);
-            logger.LogWarning("JWTIssuer loaded with value: {Issuer}", jwtSettings.JWTIssuer);
-        }
-        else
-        {
-            logger.LogWarning("JWTKey or JWTIssuer is NOT loaded correctly from configuration.");
-        }
-        // --- END DEBUG ---
-        
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.JWTKey)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.JWTKey)),
             ValidateIssuer = true,
             ValidIssuer = jwtSettings.JWTIssuer,
             ValidateAudience = false, // Legacy app uses "self" which doesn't match tokens
             ClockSkew = TimeSpan.Zero,
-            ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 }
+            ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 },
         };
     });
 
+    builder.Services.DIRegisterEncounters();
     builder.Services.AddAuthorization();
     builder.Services.AddControllers();
+
 
     // Add CORS configuration
     builder.Services.AddCors(options =>
@@ -115,7 +125,10 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(options =>
     {
-        options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "EduDoc API", Version = "v1" });
+        options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "EduDoc API", Version = "v5" });
+
+        options.AddServer(new OpenApiServer { Url = "/v5" });
+
         options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
         {
             Description = "Enter your JWT token below:",
@@ -144,12 +157,8 @@ try
 
     var app = builder.Build();
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Test"))
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     // Add CORS middleware before auth
     app.UseCors();
@@ -169,3 +178,6 @@ catch (Exception ex)
     Console.WriteLine($"Logger was null. {ex.ToString()}");
     throw;
 }
+
+// Make the Program class accessible to test projects
+public partial class Program { }

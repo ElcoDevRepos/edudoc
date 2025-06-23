@@ -161,6 +161,7 @@ namespace API.Auth
         [HttpPost]
         [Route("token")]
         [AllowAnonymous]
+
         public virtual IActionResult RequestToken([FromBody] LoginParams lp)
         {
             return ExecuteValidatedAction(() =>

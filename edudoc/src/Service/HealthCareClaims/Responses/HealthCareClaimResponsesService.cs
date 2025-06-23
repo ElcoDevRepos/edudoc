@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using Service.Auth.Models;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Service.HealthCareClaims
 {
@@ -28,13 +29,15 @@ namespace Service.HealthCareClaims
         private readonly IConfiguration _configuration;
         private readonly IEDIParser _parser;
         private readonly IDocumentHelper _documentHelper;
+        private readonly ILogger<HealthCareClaimResponsesService> _logger;
         private Dictionary<string, int> _ediErrorCodesDict;
 
         public HealthCareClaimResponsesService(IPrimaryContext context,
                                       IEmailHelper emailHelper,
                                       IConfigurationSettings configurationSettings,
                                       IDocumentHelper documentHelper,
-                                      IConfiguration configuration
+                                      IConfiguration configuration,
+                                      ILogger<HealthCareClaimResponsesService> logger
                                       ) : base(context, new ValidationService(context, emailHelper))
         {
             _ediErrorCodesDict = new Dictionary<string, int>();
@@ -44,6 +47,7 @@ namespace Service.HealthCareClaims
             _configurationSettings = configurationSettings;
             _configuration = configuration;
             _parser = new EDIParser();
+            _logger = logger;
         }
 
         public void HandleBillingResponseFileProcessing()
@@ -81,6 +85,7 @@ namespace Service.HealthCareClaims
             }
             catch (Exception e)
             {
+                this._logger.LogError(e, "Exception in ProcessHealthCareClaimResponse");
                 DiscardHealthCareClaimResponse(healthCareClaimResponseId, fileName, e);
                 return null;
             }

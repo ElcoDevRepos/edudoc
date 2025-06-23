@@ -1,0 +1,446 @@
+@use '../../../../../styles/design-tokens' as *;
+
+.encounter-details-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+mat-icon[matSuffix] {
+  cursor: help;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding: $spacing-md;
+  padding-bottom: $sticky-footer-height; 
+}
+
+mat-card-title {
+  padding-bottom: 10px;
+}
+
+.form-card {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: $spacing-md;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.student-add-row {
+  align-items: flex-start;
+}
+
+.form-field {
+  flex: 1 1 $form-field-min-width;
+}
+
+.form-field-time {
+  flex: 1 1 $form-field-time-width;
+}
+
+.sessions-table {
+  width: 100%;
+  
+  .mat-mdc-row {
+    cursor: pointer;
+    
+    &:hover {
+      background-color: $hover-background;
+    }
+  }
+  
+  .session-detail-row {
+    cursor: default;
+    
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+.session-row {
+  cursor: pointer;
+}
+
+.session-detail-row {
+  height: 0;
+}
+
+.session-detail {
+  overflow: hidden;
+
+  .session-detail-content {
+    padding: $spacing-xl 0;
+    background-color: $background-light;
+    
+    .deviation-select {
+      width: 100%;
+      max-width: none;
+      margin-bottom: $spacing-md;
+    }
+
+    .regular-expanded-content {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+      
+      .main-content-layout {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-2xl;
+        
+        @media (min-width: $breakpoint-tablet) {
+          flex-direction: row;
+          align-items: flex-start;
+          gap: $spacing-3xl;
+          
+          .left-section {
+            flex: 2;
+            min-width: 0;
+          }
+          
+          .right-section {
+            flex: 3;
+            min-width: 0;
+          }
+        }
+      }
+      
+      .managers {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-md;
+        
+        .manager-item {
+          background: $background-white;
+          border: 1px solid $border-color;
+          border-radius: $border-radius;
+          padding: $card-padding;
+          transition: $transition-fast;
+          box-shadow: $shadow-sm;
+          display: flex;
+          flex-direction: column;
+          min-height: $card-min-height;
+          
+          &.clickable-card {
+            cursor: pointer;
+            
+            &:hover {
+              border-color: $primary-blue;
+              box-shadow: $shadow-lg;
+              transform: $transform-hover;
+            }
+            
+            &:active {
+              transform: $transform-active;
+              box-shadow: $shadow-md;
+            }
+          }
+          
+          &:hover:not(.clickable-card) {
+            border-color: $primary-blue;
+            box-shadow: $shadow-md;
+            transform: $transform-active;
+          }
+          
+          .manager-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: $spacing-xs;
+            
+            h4 {
+              margin: 0;
+              font-size: $font-size-md;
+              font-weight: $font-weight-semibold;
+              color: $text-primary;
+            }
+            
+            .edit-button {
+              min-width: $icon-button-size;
+              width: $icon-button-size;
+              height: $icon-button-size;
+              padding: 0;
+              
+              mat-icon {
+                font-size: $icon-size-sm;
+                width: $icon-size-sm;
+                height: $icon-size-sm;
+              }
+            }
+          }
+          
+          .manager-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            
+            .count-text {
+              margin: 0 0 $spacing-xs 0;
+              font-size: $font-size-sm;
+              color: $text-secondary;
+              font-weight: $font-weight-medium;
+            }
+            
+            .selected-items {
+              flex: 1;
+              overflow: hidden;
+              
+              .item-list {
+                font-size: $font-size-xs;
+                color: $text-muted;
+                line-height: $line-height-tight;
+                max-height: 50px;
+                overflow-y: auto;
+                
+                .item {
+                  margin-bottom: 2px;
+                  
+                  &:last-child {
+                    margin-bottom: 0;
+                  }
+                }
+                
+                &::-webkit-scrollbar {
+                  width: $scrollbar-width;
+                }
+                
+                &::-webkit-scrollbar-track {
+                  background: #f1f1f1;
+                  border-radius: $border-radius-sm;
+                }
+                
+                &::-webkit-scrollbar-thumb {
+                  background: #c1c1c1;
+                  border-radius: $border-radius-sm;
+                  
+                  &:hover {
+                    background: #a8a8a8;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      .time-controls {
+        background: $background-white;
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        padding: $card-padding-lg $card-padding-lg 0;
+        box-shadow: $shadow-sm;
+        margin-bottom: $spacing-sm;
+        
+        .controls-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr auto;
+          gap: $card-padding-lg;
+          align-items: center;
+          
+          @media (max-width: $breakpoint-mobile) {
+            grid-template-columns: 1fr;
+            gap: $spacing-md;
+          }
+          
+          @media (max-width: $breakpoint-desktop) and (min-width: $breakpoint-tablet) {
+            grid-template-columns: 1fr 1fr;
+            
+            mat-slide-toggle {
+              grid-column: 1 / -1;
+              justify-self: start;
+            }
+          }
+          
+          mat-form-field {
+            width: 100%;
+          }
+          
+          .telehealth-toggle {
+            padding-bottom: $card-padding-lg;
+          }
+        }
+      }
+      
+      .case-notes-section {
+        background: $background-white;
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        padding: $card-padding-lg $card-padding-lg 0;
+        box-shadow: $shadow-sm;
+        
+        h4 {
+          margin: 0 0 $card-padding-lg 0;
+          font-size: $font-size-md;
+          font-weight: $font-weight-semibold;
+          color: $text-primary;
+          padding-bottom: $spacing-xs;
+        }
+        
+        .stored-notes-select {
+          width: 100%;
+          margin-bottom: $card-padding-lg;
+        }
+        
+        .notes-textarea {
+          width: 100%;
+        }
+      }
+      
+
+    }
+  }
+
+}
+
+.deviation-select {
+  width: 100%;
+}
+
+.no-sessions-message {
+  padding: $spacing-md;
+  text-align: center;
+  color: $text-placeholder;
+  font-style: italic;
+}
+
+.sticky-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $background-white;
+  border-top: 1px solid $border-hover;
+  padding: $spacing-xs $spacing-md;
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-xs;
+  z-index: $z-index-sticky-footer;
+}
+
+.full-height {
+  flex-grow: 1;
+}
+
+// Mobile-friendly layout
+@media (max-width: $breakpoint-tablet) {
+  .detail-container {
+    flex-direction: column;
+  }
+}
+
+.mat-column-actions {
+  width: 120px;
+  text-align: right;
+  white-space: nowrap;
+  
+  button {
+    display: inline-flex;
+    min-width: 40px;
+    margin-left: 4px;
+    
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+// Remove session button styling
+.remove-session-btn {
+  color: $danger-red !important;
+  
+  &:hover {
+    background-color: $danger-red-hover !important;
+  }
+  
+  mat-icon {
+    color: $danger-red !important;
+  }
+}
+
+// Quill editor styling
+.notes-editor {
+  width: 100%;
+  margin-bottom: $card-padding-lg;
+  
+  .case-notes-quill {
+    width: 100%;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    background: $background-white;
+    
+    ::ng-deep {
+      .ql-toolbar {
+        border-top: 1px solid $border-color;
+        border-left: 1px solid $border-color;
+        border-right: 1px solid $border-color;
+        border-bottom: none;
+        border-radius: $border-radius $border-radius 0 0;
+        background: $background-light;
+        padding: $spacing-xs $spacing-sm;
+        
+        .ql-formats {
+          margin-right: $spacing-sm;
+        }
+      }
+      
+      .ql-container {
+        border: 1px solid $border-color;
+        border-top: none;
+        border-radius: 0 0 $border-radius $border-radius;
+        font-family: inherit;
+        font-size: $font-size-base;
+        
+        .ql-editor {
+          min-height: $editor-min-height;
+          padding: $spacing-md;
+          line-height: $line-height-base;
+          
+          &.ql-blank::before {
+            color: $text-disabled;
+            font-style: normal;
+          }
+          
+          p {
+            margin-bottom: $spacing-xs;
+            
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+          
+          ul, ol {
+            margin: $spacing-xs 0;
+            padding-left: $spacing-xl;
+          }
+          
+          h1, h2, h3 {
+            margin: $spacing-sm 0 $spacing-xs 0;
+            font-weight: $font-weight-semibold;
+          }
+          
+          h1 { font-size: $font-size-lg; }
+          h2 { font-size: $font-size-md; }
+          h3 { font-size: $font-size-base; }
+        }
+      }
+      
+      &:focus-within {
+        .ql-toolbar {
+          border-color: $primary-blue;
+        }
+        
+        .ql-container {
+          border-color: $primary-blue;
+        }
+      }
+    }
+  }
+}

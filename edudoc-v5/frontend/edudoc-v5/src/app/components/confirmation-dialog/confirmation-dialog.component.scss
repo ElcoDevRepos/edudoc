@@ -1,0 +1,49 @@
+@use '../../../styles/design-tokens' as *;
+
+.confirmation-dialog {
+  .dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-md;
+    
+    h2 {
+      margin: 0;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+    }
+    
+    .close-button {
+      margin: 0 $spacing-md;
+    }
+  }
+  
+  .dialog-content {
+    margin-bottom: $spacing-xl;
+    
+    p {
+      margin: 0;
+      font-size: $font-size-base;
+      line-height: $line-height-base;
+      color: $text-placeholder;
+    }
+  }
+  
+  .dialog-actions {
+    gap: $spacing-sm;
+    
+    button {
+      margin-left: 0 !important;
+    }
+    
+    .danger-button {
+      background-color: $danger-red !important;
+      color: white !important;
+      
+      &:hover {
+        background-color: $danger-red-hover !important;
+      }
+    }
+  }
+} 
