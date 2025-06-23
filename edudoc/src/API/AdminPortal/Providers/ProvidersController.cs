@@ -163,7 +163,8 @@ namespace API.Providers
 
                 var accessStatusList = extraParamLists["archivedstatus"];
 
-                if (archivedStatusFiltered = accessStatusList.Count > 0)
+                archivedStatusFiltered = accessStatusList.Count > 0;
+                if (archivedStatusFiltered)
                     cspFull.AddedWhereClause.Add(p => accessStatusList.Contains(p.Archived));
 
                 if (extras["districtIds"] != null) {
