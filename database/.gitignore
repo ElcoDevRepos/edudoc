@@ -19,7 +19,9 @@ build/
 
 # Visual Studio cache/options
 .vs/
+
 *.suo
+
 *.dtbcache
 *.dtbcache.json
 
