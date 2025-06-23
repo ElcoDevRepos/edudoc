@@ -15,7 +15,7 @@ export const adminNavMenu: (NavSidebarRowItem | NavSidebarParentRowItem)[] = [
         new NavSidebarRowItem({
             content: 'New App (v5)',
             icon: 'fa fa-fw fa-rocket',
-            link: '/admin/v5-app',
+            link: '/admin/v5-app/auth-test',
         })
     ]),
     new NavSidebarParentRowItem({

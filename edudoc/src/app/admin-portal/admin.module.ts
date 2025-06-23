@@ -52,6 +52,9 @@ import { DataImportModule } from './data-import/data-import.module';
         AdminNotFoundComponent,
         V5WrapperComponent
     ],
+    exports: [
+        V5WrapperComponent
+    ],
     imports: [
         CommonModule,
         UserRoleModule,

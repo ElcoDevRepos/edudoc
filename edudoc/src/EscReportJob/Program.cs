@@ -1,18 +1,21 @@
-using Service.Core.Utilities;
-using Service.Core.Utilities;
-using System;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using BreckAPIBase.Startup;
-using Service.EscReport;
-using Model;
-using BreckServiceBase.Utilities.Interfaces;
-using Microsoft.Extensions.Configuration;
-using Service.ActivitySummaries;
-using Service.Utilities;
 using BreckServiceBase.Utilities;
-using Service.Utilities.Excel;
+using BreckServiceBase.Utilities.Interfaces;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Model;
+using Service.ActivitySummaries;
 using Service.Base;
+using Service.Core.Utilities;
+using Service.Core.Utilities;
+using Service.EscReport;
+using Service.Utilities;
+using Service.Utilities.Excel;
+using System;
 
 namespace EscReportJob
 {
@@ -20,40 +23,69 @@ namespace EscReportJob
     {
         public static void Main(string[] args)
         {
-            var env = System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-            if (string.IsNullOrWhiteSpace(env))
+            try
             {
-                env = "Development";
+                var env = System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+                if (string.IsNullOrWhiteSpace(env))
+                {
+                    env = "Development";
+                }
+
+                Console.WriteLine(env);
+
+                var config = new ConfigurationBuilder();
+                config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                      .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true);
+
+                config.AddEnvironmentVariables();
+                if (args != null)
+                {
+                    config.AddCommandLine(args);
+                }
+                IConfiguration configuration = config.Build();
+
+                var services = new ServiceCollection();
+                services.AddSingleton(configuration);
+                services.AddTransient<IDocumentHelper, DocumentHelper>();
+                services.AddTransient<IFileStorageHandler, OnServerFileStorageHandler>();
+                services.AddTransient<IConfigurationSettings, ConfigurationSettings>();
+                services.AddTransient<IEmailHelper, EmailHelper>();
+                services.AddTransient<IExcelBuilder, ExcelBuilder>();
+                services.AddScoped<IEscReportService, EscReportService>();
+                services.AddScoped<IPrimaryContext, PrimaryContext>();
+                services.AddScoped<IPrimaryContext, PrimaryContext>();
+                services.AddLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                    logging.AddApplicationInsightsWebJobs(telemetryConfiguration =>
+                    {
+                        telemetryConfiguration.ConnectionString = configuration["ApplicationInsights:JobsConnectionString"];
+                    });
+                    logging.SetMinimumLevel(LogLevel.Information);
+                });
+
+                services.AddTransient<Application>();
+
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+                try
+                {
+                    logger.LogInformation("Starting job");
+                    serviceProvider.GetService<Application>().Run();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Exception");
+                    throw;
+                }
             }
-
-            Console.WriteLine(env);
-
-            var config = new ConfigurationBuilder();
-            config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                  .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true);
-
-            config.AddEnvironmentVariables();
-            if (args != null)
+            catch (Exception ex)
             {
-                config.AddCommandLine(args);
+                Console.WriteLine($"Exception:{ex.ToString()}");
+                throw;
             }
-            IConfiguration configuration = config.Build();
-
-            var services = new ServiceCollection();
-            services.AddSingleton(configuration);
-            services.AddTransient<IDocumentHelper, DocumentHelper>();
-            services.AddTransient<IFileStorageHandler, OnServerFileStorageHandler>();
-            services.AddTransient<IConfigurationSettings, ConfigurationSettings>();
-            services.AddTransient<IEmailHelper, EmailHelper>();
-            services.AddTransient<IExcelBuilder, ExcelBuilder>();
-            services.AddScoped<IEscReportService, EscReportService>();
-            services.AddScoped<IPrimaryContext, PrimaryContext>();
-
-            services.AddTransient<Application>();
-
-            var serviceProvider = services.BuildServiceProvider();
-            serviceProvider.GetService<Application>().Run();
         }
     }
 }

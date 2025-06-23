@@ -15,6 +15,7 @@ using Service.Utilities.Excel;
 using Service.Utilities.Excel.Model;
 using Service.Utilities;
 using Service.Base;
+using Microsoft.Extensions.Logging;
 
 namespace Service.EscReport
 {
@@ -25,12 +26,14 @@ namespace Service.EscReport
         private readonly IConfiguration _config;
         private readonly IExcelBuilder _excelBuilder;
         private readonly IDocumentHelper _documentHelper;
+        private readonly ILogger<EscReportService> _logger;
         public EscReportService(
             IPrimaryContext context,
             IEmailHelper emailHelper,
             IConfiguration config,
             IExcelBuilder excelBuilder,
-            IDocumentHelper documentHelper
+            IDocumentHelper documentHelper,
+            ILogger<EscReportService> logger
         ) : base(context, new ValidationService(context, emailHelper))
         {
             _context = context;
@@ -38,6 +41,7 @@ namespace Service.EscReport
             _config = config;
             _excelBuilder = excelBuilder;
             _documentHelper = documentHelper;
+            _logger = logger;
         }
 
         public void GenerateEscReports()
@@ -81,6 +85,7 @@ namespace Service.EscReport
                 }
                 catch (Exception ex)
                 {
+                    this._logger.LogError(ex, "Exception in GenerateEscReports");
                     SendErrorEmail(esc.Id, esc.Name, ex);
                 }
             }

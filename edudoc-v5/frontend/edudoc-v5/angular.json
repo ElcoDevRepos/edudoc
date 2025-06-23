@@ -55,7 +55,6 @@
               ],
               "outputHashing": "all",
               "baseHref": "/v5/",
-              "deployUrl": "/v5/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -74,7 +73,6 @@
               "sourceMap": true,
               "extractLicenses": false,
               "baseHref": "/v5/",
-              "deployUrl": "/v5/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -122,7 +120,22 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "codeCoverage": true,
+            "codeCoverageExclude": [
+              "src/**/*.spec.ts",
+              "src/**/*.mock.ts",
+              "src/**/test-*.ts",
+              "src/main.ts",
+              "src/polyfills.ts"
+            ]
+          },
+          "configurations": {
+            "coverage": {
+              "codeCoverage": true,
+              "watch": false,
+              "browsers": "ChromeHeadless"
+            }
           }
         }
       }

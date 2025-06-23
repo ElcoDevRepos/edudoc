@@ -1,12 +1,15 @@
-using Service.Core.Utilities;
-using Service.Core.Utilities;
 using BreckServiceBase.Utilities;
 using BreckServiceBase.Utilities.Interfaces;
 using BreckServiceBase.Utilities.Models;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Model;
 using Service.CaseLoads.CaseLoadOptions;
+using Service.Core.Utilities;
+using Service.Core.Utilities;
 using Service.Encounters;
 using Service.Utilities;
 using System;
@@ -19,44 +22,73 @@ namespace TherapySchedulesJob
     {
         public static int Main(string[] args)
         {
-
-            var env = System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-            if (string.IsNullOrWhiteSpace(env))
+            try
             {
-                env = "Development";
+                var env = System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+                if (string.IsNullOrWhiteSpace(env))
+                {
+                    env = "Development";
+                }
+
+                Console.WriteLine(env);
+
+                var config = new ConfigurationBuilder();
+                config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                      .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true);
+
+                config.AddEnvironmentVariables();
+                if (args != null)
+                {
+                    config.AddCommandLine(args);
+                }
+                IConfiguration configuration = config.Build();
+
+                var services = new ServiceCollection();
+                services.AddSingleton(configuration);
+                services.AddTransient<IConfigurationSettings, ConfigurationSettings>();
+                services.AddTransient<IEmailHelper, EmailHelper>();
+                services.AddTransient<Service.Core.Utilities.IEmailConfiguration, EmailConfiguration>();
+                services.AddTransient<IConfigurationSettings, ConfigurationSettings>();
+                services.AddScoped<IEncounterService, EncounterService>();
+                services.AddScoped<IEncounterStudentService, EncounterStudentService>();
+                services.AddScoped<IEncounterStudentStatusService, EncounterStudentStatusService>();
+                services.AddScoped<IEncounterStudentCptCodeService, EncounterStudentCptCodeService>();
+                services.AddScoped<ICaseLoadGoalService, CaseLoadGoalService>();
+                services.AddScoped<IPrimaryContext, PrimaryContext>();
+                services.AddScoped<IPrimaryContext, PrimaryContext>();
+                services.AddLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                    logging.AddApplicationInsightsWebJobs(telemetryConfiguration =>
+                    {
+                        telemetryConfiguration.ConnectionString = configuration["ApplicationInsights:JobsConnectionString"];
+                    });
+                    logging.SetMinimumLevel(LogLevel.Information);
+                });
+
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+                try
+                {
+                    logger.LogInformation("Starting job");
+                    serviceProvider.GetService<IEncounterService>().BuildTodayFromStudentTherapySchedules();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Exception");
+                    throw;
+                }
+
+                return 0;
+
             }
-
-            Console.WriteLine(env);
-
-            var config = new ConfigurationBuilder();
-            config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                  .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true);
-
-            config.AddEnvironmentVariables();
-            if (args != null)
+            catch (Exception ex)
             {
-                config.AddCommandLine(args);
+                Console.WriteLine($"Exception:{ex.ToString()}");
+                throw;
             }
-            IConfiguration configuration = config.Build();
-
-            var services = new ServiceCollection();
-            services.AddSingleton(configuration);
-            services.AddTransient<IConfigurationSettings, ConfigurationSettings>();
-            services.AddTransient<IEmailHelper, EmailHelper>();
-            services.AddTransient<Service.Core.Utilities.IEmailConfiguration, EmailConfiguration>();
-            services.AddTransient<IConfigurationSettings, ConfigurationSettings>();
-            services.AddScoped<IEncounterService, EncounterService>();
-            services.AddScoped<IEncounterStudentService, EncounterStudentService>();
-            services.AddScoped<IEncounterStudentStatusService, EncounterStudentStatusService>();
-            services.AddScoped<IEncounterStudentCptCodeService, EncounterStudentCptCodeService>();
-            services.AddScoped<ICaseLoadGoalService, CaseLoadGoalService>();
-            services.AddScoped<IPrimaryContext, PrimaryContext>();
-
-             var serviceProvider = services.BuildServiceProvider();
-            serviceProvider.GetService<IEncounterService>().BuildTodayFromStudentTherapySchedules();
-
-            return 0;
 
         }
     }

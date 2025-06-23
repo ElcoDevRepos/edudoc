@@ -1,0 +1,98 @@
+<div class="goal-manager-dialog">
+  <mat-card class="goal-manager-card">
+    <mat-card-header class="dialog-header">
+      <mat-card-title>Manage Goals for {{ data.sessionName || 'Student' }}</mat-card-title>
+      <button mat-icon-button mat-dialog-close class="close-button">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content class="dialog-content">
+    <div class="single-column-layout">
+      <div class="search-header">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search Goals</mat-label>
+          <input matInput 
+                 placeholder="Type to search goals..." 
+                 [value]="searchTerm"
+                 (input)="updateSearchTerm($any($event.target).value)">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        
+        <div class="selected-summary" *ngIf="selectedGoals.length > 0">
+          <mat-icon>check_circle</mat-icon>
+          <span>{{ selectedGoals.length }} goal{{ selectedGoals.length !== 1 ? 's' : '' }} selected</span>
+        </div>
+      </div>
+
+      <div class="goals-container">
+        <div class="goal-card" 
+             *ngFor="let goal of filteredAvailableGoals; trackBy: trackByGoalId" 
+             [class.selected]="isGoalSelected(goal)">
+          
+          <!-- Goal Header with Checkbox -->
+          <div class="goal-header">
+            <mat-checkbox 
+              [checked]="isGoalSelected(goal)"
+              (change)="onGoalToggle(goal, $event.checked)"
+              class="goal-checkbox">
+            </mat-checkbox>
+            
+            <div class="goal-content">
+              <div class="goal-description">{{ goal.description }}</div>
+            </div>
+          </div>
+
+          <!-- Expandable Form Section -->
+          <div class="goal-form-section" *ngIf="isGoalSelected(goal)" [@slideInOut]>
+            <div class="form-fields" [attr.data-goal-id]="goal.id">
+              <mat-form-field appearance="outline">
+                <mat-label>Service Outcome</mat-label>
+                <mat-select [value]="getOutcome(goal.id)" (selectionChange)="setOutcome(goal.id, $event.value)">
+                  <mat-option *ngFor="let outcome of serviceOutcomes" [value]="outcome.id">
+                    {{ outcome.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Progress Code</mat-label>
+                <mat-select [value]="getProgress(goal.id)" (selectionChange)="setProgress(goal.id, $event.value)">
+                  <mat-option *ngFor="let progress of progressCodes" [value]="progress.id">
+                    {{ progress.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="notes-field">
+                <mat-label>Notes</mat-label>
+                <textarea matInput 
+                          [value]="getNotes(goal.id)"
+                          (input)="setNotes(goal.id, $any($event.target).value)"
+                          rows="3"
+                          placeholder="Enter notes for this goal..."></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="filteredAvailableGoals.length === 0" class="empty-state">
+          <mat-icon>search_off</mat-icon>
+          <p>No goals found matching your search</p>
+          <p class="help-text">Try adjusting your search terms</p>
+        </div>
+      </div>
+    </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end" class="dialog-actions">
+      <button mat-stroked-button mat-dialog-close>Cancel</button>
+      <button mat-flat-button 
+              color="primary" 
+              [mat-dialog-close]="selectedGoals"
+              [disabled]="selectedGoals.length === 0">
+        Save Goals ({{ selectedGoals.length }})
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

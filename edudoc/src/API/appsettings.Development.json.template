@@ -4,6 +4,12 @@
             "Default": "Information",
             "Microsoft": "Warning",
             "Microsoft.Hosting.Lifetime": "Information"
+        },
+        "ApplicationInsights": {
+            "LogLevel": {
+                "Default": "Information",
+                "Microsoft": "Error"
+            }
         }
     },
     "EmailConfiguration": {
@@ -35,5 +41,8 @@
     },
     "ConnectionStrings": {
         "Primary": "Server=(localdb)\\ProjectsV13;Database=edudoc.SQL;Trusted_Connection=True;MultipleActiveResultSets=true"
+    },
+    "ApplicationInsights": {
+        "ConnectionString": "InstrumentationKey=03f4c24d-222c-4315-be9d-33e9b4cc9e8c;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/;ApplicationId=babf0dfe-667c-49e1-b73c-fc2a5c6220ee"
     }
 }
