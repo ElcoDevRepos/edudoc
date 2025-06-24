@@ -17,7 +17,6 @@ build/
 [Bb]in/
 [Oo]bj/
 
-
 # SSDT schema compare
 *.scmp
 

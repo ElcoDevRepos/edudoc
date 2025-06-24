@@ -37,6 +37,7 @@ import { NotificationsService } from '@mt-ng2/notifications-module';
 import { MtSearchFilterItem } from '@mt-ng2/search-filter-select-control';
 import { ISearchbarControlAPI } from '@mt-ng2/searchbar-control';
 import { ISelectionChangedEvent, ITypeAheadAPI, VirtualTypeAheadGetItemsFunction } from '@mt-ng2/type-ahead-control';
+import { ISearchFilterCheckboxValueChangedEvent } from '@mt-ng2/search-filter-checkbox-control';
 import { forkJoin, Observable } from 'rxjs';
 import { debounceTime, finalize, map } from 'rxjs/operators';
 import { EncounterEntityListConfig } from './encounters.entity-list-config';
@@ -111,6 +112,7 @@ export class EncounterComponent implements OnInit {
     selectedStatus: IEncounterStatus;
     abandonedNotesField: DynamicField = abandonendNotesField;
     abandonedNotesValue = this.abandonedNotesField.value;
+    includeArchived = false;
     // Modal parameters
     reasonForReturnControl: AbstractControl;
     reasonForAbandonmentControl: AbstractControl;
@@ -257,6 +259,10 @@ export class EncounterComponent implements OnInit {
         return this.providerService
             .searchProviders({
                 query: searchText,
+                extraParams: [new ExtraSearchParams({
+                    name: 'archivedstatus',
+                    valueArray: [1, 0],
+                })]
             })
             .pipe(
                 debounceTime(300),
@@ -334,7 +340,8 @@ export class EncounterComponent implements OnInit {
             this.encounterNumberQuery ||
             this.medicaidNoQuery ||
             this.studentCodeQuery ||
-            this.claimIdQuery
+            this.claimIdQuery ||
+            this.includeArchived
         );
 
         if (!atLeastOneFilterSelected) {
@@ -436,6 +443,13 @@ export class EncounterComponent implements OnInit {
             }),
         );
 
+        _extraSearchParams.push(
+            new ExtraSearchParams({
+                name: 'archivedstatus',
+                valueArray: this.includeArchived ? [1, 0] : [0],
+            })
+        );
+
         return _extraSearchParams;
     }
 
@@ -494,6 +508,10 @@ export class EncounterComponent implements OnInit {
     dateSelectionChanged(range: ISearchFilterDaterangeValue): void {
         this.startDate = range ? range.startDate : this.startDate;
         this.endDate = range ? range.endDate : this.endDate;
+    }
+
+    includeArchivedChanged(event: ISearchFilterCheckboxValueChangedEvent): void {
+        this.includeArchived = event.value;
     }
 
     filterSelectionChanged(): void {
@@ -573,6 +591,7 @@ export class EncounterComponent implements OnInit {
         }
         this.startDate = null;
         this.endDate = null;
+        this.includeArchived = false;
     }
     resetPageAndGetEncounters(): void {
         this.currentPage = 1;

@@ -163,8 +163,6 @@ namespace API.Providers
                 provider => provider.ProviderEscAssignments.Select(pe => pe.ProviderEscSchoolDistricts.Select(pesd => pesd.SchoolDistrict)),
             };
 
-            cspFull.AddedWhereClause.Add(p => !p.Archived);
-
             if (!IsBlankQuery(csp.Query))
             {
                 string[] terms = SplitSearchTerms(csp.Query.Trim().ToLower());
@@ -178,15 +176,29 @@ namespace API.Providers
                 }
             }
 
-            if (!string.IsNullOrEmpty(csp.extraparams)) {
+
+            var archivedStatusFiltered = false;
+
+            if(!string.IsNullOrEmpty(csp.extraparams)) {
                 var extras = System.Web.HttpUtility.ParseQueryString(WebUtility.UrlDecode(csp.extraparams));
-                if(extras["districtIds"] != null) {
+                var extraParamLists = SearchStaticMethods.GetBoolListFromExtraParams(csp.extraparams, "archivedstatus");
+
+                var accessStatusList = extraParamLists["archivedstatus"];
+
+                archivedStatusFiltered = accessStatusList.Count > 0;
+                if (archivedStatusFiltered)
+                    cspFull.AddedWhereClause.Add(p => accessStatusList.Contains(p.Archived));
+
+                if (extras["districtIds"] != null) {
                     var districtIds = CommonFunctions.GetIntListFromExtraParams(csp.extraparams,"districtIds")["districtIds"];
                     cspFull.AddedWhereClause.Add(p =>
                             p.ProviderEscAssignments.Any(pea =>
                                 pea.ProviderEscSchoolDistricts.Any(peasd => districtIds.Contains(peasd.SchoolDistrictId))));
                 }
             }
+
+            if (!archivedStatusFiltered)
+                cspFull.AddedWhereClause.Add(p => !p.Archived); //Default provider search behavior
 
             cspFull.DefaultOrderBy = "ProviderUser.LastName";
             if (csp.order != null && csp.orderdirection != null)
