@@ -5,6 +5,7 @@ using System;
 using Service.SchoolDistricts.ProviderCaseUploads;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace RosterUploadJob
 {
@@ -21,7 +22,7 @@ namespace RosterUploadJob
         private readonly IProviderCaseUploadService _providerCaseUploadService;
         private readonly IProviderCaseUploadDocumentService _providerCaseUploadDocumentService;
         private readonly IPrimaryContext _context;
-
+        private readonly ILogger<Application> _logger;
 
 
         public Application(
@@ -30,7 +31,8 @@ namespace RosterUploadJob
             IRosterUploadService rosterUploadService,
             IProviderCaseUploadService providerCaseUploadService,
             IProviderCaseUploadDocumentService providerCaseUploadDocumentService,
-        IPrimaryContext context)
+            ILogger<Application> logger,
+            IPrimaryContext context)
         {
             _schoolDistrictRosterService = schoolDistrictRosterService;
             _schoolDistrictRosterDocumentService = schoolDistrictRosterDocumentService;
@@ -38,6 +40,7 @@ namespace RosterUploadJob
             _providerCaseUploadService = providerCaseUploadService;
             _providerCaseUploadDocumentService = providerCaseUploadDocumentService;
             _context = context;
+            _logger = logger;
 
         }
 
@@ -68,10 +71,9 @@ namespace RosterUploadJob
                 }
                 catch (Exception e)
                 {
+                    this._logger.LogError(e, "Exception in Run");
                     _rosterUploadService.DiscardRosterUpload(document, e);
-
                 }
-
             }
 
             var unprocessedCaseloadUploadDocuments = _providerCaseUploadDocumentService.GetDocumentsForConversion();
@@ -83,6 +85,7 @@ namespace RosterUploadJob
                 }
                 catch (Exception e)
                 {
+                    this._logger.LogError(e, "Exception in Run");
                     _providerCaseUploadService.DiscardCaseloadUpload(document, e);
                 }
             }

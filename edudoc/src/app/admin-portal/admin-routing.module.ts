@@ -62,7 +62,7 @@ const adminRoutes: Routes = [
             },
             {
                 component: V5WrapperComponent,
-                path: 'v5-app',
+                path: 'v5-app/auth-test',
                 data: {
                     title: 'New App (v5)'
                 }

@@ -1,0 +1,88 @@
+// ===========================================
+// DESIGN TOKENS - EduDoc Platform
+// ===========================================
+
+// Brand Colors
+$primary-blue: #1976d2;
+$primary-blue-hover: rgba(25, 118, 210, 0.2);
+$primary-blue-active: rgba(25, 118, 210, 0.15);
+
+// Semantic Colors  
+$danger-red: #d32f2f;
+$danger-red-hover: rgba(211, 47, 47, 0.04);
+
+// Neutral Colors
+$border-color: #e1e5e9;
+$background-light: #f8f9fa;
+$background-white: white;
+$text-primary: #2c3e50;
+$text-secondary: #6c757d;
+$text-muted: #495057;
+$text-disabled: #999;
+$text-placeholder: #666;
+
+// Interactive States
+$hover-background: rgba(0, 0, 0, 0.04);
+$border-hover: rgba(0, 0, 0, 0.12);
+
+// Spacing System
+$spacing-xs: 8px;
+$spacing-sm: 12px;
+$spacing-md: 16px;
+$spacing-lg: 20px;
+$spacing-xl: 24px;
+$spacing-2xl: 32px;
+$spacing-3xl: 40px;
+
+// Border Radius
+$border-radius-sm: 2px;
+$border-radius: 8px;
+
+// Shadows (Card System)
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 2px 8px rgba(25, 118, 210, 0.15);
+$shadow-lg: 0 4px 12px rgba(25, 118, 210, 0.2);
+
+// Transitions
+$transition-fast: all 0.2s ease;
+$transform-hover: translateY(-2px);
+$transform-active: translateY(-1px);
+
+// Breakpoints
+$breakpoint-mobile: 767px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+
+// Component Sizing
+$icon-button-size: 32px;
+$icon-size-sm: 18px;
+$scrollbar-width: 4px;
+$sticky-footer-height: 80px;
+
+// Typography Scale
+$font-size-xs: 12px;
+$font-size-sm: 13px;
+$font-size-base: 14px;
+$font-size-md: 16px;
+$font-size-lg: 18px;
+
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+
+$line-height-tight: 1.4;
+$line-height-base: 1.5;
+
+// Card Components
+$card-padding: 16px;
+$card-padding-lg: 20px;
+$card-min-height: 100px;
+
+// Form Components
+$form-field-min-width: 300px;
+$form-field-time-width: 120px;
+
+// Editor Components
+$editor-min-height: 180px;
+
+// Z-Index Scale
+$z-index-sticky-footer: 100; 

@@ -27,6 +27,9 @@
             "style": "kebab-case"
           }
         ]
+      },
+      "parserOptions": {
+        "createDefaultProgram": true
       }
     },
     {

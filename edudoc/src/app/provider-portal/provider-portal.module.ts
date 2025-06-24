@@ -18,6 +18,8 @@ import { ProgressReportModule } from './provider-progress-reports/progress-repor
 import { ProviderReportsModule } from './provider-reports/provider-reports.module';
 import { SupervisorApproveAssistantEncountersComponent } from './supervisor-approve-assistant-encounters/supervisor-approve-assistant-encounters.component';
 import { ProviderUserModule } from './users/provider-user.module';
+import { AdminModule } from '../admin-portal/admin.module';
+
 
 @NgModule({
     declarations: [
@@ -26,6 +28,7 @@ import { ProviderUserModule } from './users/provider-user.module';
         ElectronicSignatureModalComponent,
         SupervisorApprovalModalComponent,
         SupervisorApproveAssistantEncountersComponent,
+
     ],
     imports: [
         AcknowledgmentsModule,
@@ -41,6 +44,7 @@ import { ProviderUserModule } from './users/provider-user.module';
         ProviderUserModule,
         MissingReferralsModule,
         SharedModule,
+        AdminModule,
     ],
     providers: [ProviderPortalGuard]
 })

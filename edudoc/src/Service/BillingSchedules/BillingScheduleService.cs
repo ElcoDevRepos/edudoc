@@ -154,6 +154,7 @@ namespace Service.BillingSchedules
             }
             catch (Exception e)
             {
+                this._logger.LogError(e, "Exception in GenerateHealthCareClaim");
                 DiscardBillingSchedule(newClaimId, billingScheduleId, e);
                 return 0;
             }

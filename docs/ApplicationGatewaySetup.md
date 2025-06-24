@@ -6,8 +6,10 @@ This document outlines the steps to set up Azure Application Gateway for routing
 ## Routing Structure
 - /v4/api/* → Legacy backend
 - /v4/docs/* → Legacy backend
+- /v4/swagger/* → Legacy backend
 - /v4/* → Legacy frontend
 - /v5/api/* → V5 backend
+- /v5/swagger/* → V5 backend
 - /v5/* → V5 frontend
 
 ## Setup Steps
@@ -90,13 +92,13 @@ az network application-gateway http-settings create --gateway-name agw-edudoc-te
 az network application-gateway http-settings create --gateway-name agw-edudoc-test --resource-group rg-test-eastus2-EduDoc --name http-settings-v5 --port 80 --protocol Http --cookie-based-affinity Disabled --host-name-from-backend-pool true --probe probe-v5-backend
 
 # Create the main path map and its first rule (the most specific v4 rule) in a single command.
-# This ensures that /v4/api/* and /v4/docs/* are evaluated before the more general /v4/* rule.
+# This ensures that /v4/api/*, /v4/docs/*, and /v4/swagger/* are evaluated before the more general /v4/* rule.
 # This command also sets the default fallback rule to point to the legacy frontend.
-az network application-gateway url-path-map create --gateway-name agw-edudoc-test --resource-group rg-test-eastus2-EduDoc --name path-map-main --rule-name rule-path-v4-api --paths /v4/api/* /v4/docs/* --address-pool pool-legacy-backend --http-settings http-settings-legacy --default-address-pool pool-legacy-frontend --default-http-settings http-settings-legacy
+az network application-gateway url-path-map create --gateway-name agw-edudoc-test --resource-group rg-test-eastus2-EduDoc --name path-map-main --rule-name rule-path-v4-api --paths /v4/api/* /v4/docs/* /v4/swagger/* --address-pool pool-legacy-backend --http-settings http-settings-legacy --default-address-pool pool-legacy-frontend --default-http-settings http-settings-legacy
 
 # Add the remaining path rules to the path map, starting with the more general v4 rule.
 az network application-gateway url-path-map rule create --gateway-name agw-edudoc-test --resource-group rg-test-eastus2-EduDoc --path-map-name path-map-main --name rule-path-v4-frontend --paths /v4/* --address-pool pool-legacy-frontend --http-settings http-settings-legacy
-az network application-gateway url-path-map rule create --gateway-name agw-edudoc-test --resource-group rg-test-eastus2-EduDoc --path-map-name path-map-main --name rule-path-v5-api --paths /v5/api/* --address-pool pool-v5-backend --http-settings http-settings-v5
+az network application-gateway url-path-map rule create --gateway-name agw-edudoc-test --resource-group rg-test-eastus2-EduDoc --path-map-name path-map-main --name rule-path-v5-api --paths /v5/api/* /v5/swagger/* --address-pool pool-v5-backend --http-settings http-settings-v5
 az network application-gateway url-path-map rule create --gateway-name agw-edudoc-test --resource-group rg-test-eastus2-EduDoc --path-map-name path-map-main --name rule-path-v5-frontend --paths /v5/* --address-pool pool-v5-frontend --http-settings http-settings-v5
 ```
 

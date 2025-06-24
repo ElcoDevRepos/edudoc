@@ -17,11 +17,6 @@ build/
 [Bb]in/
 [Oo]bj/
 
-# Visual Studio cache/options
-.vs/
-*.suo
-*.dtbcache
-*.dtbcache.json
 
 # SSDT schema compare
 *.scmp
