@@ -72,8 +72,12 @@
             (selectionChanged)="dateSelectionChanged($event)">
         </mt-search-filter-daterange>
     </div>
-    <div class="col-md-2"><button class="btn" (click)="clearFilters()">Clear filters</button></div>
-    <div class="col-md-2">
+    <div class="col-md-2 checkbox-div">
+        <br />
+        <mt-search-filter-checkbox (searchCheckboxChanged)="includeArchivedChanged($event)" text="Include Archived"> </mt-search-filter-checkbox>
+    </div>
+    <div class="col-md-1"><button class="btn" (click)="clearFilters()">Clear filters</button></div>
+    <div class="col-md-1">
         <button type="button" Class="btn btn-flat btn-success" (click)="resetPageAndGetEncounters()">
             Apply
         </button>
@@ -118,7 +122,7 @@
             </th>
         </ng-template>
         <ng-template mtEntityListItem let-columns="columns" let-entity>
-            <tr [style.cursor]="'default'">
+            <tr [style.cursor]="'default'" [ngClass]="entity.Archived ? 'archived' : ''">
                 <td [style.width]="'15%'">
                     <label>Name: </label> {{ entity.StudentName }} <br />
                     <label>District: </label> {{ entity.SchoolDistrict }} <br />
