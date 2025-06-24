@@ -183,7 +183,6 @@ namespace API.Providers
                 if(extras["districtIds"] != null) {
                     var districtIds = CommonFunctions.GetIntListFromExtraParams(csp.extraparams,"districtIds")["districtIds"];
                     cspFull.AddedWhereClause.Add(p =>
-                            (p.ProviderUser.SchoolDistrictId.HasValue && districtIds.Contains(p.ProviderUser.SchoolDistrictId.Value)) ||
                             p.ProviderEscAssignments.Any(pea =>
                                 pea.ProviderEscSchoolDistricts.Any(peasd => districtIds.Contains(peasd.SchoolDistrictId))));
                 }
