@@ -7,64 +7,93 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using EduDoc.Api.EF;
 using EduDoc.Api.Infrastructure.Responses;
+using EduDocV5Client;
+using EduDoc.Api.IntegrationTests.TestBase;
 
 namespace EduDoc.Api.IntegrationTests.Controllers;
 
-public class EncountersControllerTests : IClassFixture<CustomWebApplicationFactory<global::Program>>, IDisposable
+public class EncountersControllerTests : AuthorizedIntegrationTestBase
 {
-    private readonly HttpClient _client;
     private readonly IServiceScope _scope;
     private readonly EdudocSqlContext _context;
 
-    public EncountersControllerTests(CustomWebApplicationFactory<global::Program> factory)
+    public EncountersControllerTests(CustomWebApplicationFactory<global::Program> factory) : base(factory)
     {
-        _client = factory.CreateClient();
         _scope = factory.Services.CreateScope();
         _context = _scope.ServiceProvider.GetRequiredService<EdudocSqlContext>();
-        _context.Database.EnsureCreated();
     }
 
     [Fact]
     public async Task GetEncounterById_ShouldReturnEncounter_WhenEncounterExists()
     {
         // Arrange
+        SetAuthorizationHeader(UserRoleIds.Admin);
+        
         var encounterId = 1;
         var encounter = new Encounter { 
             Id = encounterId, 
             ServiceTypeId = 1,
-            ProviderId = 1  // Required field
+            ProviderId = 1,
+            CreatedById = 1,
+            IsGroup = false,
+            AdditionalStudents = 0,
+            FromSchedule = true,
+            Archived = false
         };
 
         await _context.Encounters.AddAsync(encounter);
         await _context.SaveChangesAsync();
         
         // Act
-        var response = await _client.GetAsync($"/api/encounters/{encounterId}");
+        var response = await _client.EncountersAsync(encounterId);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var responseData = await response.Content.ReadFromJsonAsync<GetSingleResponse<EncounterResponseModel>>();
-        responseData.Should().NotBeNull();
-        responseData!.Record.Should().NotBeNull();
-        responseData.Record.Id.Should().Be(encounter.Id);
+        response.Record.Should().NotBeNull();
+        response.Record.Id.Should().Be(encounter.Id);
     }
 
     [Fact]
     public async Task GetEncounterById_ShouldReturnNotFound_WhenEncounterDoesNotExist()
     {
         // Arrange
+        SetAuthorizationHeader(UserRoleIds.Admin);
         var encounterId = 999;
 
         // Act
-        var response = await _client.GetAsync($"/api/encounters/{encounterId}");
-
-        // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        try
+        {
+            var response = await _client.EncountersAsync(encounterId);
+            Assert.Fail("Should not have made it here");
+        }
+        catch (ApiException aix)
+        {
+            // Assert
+            aix.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+        }
     }
 
-    public void Dispose()
+    [Fact]
+    public async Task GetEncounterById_ShouldReturnUnauthorized_WhenNoTokenProvided()
+    {
+        // Arrange - No authorization header set
+        var encounterId = 1;
+
+        // Act & Assert
+        try
+        {
+            await _client.EncountersAsync(encounterId);
+            Assert.Fail("Should not have made it here");
+        }
+        catch (ApiException aix)
+        {
+            aix.StatusCode.Should().Be((int)HttpStatusCode.Unauthorized);
+        }
+    }
+
+    public override void Dispose()
     {
         _scope.Dispose();
         _context.Dispose();
+        base.Dispose();
     }
 } 

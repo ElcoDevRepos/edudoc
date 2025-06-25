@@ -10,6 +10,7 @@ using Service.ActivitySummaries;
 using Service.Core.Utilities;
 using Service.Utilities;
 using System;
+using System.Threading;
 
 namespace ActivitySummaryJob
 {
@@ -74,6 +75,9 @@ namespace ActivitySummaryJob
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "Exception");
+                    TelemetryClient telemetryClient = serviceProvider.GetRequiredService<TelemetryClient>();
+                    telemetryClient.Flush();
+                    Thread.Sleep(5000);
                     throw;
                 }
                 return 0;

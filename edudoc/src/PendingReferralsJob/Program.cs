@@ -9,6 +9,7 @@ using Model;
 using Service.PendingReferrals;
 using Service.ReferralReports;
 using System;
+using System.Threading;
 
 namespace PendingReferralsJob
 {
@@ -68,6 +69,9 @@ namespace PendingReferralsJob
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "Exception");
+                    TelemetryClient telemetryClient = serviceProvider.GetRequiredService<TelemetryClient>();
+                    telemetryClient.Flush();
+                    Thread.Sleep(5000);
                     throw;
                 }
 

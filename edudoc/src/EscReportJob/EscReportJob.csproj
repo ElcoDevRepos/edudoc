@@ -6,6 +6,16 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="appsettings.Test.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="appsettings.Test.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Breckenridge.API.Base" Version="6.1.0" />
         <PackageReference Include="Microsoft.ApplicationInsights" Version="2.23.0" />
         <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.23.0" />
@@ -17,8 +27,5 @@
     <ItemGroup>
         <ProjectReference Include="../Model/Model.csproj" />
         <ProjectReference Include="../Service/Service.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
     </ItemGroup>
 </Project>

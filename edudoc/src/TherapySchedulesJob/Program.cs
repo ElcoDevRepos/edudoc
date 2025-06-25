@@ -13,6 +13,7 @@ using Service.Core.Utilities;
 using Service.Encounters;
 using Service.Utilities;
 using System;
+using System.Threading;
 
 namespace TherapySchedulesJob
 {
@@ -78,6 +79,9 @@ namespace TherapySchedulesJob
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "Exception");
+                    TelemetryClient telemetryClient = serviceProvider.GetRequiredService<TelemetryClient>();
+                    telemetryClient.Flush();
+                    Thread.Sleep(5000);
                     throw;
                 }
 

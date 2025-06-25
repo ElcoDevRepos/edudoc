@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EduDoc.Api.Client\EduDoc.Api.Client.csproj" />
     <ProjectReference Include="..\EduDoc.Api\EduDoc.Api.csproj" />
   </ItemGroup>
 

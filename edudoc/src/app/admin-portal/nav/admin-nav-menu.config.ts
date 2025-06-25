@@ -11,13 +11,6 @@ export const adminNavMenu: (NavSidebarRowItem | NavSidebarParentRowItem)[] = [
         icon: 'fa fa-fw fa-address-card',
         link: '/admin/my-profile',
     }),
-    ...(environment.production ? [] : [
-        new NavSidebarRowItem({
-            content: 'New App (v5)',
-            icon: 'fa fa-fw fa-rocket',
-            link: '/admin/v5-app/auth-test',
-        })
-    ]),
     new NavSidebarParentRowItem({
         children: [
             new NavSidebarRowItem({
@@ -219,19 +212,6 @@ export const adminNavMenu: (NavSidebarRowItem | NavSidebarParentRowItem)[] = [
                 content: 'Medicaid Status',
                 icon: 'fa fa-fw fa-medkit',
                 link: '/admin/provider-medicaid-status',
-            }),
-            new NavSidebarRowItem({
-                claimType: ClaimTypes.ProviderMaintenance,
-                content: 'Provider Trainings',
-                icon: 'fa fa-fw fa-book',
-                link: '/admin/provider-trainings',
-            }),
-            new NavSidebarRowItem({
-                claimType: ClaimTypes.ProviderMaintenance,
-                claimValues: [ClaimValues.FullAccess],
-                content: 'Training Documents',
-                icon: 'fa fa-fw fa-book',
-                link: '/admin/provider-training-documents',
             }),
         ],
         claimType: ClaimTypes.Encounters,

@@ -1,25 +1,32 @@
 using Azure.Identity;
-using EduDoc.Api.Infrastructure.Auth;
+using EduDoc.Api.EF;
+using EduDoc.Api.Endpoints.Encounters;
+using EduDoc.Api.Endpoints.Encounters.Queries;
+using EduDoc.Api.Endpoints.Encounters.Repositories;
+using EduDoc.Api.Endpoints.EvaluationTypes;
+using EduDoc.Api.Infrastructure.ApplicationInsights;
+using EduDoc.Api.Infrastructure.Authentication;
+using EduDoc.Api.Infrastructure.Authorization;
+using EduDoc.Api.Infrastructure.Authorization.Handlers;
 using EduDoc.Api.Infrastructure.Configuration;
+using EduDoc.Api.Infrastructure.Middleware;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using EduDoc.Api.Endpoints.Encounters.Repositories;
-using MediatR;
-using System.Runtime.CompilerServices;
-using Microsoft.EntityFrameworkCore;
-using EduDoc.Api.Endpoints.Encounters;
-using EduDoc.Api.Endpoints.Encounters.Queries;
-using EduDoc.Api.EF;
+using EduDoc.Api.Endpoints.Students;
+
 
 try
 {
 
     var builder = WebApplication.CreateBuilder(args);
+
+    builder.Services.AddSingleton<ITelemetryInitializer, TraceIdTelemetryInitializer>();
 
     builder.Logging.AddApplicationInsights(
     configureTelemetryConfiguration: config =>
@@ -95,7 +102,13 @@ try
     });
 
     builder.Services.DIRegisterEncounters();
-    builder.Services.AddAuthorization();
+    builder.Services.DIRegisterEvaluationTypes();
+    builder.Services.DIRegisterStudents();
+    
+    // Register authorization handler
+    builder.Services.AddSingleton<IAuthorizationHandler, UserRoleHandler>();
+    
+    builder.Services.AddAuthorization(AuthorizationPolicies.ConfigurePolicies);
     builder.Services.AddControllers();
 
 
@@ -125,9 +138,13 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(options =>
     {
-        options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "EduDoc API", Version = "v5" });
+        options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "EduDoc API", Version = "v1" });
 
-        options.AddServer(new OpenApiServer { Url = "/v5" });
+
+        if (!builder.Environment.IsDevelopment())
+        {
+            options.AddServer(new OpenApiServer { Url = "/v5" });
+        }
 
         options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
         {
@@ -156,6 +173,9 @@ try
     });
 
     var app = builder.Build();
+
+    app.UseMiddleware<ExceptionMiddleware>();
+    app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
     app.UseSwagger();
     app.UseSwaggerUI();

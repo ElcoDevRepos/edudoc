@@ -1,3 +1,4 @@
+using API.Common.ApplicationInsights;
 using API.Middleware;
 using API.RoleManager;
 using Autofac;
@@ -6,6 +7,7 @@ using BreckAPIBase.Startup;
 using BreckAzureBase.Startup;
 using breckhtmltopdf;
 using BreckServiceBase.Utilities;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -44,12 +46,15 @@ namespace API
                 .AddBreckenridgeAzure(Configuration)
                 .AddBreckHtmlToPdf(Configuration);
 
+            services.AddSingleton<ITelemetryInitializer, TraceIdTelemetryInitializer>();
+
             services.AddLogging(logging =>
             {
                 logging.ClearProviders();
                 logging.Configure(options =>
                 {
                     options.ActivityTrackingOptions = ActivityTrackingOptions.TraceId | ActivityTrackingOptions.SpanId;
+
                 });
                 logging.SetMinimumLevel(LogLevel.Debug);
                 logging.AddApplicationInsights(
@@ -57,6 +62,8 @@ namespace API
                        config.ConnectionString = Configuration["ApplicationInsights:ConnectionString"],
                        configureApplicationInsightsLoggerOptions: options => { });
             });
+
+          
 
             services.Configure<LoggerFilterOptions>(options =>
             {

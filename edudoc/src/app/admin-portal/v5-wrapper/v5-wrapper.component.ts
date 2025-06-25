@@ -26,8 +26,6 @@ export class V5WrapperComponent implements OnInit {
             const currentPath = this.route.snapshot.url.join('/');
             if (currentPath.includes('new-treatment-therapy')) {
                 path = '/encounters/encounter-form?serviceTypeId=3';
-            } else if (currentPath.includes('auth-test')) {
-                path = '/auth-test';
             }
         }
         

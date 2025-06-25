@@ -16,6 +16,7 @@ using Service.EscReport;
 using Service.Utilities;
 using Service.Utilities.Excel;
 using System;
+using System.Threading;
 
 namespace EscReportJob
 {
@@ -78,6 +79,9 @@ namespace EscReportJob
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "Exception");
+                    TelemetryClient telemetryClient = serviceProvider.GetRequiredService<TelemetryClient>();
+                    telemetryClient.Flush();
+                    Thread.Sleep(5000);
                     throw;
                 }
             }

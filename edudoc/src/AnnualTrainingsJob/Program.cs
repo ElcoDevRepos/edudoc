@@ -15,6 +15,7 @@ using Service.ProviderTrainings;
 using Service.Students;
 using Service.Utilities;
 using System;
+using System.Threading;
 
 
 namespace AnnualTrainingsJob
@@ -77,6 +78,9 @@ namespace AnnualTrainingsJob
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "Exception");
+                    TelemetryClient telemetryClient = serviceProvider.GetRequiredService<TelemetryClient>();
+                    telemetryClient.Flush();
+                    Thread.Sleep(5000);
                     throw;
                 }
 

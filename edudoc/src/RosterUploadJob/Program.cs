@@ -13,6 +13,7 @@ using Service.SchoolDistricts.Rosters.RosterUploads;
 using Service.Students.Merge;
 using Service.Utilities;
 using System;
+using System.Threading;
 
 namespace RosterUploadJob
 {
@@ -68,6 +69,8 @@ namespace RosterUploadJob
                     logging.AddApplicationInsightsWebJobs(telemetryConfiguration =>
                     {
                         telemetryConfiguration.ConnectionString = configuration["ApplicationInsights:JobsConnectionString"];
+                        telemetryConfiguration.DiagnosticsEventListenerLogLevel = System.Diagnostics.Tracing.EventLevel.Verbose;
+   
                     });
                     logging.SetMinimumLevel(LogLevel.Information);
                 });
@@ -82,6 +85,9 @@ namespace RosterUploadJob
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "Exception");
+                    TelemetryClient telemetryClient = serviceProvider.GetRequiredService<TelemetryClient>();
+                    telemetryClient.Flush();
+                    Thread.Sleep(5000);
                     throw;
                 }
 

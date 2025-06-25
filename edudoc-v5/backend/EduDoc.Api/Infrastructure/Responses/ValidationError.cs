@@ -1,16 +1,20 @@
 ﻿namespace EduDoc.Api.Infrastructure.Responses
 {
 
-    public enum  ErrorCode
-    {
-        NotSet,
-    }
 
 
     public class ValidationError
     {
+        public enum EnumErrorCode
+        {
+            NotSet,
+            Required,
+            MinLength,
+        }
+
+
         public string Message { get; set; } = string.Empty;
 
-        public ErrorCode ErrorCode { get; set; } = ErrorCode.NotSet;
+        public EnumErrorCode ErrorCode { get; set; } = EnumErrorCode.NotSet;
     }
 }

@@ -28,7 +28,8 @@ namespace API.Middleware
             }
             catch (Exception ex)
             {
-                var traceId = context.TraceIdentifier;
+                var d = System.Diagnostics.Activity.Current;
+                var traceId = System.Diagnostics.Activity.Current.TraceId.ToString();
                 var utcNow = DateTime.UtcNow;
 
                 logger.LogError(ex, "Unhandled exception occurred. TraceId: {TraceId} at {UtcTime}", traceId, utcNow);

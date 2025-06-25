@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
@@ -6,6 +6,16 @@
         <StartupObject>ActivitySummaryJob.Program</StartupObject>
         <Configurations>Debug;Release;Production;Testing</Configurations>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="appsettings.Test.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="appsettings.Test.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Breckenridge.API.Base" Version="6.1.1" />

@@ -10,5 +10,7 @@
         public T Record { get; set; }
 
         public List<ValidationError> Errors { get; set; } = new();
+
+        public bool Success => this.Errors.Count == 0;
     }
 }

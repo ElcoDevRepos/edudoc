@@ -28,7 +28,6 @@ import { MyReasonsForReturnModule } from './my-reasons-for-return-management/my-
 import { AppNavModule } from './nav/admin-nav.module';
 import { ProviderAttestationsModule } from './provider-attestations/provider-attestations.module';
 import { ProviderTitleModule } from './provider-titles/provider-title.module';
-import { ProviderTrainingsModule } from './provider-trainings/provider-trainings.module';
 import { ProviderModule } from './providers/provider.module';
 import { ReportsModule } from './reports/reports.module';
 import { RosterValidationModule } from './roster-validations/roster-validation.module';
@@ -86,7 +85,6 @@ import { DataImportModule } from './data-import/data-import.module';
         AdminRoutingModule,
         ServiceUnitRuleModule,
         ProviderAttestationsModule,
-        ProviderTrainingsModule,
         AppNavModule.forRoot(),
         SharedModule,
         ReportsModule,

@@ -171,14 +171,6 @@
                       class="remove-session-btn">
                 <mat-icon>remove_circle</mat-icon>
               </button>
-              <!-- Only show expand button if session is present -->
-              @if (session.formGroup.get('status')?.value === true) {
-                <button mat-icon-button 
-                        (click)="$event.stopPropagation(); expandedSession = expandedSession === session ? null : session" 
-                        matTooltip="View Details">
-                  <mat-icon>{{expandedSession === session ? 'expand_less' : 'expand_more'}}</mat-icon>
-                </button>
-              }
             </td>
           </ng-container>
 

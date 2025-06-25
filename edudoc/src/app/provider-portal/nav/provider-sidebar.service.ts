@@ -68,7 +68,7 @@ export class ProviderNavSidebarService implements INavSidebarService {
                         claimValues: [ClaimValues.FullAccess],
                         content: 'Create Encounter (new)',
                         icon: 'fa fa-fw icon-fixed-width',
-                        link: '/provider/encounters/treatment-therapy-v5',
+                        link: '/provider/encounters/new-treatment-therapy',
                     }),
                     new NavSidebarRowItem({
                         claimType: ClaimTypes.EncountersReadyForYou,

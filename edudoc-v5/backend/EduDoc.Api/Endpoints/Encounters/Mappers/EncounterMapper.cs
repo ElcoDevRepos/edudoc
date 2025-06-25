@@ -15,11 +15,15 @@ namespace EduDoc.Api.Endpoints.Encounters.Mappers
             return new EncounterResponseModel
             {
                 Id = entity.Id,
+                ProviderId = entity.ProviderId,
                 ServiceTypeId = (Constants.ServiceTypeId)entity.ServiceTypeId,
-                EncounterDate = entity.EncounterDate ?? default,
-                EncounterStartTime = entity.EncounterStartTime.HasValue ? TimeOnly.FromTimeSpan(entity.EncounterStartTime.Value.ToTimeSpan()) : default,
-                EncounterEndTime = entity.EncounterEndTime.HasValue ? TimeOnly.FromTimeSpan(entity.EncounterEndTime.Value.ToTimeSpan()) : default,
-                AdditionalStudents = entity.AdditionalStudents
+                EncounterDate = entity.EncounterDate,
+                EncounterStartTime = entity.EncounterStartTime,
+                EncounterEndTime = entity.EncounterEndTime,
+                IsGroup = entity.IsGroup,
+                AdditionalStudents = entity.AdditionalStudents,
+                FromSchedule = entity.FromSchedule,
+                Archived = entity.Archived
             };
         }
     }
