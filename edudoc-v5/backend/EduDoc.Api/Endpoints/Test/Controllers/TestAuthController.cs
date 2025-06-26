@@ -17,13 +17,14 @@ namespace EduDoc.Api.Endpoints.Test.Controllers
         [Authorize]
         public IActionResult AuthenticatedEndpoint()
         {
+            var auth = Auth;
             return Ok(new
             {
                 message = "You are authenticated!",
-                userId = GetAuthUserId(),
-                username = GetUsername(),
-                roleId = GetUserRoleId(),
-                roleTypeId = GetUserRoleTypeId()
+                userId = auth.UserId,
+                username = auth.Username,
+                roleId = auth.UserRoleId,
+                roleTypeId = auth.UserRoleTypeId
             });
         }
     }
