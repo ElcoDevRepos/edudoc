@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using EduDoc.Api.Endpoints.Students;
+using EduDoc.Api.Endpoints.EncounterLocations;
 
 
 try
@@ -102,6 +103,7 @@ try
     });
 
     builder.Services.DIRegisterEncounters();
+    builder.Services.DIRegisterEncounterLocations();
     builder.Services.DIRegisterEvaluationTypes();
     builder.Services.DIRegisterStudents();
     
