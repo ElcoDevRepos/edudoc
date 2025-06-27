@@ -23,7 +23,7 @@ public class EncounterLocationsControllerTests : AuthorizedIntegrationTestBase
     }
 
     [Fact]
-    public async Task GetAllEncounterLocations_ShouldReturnUnauthorized_WhenNoTokenProvided()
+    public async Task GetAllEncounterLocations_Should_ReturnUnauthorized_When_NoTokenProvided()
     {
         // Act
         try
@@ -39,7 +39,7 @@ public class EncounterLocationsControllerTests : AuthorizedIntegrationTestBase
     }
 
     [Fact]
-    public async Task GetAllEncounterLocations_ShouldReturnLocations_WhenValidTokenProvided()
+    public async Task GetAllEncounterLocations_Should_ReturnLocations_When_ValidTokenProvided()
     {
         // Arrange
         SetAuthorizationHeader(UserRoleIds.Admin);
@@ -61,7 +61,7 @@ public class EncounterLocationsControllerTests : AuthorizedIntegrationTestBase
     }
 
     [Fact]
-    public async Task GetAllEncounterLocations_ShouldReturnEmptyList_WhenNoLocationsExist()
+    public async Task GetAllEncounterLocations_Should_ReturnEmptyList_When_NoLocationsExist()
     {
         // Arrange
         SetAuthorizationHeader(UserRoleIds.Provider);
