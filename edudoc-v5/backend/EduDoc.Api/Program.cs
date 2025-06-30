@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using EduDoc.Api.Endpoints.Students;
+using EduDoc.Api.Endpoints.DeviationReasons;
 
 
 try
@@ -104,6 +105,7 @@ try
     builder.Services.DIRegisterEncounters();
     builder.Services.DIRegisterEvaluationTypes();
     builder.Services.DIRegisterStudents();
+    builder.Services.DIRegisterDeviationReasons();
     
     // Register authorization handler
     builder.Services.AddSingleton<IAuthorizationHandler, UserRoleHandler>();
