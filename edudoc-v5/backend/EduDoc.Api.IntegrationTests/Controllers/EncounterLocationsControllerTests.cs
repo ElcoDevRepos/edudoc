@@ -27,9 +27,8 @@ public class EncounterLocationsControllerTests : AuthorizedIntegrationTestBase
     {
         // Act
         try
-        {
-            var client = new EduDocClient("", _factory.CreateClient());
-            await client.EncounterLocationsAsync();
+        {;
+            await _client.EncounterLocationsAsync();
             Assert.Fail("Should not have succeeded");
         }
         catch (ApiException aix)
