@@ -27,7 +27,7 @@ public class EncounterLocationsControllerTests : AuthorizedIntegrationTestBase
     {
         // Act
         try
-        {;
+        {
             await _client.EncounterLocationsAsync();
             Assert.Fail("Should not have succeeded");
         }
