@@ -4,6 +4,12 @@ namespace EduDoc.Api.Infrastructure.Responses
 {
     public class GetMultipleResponse<T>
     {
+        public GetMultipleResponse()
+        {
+            Records = new List<T>();
+            Errors = new List<ValidationError>();
+        }
+
         public GetMultipleResponse(List<T> records)
         {
             this.Records = records;
