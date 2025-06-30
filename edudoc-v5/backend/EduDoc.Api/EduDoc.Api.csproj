@@ -52,4 +52,9 @@
     <None Include="appsettings.Development.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EduDoc.Core\EduDoc.Core.csproj" />
+    <ProjectReference Include="..\EduDoc.Infrastructure\EduDoc.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
