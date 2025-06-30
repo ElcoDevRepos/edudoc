@@ -27,7 +27,7 @@ namespace EduDoc.Api.UnitTests.Features.EncounterStatuses.Controllers
         }
 
         [Fact]
-        public async Task GetAllEncounterStatuses_Should_ReturnOk_WhenStatusesExist()
+        public async Task GetAllEncounterStatuses_Should_ReturnOk_When_StatusesExist()
         {
             // Arrange
             var statuses = new List<EncounterStatusResponseModel>
