@@ -1,13 +1,14 @@
-using System.Net;
-using System.Threading.Tasks;
-using EduDoc.Api.EF.Models;
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using EduDoc.Api.EF;
-using EduDoc.Api.IntegrationTests.TestBase;
-using System.Net.Http.Json;
+using EduDoc.Api.EF.Models;
 using EduDoc.Api.Endpoints.Districts.Models;
 using EduDoc.Api.Infrastructure.Responses;
+using EduDoc.Api.IntegrationTests.TestBase;
+using EduDocV5Client;
+using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
 
 namespace EduDoc.Api.IntegrationTests.Controllers;
 
@@ -23,15 +24,22 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
     }
 
     [Fact]
-    public async Task GetAllDistricts_ShouldReturnUnauthorized_WhenNoTokenProvided()
+    public async Task GetAllDistricts_Should_ReturnUnauthorized_When_NoTokenProvided()
     {
         // Act & Assert
-        var response = await _httpClient.GetAsync("/api/districts");
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        try
+        {
+            await _client.DistrictsAsync(); 
+            Assert.Fail("Should not have succeeded");
+        }
+        catch (ApiException aix)
+        {
+            aix.StatusCode.Should().Be((int)HttpStatusCode.Unauthorized);
+        }
     }
 
     [Fact]
-    public async Task GetAllDistricts_ShouldReturnAllDistricts_WhenAdminUser()
+    public async Task GetAllDistricts_Should_ReturnAllDistricts_When_AdminUser()
     {
         // Arrange
         SetAuthorizationHeader(UserRoleIds.Admin);
@@ -89,23 +97,21 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
         await _context.SaveChangesAsync();
 
         // Act
-        var response = await _httpClient.GetAsync("/api/districts");
-        var responseData = await response.Content.ReadFromJsonAsync<GetMultipleResponse<DistrictResponseModel>>();
+        var response = await _client.DistrictsAsync();
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        responseData.Should().NotBeNull();
-        responseData!.Success.Should().BeTrue();
-        responseData.Records.Should().HaveCount(3);
-        responseData.Errors.Should().BeEmpty();
+        response.Should().NotBeNull();
+        response.Success.Should().BeTrue();
+        response.Records.Should().HaveCount(3);
+        response.Errors.Should().BeEmpty();
 
-        responseData.Records.Should().Contain(d => d.Name == "Test District 1" && d.Code == "TST1");
-        responseData.Records.Should().Contain(d => d.Name == "Test District 2" && d.Code == "TST2");
-        responseData.Records.Should().Contain(d => d.Name == "Test District 3" && d.Code == "TST3");
+        response.Records.Should().Contain(d => d.Name == "Test District 1" && d.Code == "TST1");
+        response.Records.Should().Contain(d => d.Name == "Test District 2" && d.Code == "TST2");
+        response.Records.Should().Contain(d => d.Name == "Test District 3" && d.Code == "TST3");
     }
 
     [Fact]
-    public async Task GetAllDistricts_ShouldReturnEmptyList_WhenNoDistrictsExist()
+    public async Task GetAllDistricts_Should_ReturnEmptyList_When_NoDistrictsExist()
     {
         // Arrange
         SetAuthorizationHeader(UserRoleIds.Admin);
@@ -124,19 +130,17 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
         await _context.SaveChangesAsync();
 
         // Act
-        var response = await _httpClient.GetAsync("/api/districts");
-        var responseData = await response.Content.ReadFromJsonAsync<GetMultipleResponse<DistrictResponseModel>>();
+        var response = await _client.DistrictsAsync();
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        responseData.Should().NotBeNull();
-        responseData!.Success.Should().BeTrue();
-        responseData.Records.Should().BeEmpty();
-        responseData.Errors.Should().BeEmpty();
+        response.Should().NotBeNull();
+        response.Success.Should().BeTrue();
+        response.Records.Should().BeEmpty();
+        response.Errors.Should().BeEmpty();
     }
 
     [Fact]
-    public async Task GetAllDistricts_ShouldReturnOnlyAssociatedDistricts_WhenProviderUser()
+    public async Task GetAllDistricts_Should_ReturnOnlyAssociatedDistricts_When_ProviderUser()
     {
         // Arrange
         SetAuthorizationHeader(UserRoleIds.Provider, "2", "Provider User");
@@ -234,23 +238,21 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
         await _context.SaveChangesAsync();
 
         // Act
-        var response = await _httpClient.GetAsync("/api/districts");
-        var responseData = await response.Content.ReadFromJsonAsync<GetMultipleResponse<DistrictResponseModel>>();
+        var response = await _client.DistrictsAsync();
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        responseData.Should().NotBeNull();
-        responseData!.Success.Should().BeTrue();
-        responseData.Records.Should().HaveCount(2);
-        responseData.Errors.Should().BeEmpty();
+        response.Should().NotBeNull();
+        response.Success.Should().BeTrue();
+        response.Records.Should().HaveCount(2);
+        response.Errors.Should().BeEmpty();
 
-        responseData.Records.Should().Contain(d => d.Name == "Associated District 1");
-        responseData.Records.Should().Contain(d => d.Name == "Associated District 2");
-        responseData.Records.Should().NotContain(d => d.Name == "Unassociated District");
+        response.Records.Should().Contain(d => d.Name == "Associated District 1");
+        response.Records.Should().Contain(d => d.Name == "Associated District 2");
+        response.Records.Should().NotContain(d => d.Name == "Unassociated District");
     }
 
     [Fact]
-    public async Task GetAllDistricts_ShouldReturnEmptyList_WhenProviderHasNoAssociatedDistricts()
+    public async Task GetAllDistricts_Should_ReturnEmptyList_When_ProviderHasNoAssociatedDistricts()
     {
         // Arrange
         SetAuthorizationHeader(UserRoleIds.Provider, "2", "Provider User");
@@ -297,19 +299,17 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
         await _context.SaveChangesAsync();
 
         // Act
-        var response = await _httpClient.GetAsync("/api/districts");
-        var responseData = await response.Content.ReadFromJsonAsync<GetMultipleResponse<DistrictResponseModel>>();
+        var response = await _client.DistrictsAsync();
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        responseData.Should().NotBeNull();
-        responseData!.Success.Should().BeTrue();
-        responseData.Records.Should().BeEmpty();
-        responseData.Errors.Should().BeEmpty();
+        response.Should().NotBeNull();
+        response.Success.Should().BeTrue();
+        response.Records.Should().BeEmpty();
+        response.Errors.Should().BeEmpty();
     }
 
     [Fact]
-    public async Task GetAllDistricts_ShouldReturnOnlyAssignedDistrict_WhenDistrictAdminUser()
+    public async Task GetAllDistricts_Should_ReturnOnlyAssignedDistrict_When_DistrictAdminUser()
     {
         // Arrange
         SetAuthorizationHeader(UserRoleIds.SchoolDistrictAdmin, "3", "District Admin User");
@@ -358,22 +358,20 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
         await _context.SaveChangesAsync();
 
         // Act
-        var response = await _httpClient.GetAsync("/api/districts");
-        var responseData = await response.Content.ReadFromJsonAsync<GetMultipleResponse<DistrictResponseModel>>();
+        var response = await _client.DistrictsAsync();
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        responseData.Should().NotBeNull();
-        responseData!.Success.Should().BeTrue();
-        responseData.Records.Should().HaveCount(1);
-        responseData.Errors.Should().BeEmpty();
+        response.Should().NotBeNull();
+        response.Success.Should().BeTrue();
+        response.Records.Should().HaveCount(1);
+        response.Errors.Should().BeEmpty();
 
-        responseData.Records.Should().Contain(d => d.Name == "Assigned District");
-        responseData.Records.Should().NotContain(d => d.Name == "Unassigned District");
+        response.Records.Should().Contain(d => d.Name == "Assigned District");
+        response.Records.Should().NotContain(d => d.Name == "Unassigned District");
     }
 
     [Fact]
-    public async Task GetAllDistricts_ShouldReturnEmptyList_WhenDistrictAdminHasNoAssignedDistrict()
+    public async Task GetAllDistricts_Should_ReturnEmptyList_When_DistrictAdminHasNoAssignedDistrict()
     {
         // Arrange
         SetAuthorizationHeader(UserRoleIds.SchoolDistrictAdmin, "3", "District Admin User");
@@ -410,15 +408,13 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
         await _context.SaveChangesAsync();
 
         // Act
-        var response = await _httpClient.GetAsync("/api/districts");
-        var responseData = await response.Content.ReadFromJsonAsync<GetMultipleResponse<DistrictResponseModel>>();
+        var response = await _client.DistrictsAsync();
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        responseData.Should().NotBeNull();
-        responseData!.Success.Should().BeTrue();
-        responseData.Records.Should().BeEmpty();
-        responseData.Errors.Should().BeEmpty();
+        response.Should().NotBeNull();
+        response.Success.Should().BeTrue();
+        response.Records.Should().BeEmpty();
+        response.Errors.Should().BeEmpty();
     }
 
     public override void Dispose()

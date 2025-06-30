@@ -43,7 +43,7 @@ public class DistrictsControllerTests
     }
 
     [Fact]
-    public async Task GetAllDistricts_Should_ReturnOkResult_WhenDistrictsFound()
+    public async Task GetAllDistricts_Should_ReturnOk_When_DistrictsExist()
     {
         // Arrange
         var districts = new List<DistrictResponseModel>
@@ -100,7 +100,7 @@ public class DistrictsControllerTests
     }
 
     [Fact]
-    public async Task GetAllDistricts_Should_ReturnOkResult_WhenNoDistrictsFound()
+    public async Task GetAllDistricts_Should_ReturnOkWithEmptyList_When_NoDistrictsExist()
     {
         // Arrange
         var emptyList = new List<DistrictResponseModel>();

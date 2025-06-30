@@ -15,7 +15,7 @@ public class DistrictMapperTests
     }
 
     [Fact]
-    public void Map_Should_MapEntityToResponseModel_WhenValidEntityProvided()
+    public void Map_Should_MapEntityToResponseModel_When_ValidEntityProvided()
     {
         // Arrange
         var district = new SchoolDistrict
@@ -48,7 +48,7 @@ public class DistrictMapperTests
     }
 
     [Fact]
-    public void Map_Should_MapEntityList_WhenValidEntityListProvided()
+    public void Map_Should_MapEntityList_When_ValidEntityListProvided()
     {
         // Arrange
         var districts = new List<SchoolDistrict>
@@ -117,7 +117,7 @@ public class DistrictMapperTests
     }
 
     [Fact]
-    public void Map_Should_HandleEmptyList()
+    public void Map_Should_ReturnEmptyList_When_EntityListIsEmpty()
     {
         // Arrange
         var districts = new List<SchoolDistrict>();
@@ -131,24 +131,24 @@ public class DistrictMapperTests
     }
 
     [Fact]
-    public void Map_Should_HandleNullList()
-    {
-        // Arrange
-        List<SchoolDistrict> districts = null!;
-
-        // Act & Assert
-        var action = () => _mapper.Map(districts);
-        action.Should().Throw<ArgumentNullException>();
-    }
-
-    [Fact]
-    public void Map_Should_HandleNullEntity()
+    public void Map_Should_ThrowArgumentNullException_When_EntityIsNull()
     {
         // Arrange
         SchoolDistrict district = null!;
 
         // Act & Assert
         var action = () => _mapper.Map(district);
+        action.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void Map_Should_ThrowArgumentNullException_When_EntityListIsNull()
+    {
+        // Arrange
+        List<SchoolDistrict> districts = null!;
+
+        // Act & Assert
+        var action = () => _mapper.Map(districts);
         action.Should().Throw<ArgumentNullException>();
     }
 } 
