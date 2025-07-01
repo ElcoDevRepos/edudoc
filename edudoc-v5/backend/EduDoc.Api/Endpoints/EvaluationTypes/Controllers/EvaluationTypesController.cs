@@ -23,7 +23,8 @@ public class EvaluationTypesController : BaseApiController
     /// Retrieves all available evaluation types
     /// </summary>
     /// <returns>A list of evaluation types with their IDs and names</returns>
-    [HttpGet("", Name = "GetAllEvaluationTypes")]
+    [HttpGet]
+    [Authorize]
     [ProducesResponseType(typeof(GetMultipleResponse<EvaluationTypeResponseModel>), StatusCodes.Status200OK)]
     public async Task<ActionResult<GetMultipleResponse<EvaluationTypeResponseModel>>> GetAllEvaluationTypes()
     {

@@ -121,7 +121,6 @@ public class StudentMapperTests
             DateOfBirth = new DateTime(2010, 3, 15),
             SchoolId = 10,
             DistrictId = null,
-            School = null,
             District = null
         };
 

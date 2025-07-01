@@ -22,9 +22,7 @@ namespace EduDoc.Api.Endpoints.Client.Controllers
                 ClassName = "EduDocClient",
                 CSharpGeneratorSettings =
                 {
-                    Namespace = "EduDocV5Client",
-                    ArrayType = "System.Collections.Generic.List",
-                    ArrayInstanceType = "System.Collections.Generic.List"
+                    Namespace = "EduDocV5Client"
                 }
             };
 

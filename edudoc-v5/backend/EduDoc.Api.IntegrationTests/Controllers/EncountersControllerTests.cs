@@ -1,37 +1,64 @@
+using EduDoc.Api.EF;
+using EduDoc.Api.EF.Models;
+using EduDoc.Api.Endpoints.Encounters.Models;
+using EduDoc.Api.Infrastructure.Responses;
+using EduDoc.Api.IntegrationTests.Infrastructure;
+using EduDocV5Client;
+using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using EduDoc.Api.Endpoints.Encounters.Models;
-using EduDoc.Api.EF.Models;
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using EduDoc.Api.EF;
-using EduDoc.Api.Infrastructure.Responses;
-using EduDocV5Client;
-using EduDoc.Api.IntegrationTests.TestBase;
+using Xunit.Abstractions;
 
 namespace EduDoc.Api.IntegrationTests.Controllers;
 
-public class EncountersControllerTests : AuthorizedIntegrationTestBase
+public class EncountersControllerTests : IClassFixture<CustomWebApplicationFactory<Startup>>, IAsyncLifetime
 {
-    private readonly IServiceScope _scope;
-    private readonly EdudocSqlContext _context;
+    private readonly CustomWebApplicationFactory<Startup> _factory;
+    private TestResources _testResources = null!;
 
-    public EncountersControllerTests(CustomWebApplicationFactory<global::Program> factory) : base(factory)
+    public EncountersControllerTests(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper output)
     {
-        _scope = factory.Services.CreateScope();
-        _context = _scope.ServiceProvider.GetRequiredService<EdudocSqlContext>();
+        _factory = factory;
+        _factory.OutputHelper = output;
+    }
+
+    public async Task InitializeAsync()
+    {
+        _testResources = await _factory.SetupTest();
+    }
+
+    public async Task DisposeAsync()
+    {
+        await Task.CompletedTask;
     }
 
     [Fact]
     public async Task GetEncounterById_ShouldReturnEncounter_WhenEncounterExists()
     {
         // Arrange
-        SetAuthorizationHeader(UserRoleIds.Admin);
-        
-        var encounterId = 1;
-        var encounter = new Encounter { 
-            Id = encounterId, 
+        await _testResources.TestDatabaseRepository.InsertProviderTitleAsync(new ProviderTitle()
+        {
+            Id = 1,
+            Name = "Test Title",
+            ServiceCodeId = 1,
+        });
+
+        await _testResources.TestDatabaseRepository.InsertProviderAsync(new Provider()
+        {
+            Id = 1,
+            ProviderUserId = 1,
+            TitleId = 1,
+            ProviderEmploymentTypeId = 1,
+            CreatedById = 1,
+        });
+
+        await _testResources.TestDatabaseRepository.InsertEncounterAsync(new Encounter
+        {
+            Id = 1,
             ServiceTypeId = 1,
             ProviderId = 1,
             CreatedById = 1,
@@ -39,30 +66,23 @@ public class EncountersControllerTests : AuthorizedIntegrationTestBase
             AdditionalStudents = 0,
             FromSchedule = true,
             Archived = false
-        };
+        });
 
-        await _context.Encounters.AddAsync(encounter);
-        await _context.SaveChangesAsync();
-        
         // Act
-        var response = await _client.EncountersAsync(encounterId);
+        var response = await _testResources.GetAuthenticatedApiClient().GetEncounterByIdAsync(1);
 
         // Assert
         response.Record.Should().NotBeNull();
-        response.Record.Id.Should().Be(encounter.Id);
+        response.Record.Id.Should().Be(1);
     }
 
     [Fact]
     public async Task GetEncounterById_ShouldReturnNotFound_WhenEncounterDoesNotExist()
     {
-        // Arrange
-        SetAuthorizationHeader(UserRoleIds.Admin);
-        var encounterId = 999;
-
         // Act
         try
         {
-            var response = await _client.EncountersAsync(encounterId);
+            var response = await _testResources.GetAuthenticatedApiClient().GetEncounterByIdAsync(1);
             Assert.Fail("Should not have made it here");
         }
         catch (ApiException aix)
@@ -75,13 +95,10 @@ public class EncountersControllerTests : AuthorizedIntegrationTestBase
     [Fact]
     public async Task GetEncounterById_ShouldReturnUnauthorized_WhenNoTokenProvided()
     {
-        // Arrange - No authorization header set
-        var encounterId = 1;
-
         // Act & Assert
         try
         {
-            await _client.EncountersAsync(encounterId);
+            await _testResources.GetUnauthenticatedApiClient().GetEncounterByIdAsync(1);
             Assert.Fail("Should not have made it here");
         }
         catch (ApiException aix)
@@ -89,11 +106,4 @@ public class EncountersControllerTests : AuthorizedIntegrationTestBase
             aix.StatusCode.Should().Be((int)HttpStatusCode.Unauthorized);
         }
     }
-
-    public override void Dispose()
-    {
-        _scope.Dispose();
-        _context.Dispose();
-        base.Dispose();
-    }
-} 
+}

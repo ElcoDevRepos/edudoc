@@ -14,7 +14,7 @@
   },
   "AllowedHosts": "*",
   "KeyVaultUri": "",
-  "jwtSettings": {
+  "JwtSettings": {
     "JWTKey": "aTVhzdvJrQkB6q0721OER+wljtVR6Dke4vJv/n5LTo8SjyttIw+koURJrf/VYeoLZrh9fnZvYPfcgobEm6Hj0g==",
     "JWTIssuer": "self",
     "JWTAccessMinutes": 480

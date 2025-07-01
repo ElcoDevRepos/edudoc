@@ -1,5 +1,6 @@
 using EduDoc.Api.Endpoints.Students.Models;
 using EduDoc.Api.Endpoints.Students.Validators;
+using EduDoc.Api.Infrastructure.Responses;
 using FluentAssertions;
 
 namespace EduDoc.Api.UnitTests.Features.Students.Validators;
@@ -83,9 +84,8 @@ public class StudentSearchRequestValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1);
-        result.Errors.Should().Contain(e => e.PropertyName == "SearchText" && e.ErrorMessage == "Search text is required and must be at least 2 characters long");
+        result.Errors.Should().Contain(e => e.PropertyName == "SearchText" && e.ErrorMessage == "Search text is required and must be at least 2 characters long" && e.ErrorCode == ValidationError.EnumErrorCode.MinimumLengthNotMet.ToString());
     }
-
     [Fact]
     public void Validate_Should_ReturnInvalid_WhenSearchTextIsNull()
     {
@@ -102,7 +102,7 @@ public class StudentSearchRequestValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1);
-        result.Errors.Should().Contain(e => e.PropertyName == "SearchText" && e.ErrorMessage == "Search text is required and must be at least 2 characters long");
+        result.Errors.Should().Contain(e => e.PropertyName == "SearchText" && e.ErrorMessage == "Search text is required and must be at least 2 characters long" && e.ErrorCode == ValidationError.EnumErrorCode.MinimumLengthNotMet.ToString());
     }
 
     [Fact]
@@ -121,7 +121,7 @@ public class StudentSearchRequestValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1);
-        result.Errors.Should().Contain(e => e.PropertyName == "SearchText" && e.ErrorMessage == "Search text is required and must be at least 2 characters long");
+        result.Errors.Should().Contain(e => e.PropertyName == "SearchText" && e.ErrorMessage == "Search text is required and must be at least 2 characters long" && e.ErrorCode == ValidationError.EnumErrorCode.MinimumLengthNotMet.ToString());
     }
 
     [Fact]
@@ -140,7 +140,7 @@ public class StudentSearchRequestValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1);
-        result.Errors.Should().Contain(e => e.PropertyName == "SearchText" && e.ErrorMessage == "Search text is required and must be at least 2 characters long");
+        result.Errors.Should().Contain(e => e.PropertyName == "SearchText" && e.ErrorMessage == "Search text is required and must be at least 2 characters long" && e.ErrorCode == ValidationError.EnumErrorCode.MinimumLengthNotMet.ToString());
     }
 
     [Fact]
@@ -159,7 +159,7 @@ public class StudentSearchRequestValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1);
-        result.Errors.Should().Contain(e => e.PropertyName == "SearchText" && e.ErrorMessage == "Search text is required and must be at least 2 characters long");
+        result.Errors.Should().Contain(e => e.PropertyName == "SearchText" && e.ErrorMessage == "Search text is required and must be at least 2 characters long" && e.ErrorCode == ValidationError.EnumErrorCode.MinimumLengthNotMet.ToString());
     }
 
     [Fact]
@@ -196,7 +196,7 @@ public class StudentSearchRequestValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1);
-        result.Errors.Should().Contain(e => e.PropertyName == "DistrictId" && e.ErrorMessage == "District ID must be greater than 0 when provided");
+        result.Errors.Should().Contain(e => e.PropertyName == "DistrictId" && e.ErrorMessage == "District ID must be greater than 0 when provided" && e.ErrorCode == ValidationError.EnumErrorCode.PositiveIntegerRequired.ToString());
     }
 
     [Fact]
@@ -215,7 +215,7 @@ public class StudentSearchRequestValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1);
-        result.Errors.Should().Contain(e => e.PropertyName == "DistrictId" && e.ErrorMessage == "District ID must be greater than 0 when provided");
+        result.Errors.Should().Contain(e => e.PropertyName == "DistrictId" && e.ErrorMessage == "District ID must be greater than 0 when provided" && e.ErrorCode == ValidationError.EnumErrorCode.PositiveIntegerRequired.ToString());
     }
 
     [Fact]
@@ -252,7 +252,7 @@ public class StudentSearchRequestValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(2);
-        result.Errors.Should().Contain(e => e.PropertyName == "SearchText" && e.ErrorMessage == "Search text is required and must be at least 2 characters long");
-        result.Errors.Should().Contain(e => e.PropertyName == "DistrictId" && e.ErrorMessage == "District ID must be greater than 0 when provided");
+        result.Errors.Should().Contain(e => e.PropertyName == "SearchText" && e.ErrorMessage == "Search text is required and must be at least 2 characters long" && e.ErrorCode == ValidationError.EnumErrorCode.MinimumLengthNotMet.ToString());
+        result.Errors.Should().Contain(e => e.PropertyName == "DistrictId" && e.ErrorMessage == "District ID must be greater than 0 when provided" && e.ErrorCode == ValidationError.EnumErrorCode.PositiveIntegerRequired.ToString());
     }
 } 

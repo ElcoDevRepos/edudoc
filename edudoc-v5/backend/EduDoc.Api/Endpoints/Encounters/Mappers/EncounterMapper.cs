@@ -5,18 +5,13 @@ namespace EduDoc.Api.Endpoints.Encounters.Mappers
 {
     public interface IEncounterMapper
     {
-        EncounterResponseModel? Map(Encounter? entity);
+        EncounterResponseModel Map(Encounter entity);
     }
 
     public class EncounterMapper : IEncounterMapper
     {
-        public EncounterResponseModel? Map(Encounter? entity)
+        public EncounterResponseModel Map(Encounter entity)
         {
-            if (entity == null)
-            {
-                return null;
-            }
-
             return new EncounterResponseModel
             {
                 Id = entity.Id,

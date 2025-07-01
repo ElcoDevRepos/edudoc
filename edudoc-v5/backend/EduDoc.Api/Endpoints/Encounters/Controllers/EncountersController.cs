@@ -24,20 +24,22 @@ public class EncountersController : BaseApiController
     /// </summary>
     /// <param name="id">The encounter ID</param>
     /// <returns>The encounter details if found</returns>
-    [HttpGet("{id}", Name = "GetEncounterById")]
+    [HttpGet("{id}")]
+    [Authorize]
     [ProducesResponseType(typeof(GetSingleResponse<EncounterResponseModel>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<GetSingleResponse<EncounterResponseModel>>> GetEncounterById(int id)
     {
         var result = await mediator.Send(new GetEncounterByIdQuery { Id = id });
 
-        if (result.Record == null)
+        // little unsure how we want the contract to the api to look here this is thrown together. We want to define what our wrappers look like
+
+        if (result == null)
         {
-            return NotFound(result);
+            return NotFound();
         }
-        else
-        {
-            return Ok(result);
-        }
+
+        return Ok(new GetSingleResponse<EncounterResponseModel>(result));
     }
+
 }

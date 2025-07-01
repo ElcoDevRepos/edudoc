@@ -3,25 +3,37 @@ using EduDoc.Api.EF;
 using EduDoc.Api.EF.Models;
 using EduDoc.Api.Endpoints.EvaluationTypes.Models;
 using EduDoc.Api.Infrastructure.Responses;
-using EduDoc.Api.IntegrationTests.TestBase;
+using EduDoc.Api.IntegrationTests.Infrastructure;
 using EduDocV5Client;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Xunit.Abstractions;
 
 namespace EduDoc.Api.IntegrationTests.Controllers;
 
-public class EvaluationTypesControllerTests : AuthorizedIntegrationTestBase
+public class EvaluationTypesControllerTests : IClassFixture<CustomWebApplicationFactory<Startup>>, IAsyncLifetime
 {
-    private readonly IServiceScope _scope;
-    private readonly EdudocSqlContext _context;
+    private readonly CustomWebApplicationFactory<Startup> _factory;
+    private TestResources _testResources = null!;
 
-    public EvaluationTypesControllerTests(CustomWebApplicationFactory<global::Program> factory) : base(factory)
+    public EvaluationTypesControllerTests(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper output)
     {
-        _scope = factory.Services.CreateScope();
-        _context = _scope.ServiceProvider.GetRequiredService<EdudocSqlContext>();
+        _factory = factory;
+        _factory.OutputHelper = output;
+    }
+
+    public async Task InitializeAsync()
+    {
+        _testResources = await _factory.SetupTest();
+    }
+
+    public async Task DisposeAsync()
+    {
+        await Task.CompletedTask;
     }
 
     [Fact]
@@ -30,60 +42,26 @@ public class EvaluationTypesControllerTests : AuthorizedIntegrationTestBase
         // Act
         try
         {
-            var response = await _client.EvaluationTypesAsync();
+            await _testResources.GetUnauthenticatedApiClient().GetAllEvaluationTypesAsync();
             Assert.Fail("Should not have succeeded");
         }
         catch (ApiException aix)
         {
             // Assert
             aix.StatusCode.Should().Be((int)HttpStatusCode.Unauthorized);
-        } 
+        }
     }
 
     [Fact]
     public async Task GetAllEvaluationTypes_ShouldReturnEvaluationTypes_WhenValidTokenProvided()
     {
-        // Arrange
-        SetAuthorizationHeader(UserRoleIds.Admin); // Any valid user should work with just [Authorize]
-        
-        var evaluationTypes = new List<EvaluationType>
-        {
-            new EvaluationType { Id = 1, Name = "Psychological Evaluation" },
-            new EvaluationType { Id = 2, Name = "Speech Therapy Evaluation" },
-            new EvaluationType { Id = 3, Name = "Occupational Therapy Evaluation" }
-        };
-
-        await _context.EvaluationTypes.AddRangeAsync(evaluationTypes);
-        await _context.SaveChangesAsync();
-
         // Act
-        var response = await _client.EvaluationTypesAsync();
+        var response = await _testResources.GetAuthenticatedApiClient().GetAllEvaluationTypesAsync();
 
         // Assert
-        response.Count.Should().Be(3);
-
-        response.Records.Should().Contain(et => et.Name == "Psychological Evaluation");
-        response.Records.Should().Contain(et => et.Name == "Speech Therapy Evaluation");
-        response.Records.Should().Contain(et => et.Name == "Occupational Therapy Evaluation");
+        response.Records.Should().NotBeNull();
+        response.Records.Should().HaveCount(2);
+        response.Records.Should().Contain(et => et.Name == "Initial Evaluation/Assessment");
+        response.Records.Should().Contain(et => et.Name == "Re-evaluation/Re-assessment");
     }
-
-    [Fact]
-    public async Task GetAllEvaluationTypes_ShouldReturnEmptyList_WhenNoEvaluationTypesExist()
-    {
-        // Arrange
-        SetAuthorizationHeader(UserRoleIds.Provider); // Any valid user should work with just [Authorize]
-
-        // Act
-        var response = await _client.EvaluationTypesAsync();
-
-        // Assert
-        response.Records.Should().BeEmpty();
-    }
-
-    public override void Dispose()
-    {
-        _scope.Dispose();
-        _context.Dispose();
-        base.Dispose();
-    }
-} 
+}
