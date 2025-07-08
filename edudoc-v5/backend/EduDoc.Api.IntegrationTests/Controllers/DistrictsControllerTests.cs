@@ -1,26 +1,40 @@
 using EduDoc.Api.EF;
 using EduDoc.Api.EF.Models;
-using EduDoc.Api.Endpoints.Districts.Models;
+using EduDoc.Api.Endpoints.Encounters.Models;
 using EduDoc.Api.Infrastructure.Responses;
+using EduDoc.Api.IntegrationTests.Infrastructure;
 using EduDoc.Api.IntegrationTests.TestBase;
 using EduDocV5Client;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Xunit.Abstractions;
 
 namespace EduDoc.Api.IntegrationTests.Controllers;
 
-public class DistrictsControllerTests : AuthorizedIntegrationTestBase
+public class DistrictsControllerTests : IClassFixture<CustomWebApplicationFactory<Startup>>, IAsyncLifetime
 {
-    private readonly IServiceScope _scope;
-    private readonly EdudocSqlContext _context;
+    private readonly CustomWebApplicationFactory<Startup> _factory;
+    private TestResources _testResources = null!;
 
-    public DistrictsControllerTests(CustomWebApplicationFactory<global::Program> factory) : base(factory)
+    public DistrictsControllerTests(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper output)
     {
-        _scope = factory.Services.CreateScope();
-        _context = _scope.ServiceProvider.GetRequiredService<EdudocSqlContext>();
+        _factory = factory;
+        _factory.OutputHelper = output;
+    }
+
+    public async Task InitializeAsync()
+    {
+        _testResources = await _factory.SetupTest();
+    }
+
+    public async Task DisposeAsync()
+    {
+        await Task.CompletedTask;
     }
 
     [Fact]
@@ -29,7 +43,7 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
         // Act & Assert
         try
         {
-            await _client.DistrictsAsync(); 
+            await _testResources.GetUnauthenticatedApiClient().DistrictsAsync(); 
             Assert.Fail("Should not have succeeded");
         }
         catch (ApiException aix)
@@ -42,19 +56,17 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
     public async Task GetAllDistricts_Should_ReturnAllDistricts_When_AdminUser()
     {
         // Arrange
-        SetAuthorizationHeader(UserRoleIds.Admin);
 
         // Create admin user (for current user authorization)
-        var adminUser = new User 
-        { 
-            Id = 998, 
+        await _testResources.TestDatabaseRepository.InsertUserAsync(new User
+        {
+            Id = 998,
             Email = "admin@test.com",
             FirstName = "Admin",
             LastName = "User",
             AuthUserId = 1, // This matches the JWT token AuthUserId
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
-        };
-        await _context.Users.AddAsync(adminUser);
+            Version = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+        });
 
         var districts = new List<SchoolDistrict>
         {
@@ -93,11 +105,10 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
             }
         };
 
-        await _context.SchoolDistricts.AddRangeAsync(districts);
-        await _context.SaveChangesAsync();
+        await _testResources.TestDatabaseRepository.InsertSchoolDistrictsAsync(districts);
 
         // Act
-        var response = await _client.DistrictsAsync();
+        var response = await _testResources.GetAuthenticatedApiClient(UserRoleIds.Admin).DistrictsAsync();
 
         // Assert
         response.Should().NotBeNull();
@@ -114,23 +125,20 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
     public async Task GetAllDistricts_Should_ReturnEmptyList_When_NoDistrictsExist()
     {
         // Arrange
-        SetAuthorizationHeader(UserRoleIds.Admin);
 
         // Create admin user (for current user authorization)
-        var adminUser = new User 
+        await _testResources.TestDatabaseRepository.InsertUserAsync(new User 
         { 
             Id = 998, 
             Email = "admin@test.com",
             FirstName = "Admin",
             LastName = "User",
             AuthUserId = 1,
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
-        };
-        await _context.Users.AddAsync(adminUser);
-        await _context.SaveChangesAsync();
+            Version = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+        });
 
         // Act
-        var response = await _client.DistrictsAsync();
+        var response = await _testResources.GetAuthenticatedApiClient(UserRoleIds.Admin).DistrictsAsync();
 
         // Assert
         response.Should().NotBeNull();
@@ -143,19 +151,43 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
     public async Task GetAllDistricts_Should_ReturnOnlyAssociatedDistricts_When_ProviderUser()
     {
         // Arrange
-        SetAuthorizationHeader(UserRoleIds.Provider, "2", "Provider User");
 
+        // Create admin user (for current user authorization)
+        await _testResources.TestDatabaseRepository.InsertUserAsync(new User
+        {
+            Id = 998,
+            Email = "admin@test.com",
+            FirstName = "Admin",
+            LastName = "User",
+            AuthUserId = 1, // This matches the JWT token AuthUserId
+            Version = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+        });
         // Create provider user
-        var providerUser = new User 
+        await _testResources.TestDatabaseRepository.InsertProviderTitleAsync(new ProviderTitle()
+        {
+            Id = 1,
+            Name = "Test Title",
+            ServiceCodeId = 1,
+        });
+
+        await _testResources.TestDatabaseRepository.InsertAuthUserAsync(new AuthUser
+        {
+            Id = 2,
+            Username = "provider1",
+            Password = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02],
+            Salt = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02],
+            RoleId = UserRoleIds.Provider
+        });
+
+        await _testResources.TestDatabaseRepository.InsertUserAsync(new User 
         { 
             Id = 999, 
             Email = "provider@test.com",
             FirstName = "Provider",
             LastName = "User",
             AuthUserId = 2, // This matches the JWT token AuthUserId
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 }
-        };
-        await _context.Users.AddAsync(providerUser);
+            Version = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01]
+        });
 
         // Create districts
         var districts = new List<SchoolDistrict>
@@ -194,20 +226,21 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
                 CreatedById = 998
             }
         };
-        await _context.SchoolDistricts.AddRangeAsync(districts);
+
+        await _testResources.TestDatabaseRepository.InsertSchoolDistrictsAsync(districts);
 
         // Create provider
-        var provider = new Provider
+        await _testResources.TestDatabaseRepository.InsertProviderAsync(new Provider
         {
             Id = 1001,
             ProviderUserId = 999, // Points to User.Id
             TitleId = 1,
-            CreatedById = 999
-        };
-        await _context.Providers.AddAsync(provider);
+            CreatedById = 999,
+            ProviderEmploymentTypeId = 1
+        });
 
         // Create provider-district associations (only for districts 1 and 2)
-        var escAssignment = new ProviderEscAssignment
+        await _testResources.TestDatabaseRepository.InsertProviderEscAssignmentAsync(new ProviderEscAssignment
         {
             Id = 1001,
             ProviderId = 1001,
@@ -215,8 +248,7 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
             EndDate = null, // Active assignment
             Archived = false,
             CreatedById = 999
-        };
-        await _context.ProviderEscAssignments.AddAsync(escAssignment);
+        });
 
         var providerEscs = new List<ProviderEscSchoolDistrict>
         {
@@ -233,12 +265,10 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
                 SchoolDistrictId = 1002
             }
         };
-        await _context.ProviderEscSchoolDistricts.AddRangeAsync(providerEscs);
-
-        await _context.SaveChangesAsync();
+        await _testResources.TestDatabaseRepository.InsertProviderEscSchoolDistrictsAsync(providerEscs);
 
         // Act
-        var response = await _client.DistrictsAsync();
+        var response = await _testResources.GetAuthenticatedApiClient(UserRoleIds.Provider, "2").DistrictsAsync();
 
         // Assert
         response.Should().NotBeNull();
@@ -255,19 +285,44 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
     public async Task GetAllDistricts_Should_ReturnEmptyList_When_ProviderHasNoAssociatedDistricts()
     {
         // Arrange
-        SetAuthorizationHeader(UserRoleIds.Provider, "2", "Provider User");
+
+        //Create admin user
+        await _testResources.TestDatabaseRepository.InsertUserAsync(new User
+        {
+            Id = 998,
+            Email = "admin@test.com",
+            FirstName = "Admin",
+            LastName = "User",
+            AuthUserId = 1,
+            Version = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+        });
 
         // Create provider user
-        var providerUser = new User 
+        await _testResources.TestDatabaseRepository.InsertProviderTitleAsync(new ProviderTitle()
+        {
+            Id = 1,
+            Name = "Test Title",
+            ServiceCodeId = 1,
+        });
+
+        await _testResources.TestDatabaseRepository.InsertAuthUserAsync(new AuthUser
+        {
+            Id = 2,
+            Username = "provider1",
+            Password = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02],
+            Salt = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02],
+            RoleId = UserRoleIds.Provider
+        });
+
+        await _testResources.TestDatabaseRepository.InsertUserAsync(new User 
         { 
             Id = 999, 
             Email = "provider@test.com",
             FirstName = "Provider",
             LastName = "User",
             AuthUserId = 2, // This matches the JWT token AuthUserId
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 }
-        };
-        await _context.Users.AddAsync(providerUser);
+            Version = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01]
+        });
 
         // Create districts (but no associations)
         var districts = new List<SchoolDistrict>
@@ -284,22 +339,21 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
                 CreatedById = 998
             }
         };
-        await _context.SchoolDistricts.AddRangeAsync(districts);
+
+        await _testResources.TestDatabaseRepository.InsertSchoolDistrictsAsync(districts);
 
         // Create provider (but no associations)
-        var provider = new Provider
+        await _testResources.TestDatabaseRepository.InsertProviderAsync(new Provider
         {
             Id = 1001,
             ProviderUserId = 999, // Points to User.Id
             TitleId = 1,
-            CreatedById = 999
-        };
-        await _context.Providers.AddAsync(provider);
-
-        await _context.SaveChangesAsync();
+            CreatedById = 999,
+            ProviderEmploymentTypeId = 1
+        });
 
         // Act
-        var response = await _client.DistrictsAsync();
+        var response = await _testResources.GetAuthenticatedApiClient(UserRoleIds.Provider, "2").DistrictsAsync();
 
         // Assert
         response.Should().NotBeNull();
@@ -312,20 +366,17 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
     public async Task GetAllDistricts_Should_ReturnOnlyAssignedDistrict_When_DistrictAdminUser()
     {
         // Arrange
-        SetAuthorizationHeader(UserRoleIds.SchoolDistrictAdmin, "3", "District Admin User");
 
-        // Create district admin user
-        var districtAdminUser = new User 
-        { 
-            Id = 1000, 
-            Email = "districtadmin@test.com",
-            FirstName = "District",
-            LastName = "Admin",
-            AuthUserId = 3, // This matches the JWT token AuthUserId,
-            SchoolDistrictId = 1001,
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02 }
-        };
-        await _context.Users.AddAsync(districtAdminUser);
+        // Create admin user
+        await _testResources.TestDatabaseRepository.InsertUserAsync(new User
+        {
+            Id = 998,
+            Email = "admin@test.com",
+            FirstName = "Admin",
+            LastName = "User",
+            AuthUserId = 1,
+            Version = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+        });
 
         // Create districts
         var districts = new List<SchoolDistrict>
@@ -353,12 +404,32 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
                 CreatedById = 998
             }
         };
-        await _context.SchoolDistricts.AddRangeAsync(districts);
 
-        await _context.SaveChangesAsync();
+        await _testResources.TestDatabaseRepository.InsertSchoolDistrictsAsync(districts);
+
+        // Create district admin user
+        await _testResources.TestDatabaseRepository.InsertAuthUserAsync(new AuthUser
+        {
+            Id = 3,
+            Username = "districtadmin1",
+            Password = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02],
+            Salt = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02],
+            RoleId = UserRoleIds.SchoolDistrictAdmin
+        });
+
+        await _testResources.TestDatabaseRepository.InsertUserAsync(new User
+        {
+            Id = 1000,
+            Email = "districtadmin@test.com",
+            FirstName = "District",
+            LastName = "Admin",
+            AuthUserId = 3, // This matches the JWT token AuthUserId,
+            SchoolDistrictId = 1001,
+            Version = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02]
+        });
 
         // Act
-        var response = await _client.DistrictsAsync();
+        var response = await _testResources.GetAuthenticatedApiClient(UserRoleIds.SchoolDistrictAdmin, "3").DistrictsAsync();
 
         // Assert
         response.Should().NotBeNull();
@@ -374,19 +445,37 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
     public async Task GetAllDistricts_Should_ReturnEmptyList_When_DistrictAdminHasNoAssignedDistrict()
     {
         // Arrange
-        SetAuthorizationHeader(UserRoleIds.SchoolDistrictAdmin, "3", "District Admin User");
+
+        // Create admin user
+        await _testResources.TestDatabaseRepository.InsertUserAsync(new User
+        {
+            Id = 998,
+            Email = "admin@test.com",
+            FirstName = "Admin",
+            LastName = "User",
+            AuthUserId = 1,
+            Version = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+        });
 
         // Create district admin user
-        var districtAdminUser = new User 
+        await _testResources.TestDatabaseRepository.InsertAuthUserAsync(new AuthUser
+        {
+            Id = 3,
+            Username = "districtadmin1",
+            Password = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02],
+            Salt = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02],
+            RoleId = UserRoleIds.SchoolDistrictAdmin
+        });
+
+        await _testResources.TestDatabaseRepository.InsertUserAsync(new User 
         { 
             Id = 1000, 
             Email = "districtadmin@test.com",
             FirstName = "District",
             LastName = "Admin",
             AuthUserId = 3, // This matches the JWT token AuthUserId
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02 }
-        };
-        await _context.Users.AddAsync(districtAdminUser);
+            Version = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02]
+        });
 
         // Create districts (but no assignments)
         var districts = new List<SchoolDistrict>
@@ -403,24 +492,17 @@ public class DistrictsControllerTests : AuthorizedIntegrationTestBase
                 CreatedById = 998
             }
         };
-        await _context.SchoolDistricts.AddRangeAsync(districts);
 
-        await _context.SaveChangesAsync();
+        await _testResources.TestDatabaseRepository.InsertSchoolDistrictsAsync(districts);
 
         // Act
-        var response = await _client.DistrictsAsync();
+
+        var response = await _testResources.GetAuthenticatedApiClient(UserRoleIds.SchoolDistrictAdmin, "3").DistrictsAsync();
 
         // Assert
         response.Should().NotBeNull();
         response.Success.Should().BeTrue();
         response.Records.Should().BeEmpty();
         response.Errors.Should().BeEmpty();
-    }
-
-    public override void Dispose()
-    {
-        _scope.Dispose();
-        _context.Dispose();
-        base.Dispose();
     }
 } 

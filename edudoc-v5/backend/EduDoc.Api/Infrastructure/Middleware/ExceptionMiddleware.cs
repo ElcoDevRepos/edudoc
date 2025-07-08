@@ -29,7 +29,7 @@ namespace EduDoc.Api.Infrastructure.Middleware
             catch (Exception ex)
             {
                 var d = System.Diagnostics.Activity.Current;
-                var traceId = System.Diagnostics.Activity.Current.TraceId.ToString();
+                var traceId = System.Diagnostics.Activity.Current?.TraceId.ToString() ?? "";
                 var utcNow = DateTime.UtcNow;
 
                 logger.LogError(ex, "Unhandled exception occurred. TraceId: {TraceId} at {UtcTime}", traceId, utcNow);
@@ -37,7 +37,7 @@ namespace EduDoc.Api.Infrastructure.Middleware
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 context.Response.ContentType = "application/json";
 
-                string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                string? environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
                 ExceptionResponse exceptionResponse = new ExceptionResponse
                 {
