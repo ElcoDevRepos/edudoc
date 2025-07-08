@@ -12,7 +12,7 @@ public class StudentSearchRequestValidator : AbstractValidator<StudentSearchRequ
     {
         RuleFor(x => x.SearchText)
             .Must(searchText => !string.IsNullOrWhiteSpace(searchText) && searchText.Trim().Length >= 2)
-            .WithErrorCode(ValidationError.EnumErrorCode.MinLength)
+            .WithErrorCode(ValidationError.EnumErrorCode.MinimumLengthNotMet)
             .WithMessage("Search text is required and must be at least 2 characters long");
 
         RuleFor(x => x.DistrictId)

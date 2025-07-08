@@ -29,7 +29,7 @@ namespace API.Middleware
             catch (Exception ex)
             {
                 var d = System.Diagnostics.Activity.Current;
-                var traceId = System.Diagnostics.Activity.Current.TraceId.ToString();
+                var traceId = System.Diagnostics.Activity.Current?.TraceId.ToString() ?? "unknown";
                 var utcNow = DateTime.UtcNow;
 
                 logger.LogError(ex, "Unhandled exception occurred. TraceId: {TraceId} at {UtcTime}", traceId, utcNow);

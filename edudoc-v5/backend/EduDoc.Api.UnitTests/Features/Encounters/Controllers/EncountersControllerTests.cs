@@ -63,7 +63,7 @@ namespace EduDoc.Api.UnitTests.Features.Encounters.Controllers
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             var response = Assert.IsType<GetSingleResponse<EncounterResponseModel>>(okResult.Value);
-            Assert.Equal(encounterId, response.Record.Id);
+            Assert.Equal(encounterId, response.Record?.Id);
         }
 
         [Fact]
@@ -72,13 +72,14 @@ namespace EduDoc.Api.UnitTests.Features.Encounters.Controllers
             // Arrange
             var encounterId = 999;
             _mediatorMock.Setup(m => m.Send(It.IsAny<GetEncounterByIdQuery>(), default))
-                .ReturnsAsync((EncounterResponseModel?)null);
+                .ReturnsAsync(null as EncounterResponseModel);
 
             // Act
             var result = await _controller.GetEncounterById(encounterId);
 
             // Assert
-            Assert.IsType<NotFoundResult>(result.Result);
+            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+            Assert.IsType<GetSingleResponse<EncounterResponseModel>>(notFoundResult.Value);
         }
 
         [Fact]
@@ -86,6 +87,8 @@ namespace EduDoc.Api.UnitTests.Features.Encounters.Controllers
         {
             // Arrange
             var encounterId = 1;
+            _mediatorMock.Setup(m => m.Send(It.IsAny<GetEncounterByIdQuery>(), default))
+             .ReturnsAsync(null as EncounterResponseModel);
 
             // Act
             await _controller.GetEncounterById(encounterId);

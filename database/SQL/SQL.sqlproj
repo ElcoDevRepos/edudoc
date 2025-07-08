@@ -319,5 +319,6 @@
   <ItemGroup>
     <None Include="test.publish.xml" />
     <None Include="local.publish.xml" />
+    <None Include="integration-test.publish.xml" />
   </ItemGroup>
 </Project>
