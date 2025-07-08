@@ -46,7 +46,7 @@ public class StudentsControllerTests : IClassFixture<CustomWebApplicationFactory
         // Act & Assert
         try
         {
-            await _testResources.GetUnauthenticatedApiClient().SearchStudentsAsync(request);
+            await _testResources.GetUnauthenticatedApiClient().SearchAsync(request);
             Assert.Fail("Should not have made it here");
         }
         catch (ApiException aix)
@@ -115,7 +115,7 @@ public class StudentsControllerTests : IClassFixture<CustomWebApplicationFactory
         };
         
         // Act
-        var responseData = await _testResources.GetAuthenticatedApiClient().SearchStudentsAsync(request);
+        var responseData = await _testResources.GetAuthenticatedApiClient().SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();
@@ -139,7 +139,7 @@ public class StudentsControllerTests : IClassFixture<CustomWebApplicationFactory
         };
 
         // Act
-        var responseData = await _testResources.GetAuthenticatedApiClient().SearchStudentsAsync(request);
+        var responseData = await _testResources.GetAuthenticatedApiClient().SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();
@@ -161,7 +161,7 @@ public class StudentsControllerTests : IClassFixture<CustomWebApplicationFactory
         // Act & Assert
         try
         {
-            await _testResources.GetAuthenticatedApiClient().SearchStudentsAsync(request);
+            await _testResources.GetAuthenticatedApiClient().SearchAsync(request);
             Assert.Fail("Should not have made it here");
         }
         catch (ApiException aix)
@@ -215,7 +215,7 @@ public class StudentsControllerTests : IClassFixture<CustomWebApplicationFactory
         });
 
         // Act
-        var responseData = await _testResources.GetAuthenticatedApiClient().SearchStudentsAsync(new StudentSearchRequestModel
+        var responseData = await _testResources.GetAuthenticatedApiClient().SearchAsync(new StudentSearchRequestModel
         {
             SearchText = "Alice",
             DistrictId = 1
@@ -321,7 +321,7 @@ public class StudentsControllerTests : IClassFixture<CustomWebApplicationFactory
         };
 
         // Act
-        var responseData = await authenticatedClient.SearchStudentsAsync(request);
+        var responseData = await authenticatedClient.SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();
@@ -383,7 +383,7 @@ public class StudentsControllerTests : IClassFixture<CustomWebApplicationFactory
         };
 
         // Act
-        var responseData = await authenticatedClient.SearchStudentsAsync(request);
+        var responseData = await authenticatedClient.SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();
@@ -461,7 +461,7 @@ public class StudentsControllerTests : IClassFixture<CustomWebApplicationFactory
         };
 
         // Act
-        var responseData = await authenticatedClient.SearchStudentsAsync(request);
+        var responseData = await authenticatedClient.SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();
@@ -511,7 +511,7 @@ public class StudentsControllerTests : IClassFixture<CustomWebApplicationFactory
         };
 
         // Act
-        var responseData = await authenticatedClient.SearchStudentsAsync(request);
+        var responseData = await authenticatedClient.SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();
@@ -531,7 +531,7 @@ public class StudentsControllerTests : IClassFixture<CustomWebApplicationFactory
         // Act & Assert
         try
         {
-            await _testResources.GetAuthenticatedApiClient().SearchStudentsAsync(request);
+            await _testResources.GetAuthenticatedApiClient().SearchAsync(request);
             Assert.Fail("Should not have made it here");
         }
         catch (ApiException aix)
@@ -570,7 +570,7 @@ public class StudentsControllerTests : IClassFixture<CustomWebApplicationFactory
         };
 
         // Act
-        var responseData = await authenticatedClient.SearchStudentsAsync(request);
+        var responseData = await authenticatedClient.SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();

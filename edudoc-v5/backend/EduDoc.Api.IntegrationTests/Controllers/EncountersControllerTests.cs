@@ -69,7 +69,7 @@ public class EncountersControllerTests : IClassFixture<CustomWebApplicationFacto
         });
 
         // Act
-        var response = await _testResources.GetAuthenticatedApiClient().GetEncounterByIdAsync(1);
+        var response = await _testResources.GetAuthenticatedApiClient().EncountersAsync(1);
 
         // Assert
         response.Record.Should().NotBeNull();
@@ -82,7 +82,7 @@ public class EncountersControllerTests : IClassFixture<CustomWebApplicationFacto
         // Act
         try
         {
-            var response = await _testResources.GetAuthenticatedApiClient().GetEncounterByIdAsync(1);
+            var response = await _testResources.GetAuthenticatedApiClient().EncountersAsync(1);
             Assert.Fail("Should not have made it here");
         }
         catch (ApiException aix)
@@ -98,7 +98,7 @@ public class EncountersControllerTests : IClassFixture<CustomWebApplicationFacto
         // Act & Assert
         try
         {
-            await _testResources.GetUnauthenticatedApiClient().GetEncounterByIdAsync(1);
+            await _testResources.GetUnauthenticatedApiClient().EncountersAsync(1);
             Assert.Fail("Should not have made it here");
         }
         catch (ApiException aix)
