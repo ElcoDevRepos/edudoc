@@ -42,7 +42,7 @@ public class EvaluationTypesControllerTests : IClassFixture<CustomWebApplication
         // Act
         try
         {
-            await _testResources.GetUnauthenticatedApiClient().GetAllEvaluationTypesAsync();
+            await _testResources.GetUnauthenticatedApiClient().EvaluationTypesAsync();
             Assert.Fail("Should not have succeeded");
         }
         catch (ApiException aix)
@@ -56,7 +56,7 @@ public class EvaluationTypesControllerTests : IClassFixture<CustomWebApplication
     public async Task GetAllEvaluationTypes_ShouldReturnEvaluationTypes_WhenValidTokenProvided()
     {
         // Act
-        var response = await _testResources.GetAuthenticatedApiClient().GetAllEvaluationTypesAsync();
+        var response = await _testResources.GetAuthenticatedApiClient().EvaluationTypesAsync();
 
         // Assert
         response.Records.Should().NotBeNull();

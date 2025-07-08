@@ -42,7 +42,7 @@ namespace EduDoc.Api.UnitTests.Features.Encounters.Controllers
         {
             // Arrange
             var encounterId = 1;
-            var encounterResponse = new GetSingleResponse<EncounterResponseModel>(new EncounterResponseModel
+            var encounterResponse = new EncounterResponseModel
             {
                 Id = encounterId,
                 ProviderId = 1,
@@ -52,7 +52,7 @@ namespace EduDoc.Api.UnitTests.Features.Encounters.Controllers
                 AdditionalStudents = 0,
                 FromSchedule = true,
                 Archived = false
-            });
+            };
 
             _mediatorMock.Setup(m => m.Send(It.IsAny<GetEncounterByIdQuery>(), default))
                 .ReturnsAsync(encounterResponse);
@@ -72,7 +72,7 @@ namespace EduDoc.Api.UnitTests.Features.Encounters.Controllers
             // Arrange
             var encounterId = 999;
             _mediatorMock.Setup(m => m.Send(It.IsAny<GetEncounterByIdQuery>(), default))
-                .ReturnsAsync(new GetSingleResponse<EncounterResponseModel>(null as EncounterResponseModel));
+                .ReturnsAsync(null as EncounterResponseModel);
 
             // Act
             var result = await _controller.GetEncounterById(encounterId);
@@ -88,7 +88,7 @@ namespace EduDoc.Api.UnitTests.Features.Encounters.Controllers
             // Arrange
             var encounterId = 1;
             _mediatorMock.Setup(m => m.Send(It.IsAny<GetEncounterByIdQuery>(), default))
-             .ReturnsAsync(new GetSingleResponse<EncounterResponseModel>(null as EncounterResponseModel));
+             .ReturnsAsync(null as EncounterResponseModel);
 
             // Act
             await _controller.GetEncounterById(encounterId);

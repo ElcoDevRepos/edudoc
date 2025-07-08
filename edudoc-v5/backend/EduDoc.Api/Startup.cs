@@ -1,5 +1,6 @@
 ﻿using Azure.Identity;
 using EduDoc.Api.EF;
+using EduDoc.Api.Endpoints.DeviationReasons;
 using EduDoc.Api.Endpoints.Encounters;
 using EduDoc.Api.Endpoints.Encounters.Queries;
 using EduDoc.Api.Endpoints.Encounters.Repositories;
@@ -71,6 +72,7 @@ public class Startup
         services.DIRegisterEncounters();
         services.DIRegisterEvaluationTypes();
         services.DIRegisterStudents();
+        services.DIRegisterDeviationReasons();
 
         services.AddControllers();
 
