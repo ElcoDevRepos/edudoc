@@ -12,6 +12,7 @@ public partial class EdudocSqlContext : DbContext
     {
     }
 
+
     public virtual DbSet<Acknowledgement> Acknowledgements { get; set; }
 
     public virtual DbSet<ActivitySummary> ActivitySummaries { get; set; }

@@ -36,6 +36,7 @@ namespace EduDoc.Api.UnitTests.Features.Encounters.Mappers
             var result = _mapper.Map(entity);
 
             // Assert
+            Assert.NotNull(result);
             Assert.Equal(entity.Id, result.Id);
             Assert.Equal(entity.ProviderId, result.ProviderId);
             Assert.Equal((Constants.ServiceTypeId)entity.ServiceTypeId, result.ServiceTypeId);
@@ -46,6 +47,19 @@ namespace EduDoc.Api.UnitTests.Features.Encounters.Mappers
             Assert.Equal(entity.AdditionalStudents, result.AdditionalStudents);
             Assert.Equal(entity.FromSchedule, result.FromSchedule);
             Assert.Equal(entity.Archived, result.Archived);
+        }
+
+        [Fact]
+        public void Map_Should_ReturnNull_When_EntityIsNull()
+        {
+            // Arrange
+            Encounter? entity = null;
+
+            // Act
+            var result = _mapper.Map(entity);
+
+            // Assert
+            Assert.Null(result);
         }
 
         [Fact]
@@ -70,12 +84,13 @@ namespace EduDoc.Api.UnitTests.Features.Encounters.Mappers
             var result = _mapper.Map(entity);
 
             // Assert
+            Assert.NotNull(result);
             Assert.Equal(entity.Id, result.Id);
             Assert.Equal(entity.ProviderId, result.ProviderId);
             Assert.Equal((Constants.ServiceTypeId)entity.ServiceTypeId, result.ServiceTypeId);
-            Assert.Equal(default(DateTime?), result.EncounterDate);
-            Assert.Equal(default(TimeOnly?), result.EncounterStartTime);
-            Assert.Equal(default(TimeOnly?), result.EncounterEndTime);
+            Assert.Null(result.EncounterDate);
+            Assert.Null(result.EncounterStartTime);
+            Assert.Null(result.EncounterEndTime);
             Assert.Equal(entity.IsGroup, result.IsGroup);
             Assert.Equal(entity.AdditionalStudents, result.AdditionalStudents);
             Assert.Equal(entity.FromSchedule, result.FromSchedule);
@@ -101,6 +116,7 @@ namespace EduDoc.Api.UnitTests.Features.Encounters.Mappers
             var result = _mapper.Map(entity);
 
             // Assert
+            Assert.NotNull(result);
             Assert.Equal(Constants.ServiceTypeId.TreatmentTherapy, result.ServiceTypeId);
         }
     }

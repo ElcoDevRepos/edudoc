@@ -2,6 +2,7 @@ using EduDoc.Api.Endpoints.EvaluationTypes.Mappers;
 using EduDoc.Api.Endpoints.EvaluationTypes.Models;
 using EduDoc.Api.EF.Models;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 
 namespace EduDoc.Api.UnitTests.Features.EvaluationTypes.Mappers;
 

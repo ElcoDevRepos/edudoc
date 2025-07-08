@@ -7,6 +7,7 @@ using EduDoc.Api.Infrastructure.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using EduDoc.Api.EF;
 using EduDocV5Client;
+using EduDoc.Api.IntegrationTests.Infrastructure;
 
 namespace EduDoc.Api.IntegrationTests.TestBase;
 

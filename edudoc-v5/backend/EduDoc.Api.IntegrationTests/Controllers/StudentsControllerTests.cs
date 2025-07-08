@@ -1,30 +1,44 @@
+using EduDoc.Api.EF;
+using EduDoc.Api.EF.Models;
+using EduDoc.Api.IntegrationTests.Infrastructure;
+using EduDocV5Client;
+using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Threading.Tasks;
-using EduDoc.Api.EF.Models;
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using EduDoc.Api.EF;
-using EduDocV5Client;
-using EduDoc.Api.IntegrationTests.TestBase;
+using Xunit.Abstractions;
+
+#pragma warning disable EF1002 // SQL injection warnings - test file with controlled parameters
 
 namespace EduDoc.Api.IntegrationTests.Controllers;
 
-public class StudentsControllerTests : AuthorizedIntegrationTestBase
+public class StudentsControllerTests : IClassFixture<CustomWebApplicationFactory<Startup>>, IAsyncLifetime
 {
-    private readonly IServiceScope _scope;
-    private readonly EdudocSqlContext _context;
+    private readonly CustomWebApplicationFactory<Startup> _factory;
+    private TestResources _testResources = null!;
 
-    public StudentsControllerTests(CustomWebApplicationFactory<global::Program> factory) : base(factory)
+    public StudentsControllerTests(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper output)
     {
-        _scope = factory.Services.CreateScope();
-        _context = _scope.ServiceProvider.GetRequiredService<EdudocSqlContext>();
+        _factory = factory;
+        _factory.OutputHelper = output;
+    }
+
+    public async Task InitializeAsync()
+    {
+        _testResources = await _factory.SetupTest();
+    }
+
+    public async Task DisposeAsync()
+    {
+        await Task.CompletedTask;
     }
 
     [Fact]
     public async Task SearchStudents_ShouldReturnUnauthorized_WhenNoTokenProvided()
     {
         // Arrange
-        var request = new EduDocV5Client.StudentSearchRequestModel 
+        var request = new StudentSearchRequestModel 
         { 
             SearchText = "John" 
         };
@@ -32,7 +46,7 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
         // Act & Assert
         try
         {
-            await _client.SearchAsync(request);
+            await _testResources.GetUnauthenticatedApiClient().SearchAsync(request);
             Assert.Fail("Should not have made it here");
         }
         catch (ApiException aix)
@@ -45,106 +59,63 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
     public async Task SearchStudents_ShouldReturnStudents_WhenValidTokenAndMatchingStudentsExist()
     {
         // Arrange
-        SetAuthorizationHeader(UserRoleIds.Admin);
+        // Create test data
+        await CreateTestUser(_testResources, 999, "admin@test.com", "Admin", "User", 1);
+        await CreateTestUser(_testResources, 998, "test@test.com", "Test", "User", 2);
 
-        // Create admin user (for current user authorization)
-        var adminUser = new User 
-        { 
-            Id = 998, 
-            Email = "admin@test.com",
-            FirstName = "Admin",
-            LastName = "User",
-            AuthUserId = 1, // This matches the JWT token AuthUserId
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
-        };
-        await _context.Users.AddAsync(adminUser);
+        // Create test school and district
+        await CreateTestSchool(_testResources, 999, "Test Elementary School");
+        await CreateTestDistrict(_testResources, 999, "Test School District", "TST");
 
-        // Create test users for CreatedBy
-        var testUser = new User 
-        { 
-            Id = 999, 
-            Email = "test@test.com",
-            FirstName = "Test",
-            LastName = "User",
-            AuthUserId = 2, // Different AuthUserId for CreatedBy
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 }
-        };
-        await _context.Users.AddAsync(testUser);
+        await _testResources.TestDatabaseRepository.InsertStudentsAsync(
+            new List<Student>
+            {
+                new Student
+                {
+                    Id = 1001,
+                    FirstName = "John",
+                    LastName = "Doe",
+                    Grade = "5",
+                    DateOfBirth = new DateTime(2010, 1, 1),
+                    SchoolId = 999,
+                    DistrictId = 999,
+                    CreatedById = 999,
+                    Archived = false
+                },
+                new Student
+                {
+                    Id = 1002,
+                    FirstName = "Johnny",
+                    LastName = "Smith",
+                    Grade = "6",
+                    DateOfBirth = new DateTime(2009, 5, 15),
+                    SchoolId = 999,
+                    DistrictId = 999,
+                    CreatedById = 999,
+                    Archived = false
+                },
+                new Student
+                {
+                    Id = 1003,
+                    FirstName = "Jane",
+                    LastName = "Johnson",
+                    Grade = "4",
+                    DateOfBirth = new DateTime(2011, 8, 20),
+                    SchoolId = 999,
+                    DistrictId = 999,
+                    CreatedById = 999,
+                    Archived = false
+                }
+             });
 
-        // Create test school
-        var testSchool = new School
-        {
-            Id = 999,
-            Name = "Test Elementary School",
-            CreatedById = 1
-        };
-        await _context.Schools.AddAsync(testSchool);
-
-        // Create test district
-        var testDistrict = new SchoolDistrict
-        {
-            Id = 999,
-            Name = "Test School District",
-            Code = "TST",
-            Einnumber = "123456789",
-            Irnnumber = "654321",
-            Npinumber = "9876543210",
-            ProviderNumber = "1234567",
-            CreatedById = 1
-        };
-        await _context.SchoolDistricts.AddAsync(testDistrict);
-
-        var students = new List<Student>
-        {
-            new Student 
-            { 
-                Id = 1001, 
-                FirstName = "John", 
-                LastName = "Doe", 
-                Grade = "5", 
-                DateOfBirth = new DateTime(2010, 1, 1),
-                SchoolId = 999,
-                DistrictId = 999,
-                CreatedById = 999,
-                Archived = false
-            },
-            new Student 
-            { 
-                Id = 1002, 
-                FirstName = "Johnny", 
-                LastName = "Smith", 
-                Grade = "6", 
-                DateOfBirth = new DateTime(2009, 5, 15),
-                SchoolId = 999,
-                DistrictId = 999,
-                CreatedById = 999,
-                Archived = false
-            },
-            new Student 
-            { 
-                Id = 1003, 
-                FirstName = "Jane", 
-                LastName = "Johnson", 
-                Grade = "4", 
-                DateOfBirth = new DateTime(2011, 8, 20),
-                SchoolId = 999,
-                DistrictId = 999,
-                CreatedById = 999,
-                Archived = false
-            }
-        };
-
-        await _context.Students.AddRangeAsync(students);
-        await _context.SaveChangesAsync();
-
-        var request = new EduDocV5Client.StudentSearchRequestModel 
+        var request = new StudentSearchRequestModel 
         { 
             SearchText = "John",
             DistrictId = 999
         };
         
         // Act
-        var responseData = await _client.SearchAsync(request);
+        var responseData = await _testResources.GetAuthenticatedApiClient().SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();
@@ -162,15 +133,13 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
     public async Task SearchStudents_ShouldReturnEmptyList_WhenNoMatchingStudentsExist()
     {
         // Arrange
-        SetAuthorizationHeader(UserRoleIds.Provider);
-        
-        var request = new EduDocV5Client.StudentSearchRequestModel 
+        var request = new StudentSearchRequestModel 
         { 
             SearchText = "NonExistentStudent"
         };
 
         // Act
-        var responseData = await _client.SearchAsync(request);
+        var responseData = await _testResources.GetAuthenticatedApiClient().SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();
@@ -184,9 +153,7 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
     public async Task SearchStudents_ShouldReturnValidationErrors_WhenSearchTextIsEmpty()
     {
         // Arrange
-        SetAuthorizationHeader(UserRoleIds.Admin);
-        
-        var request = new EduDocV5Client.StudentSearchRequestModel 
+        var request = new StudentSearchRequestModel 
         { 
             SearchText = ""
         };
@@ -194,13 +161,12 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
         // Act & Assert
         try
         {
-            await _client.SearchAsync(request);
+            await _testResources.GetAuthenticatedApiClient().SearchAsync(request);
             Assert.Fail("Should not have made it here");
         }
         catch (ApiException aix)
         {
             aix.StatusCode.Should().Be((int)HttpStatusCode.UnprocessableEntity);
-            // Note: Validation error details would be in the response body if needed
         }
     }
 
@@ -208,86 +174,52 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
     public async Task SearchStudents_ShouldFilterByDistrict_WhenDistrictIdProvided()
     {
         // Arrange
-        SetAuthorizationHeader(UserRoleIds.Admin);
-
         // Create admin user (for current user authorization)
-        var adminUser = new User 
-        { 
-            Id = 997, 
-            Email = "admin@test.com",
-            FirstName = "Admin",
-            LastName = "User",
-            AuthUserId = 1, // This matches the JWT token AuthUserId
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 }
-        };
-        await _context.Users.AddAsync(adminUser);
+        await CreateTestUser(_testResources, 997, "admin@test.com", "Admin", "User", 1);
+        await CreateTestUser(_testResources, 998, "test2@test.com", "Test", "User", 2);
 
-        // Create test users for CreatedBy
-        var testUser = new User 
-        { 
-            Id = 998, 
-            Email = "test2@test.com",
-            FirstName = "Test",
-            LastName = "User",
-            AuthUserId = 2, // Different AuthUserId for CreatedBy
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02 }
-        };
-        await _context.Users.AddAsync(testUser);
+        // Create test districts first
+        await CreateTestDistrict(_testResources, 1, "Test District 1", "TD1");
+        await CreateTestDistrict(_testResources, 2, "Test District 2", "TD2");
 
         // Create test schools for different districts
-        var school1 = new School
-        {
-            Id = 997,
-            Name = "District 1 School",
-            CreatedById = 1
-        };
-        var school2 = new School
-        {
-            Id = 998,
-            Name = "District 2 School", 
-            CreatedById = 1
-        };
-        await _context.Schools.AddRangeAsync(school1, school2);
+        await CreateTestSchool(_testResources, 997, "District 1 School");
+        await CreateTestSchool(_testResources, 998, "District 2 School");
 
-        var students = new List<Student>
+        await _testResources.TestDatabaseRepository.InsertStudentsAsync(new List<Student>
         {
-            new Student 
-            { 
-                Id = 2001, 
-                FirstName = "Alice", 
-                LastName = "District1", 
-                Grade = "5", 
+            new Student
+            {
+                Id = 2001,
+                FirstName = "Alice",
+                LastName = "District1",
+                Grade = "5",
                 DateOfBirth = new DateTime(2010, 1, 1),
                 SchoolId = 997,
                 DistrictId = 1,
                 CreatedById = 998,
                 Archived = false
             },
-            new Student 
-            { 
-                Id = 2002, 
-                FirstName = "Alice", 
-                LastName = "District2", 
-                Grade = "6", 
+            new Student
+            {
+                Id = 2002,
+                FirstName = "Alice",
+                LastName = "District2",
+                Grade = "6",
                 DateOfBirth = new DateTime(2009, 5, 15),
                 SchoolId = 998,
                 DistrictId = 2,
                 CreatedById = 998,
                 Archived = false
             }
-        };
+        });
 
-        await _context.Students.AddRangeAsync(students);
-        await _context.SaveChangesAsync();
-
-        var request = new EduDocV5Client.StudentSearchRequestModel 
-        { 
+        // Act
+        var responseData = await _testResources.GetAuthenticatedApiClient().SearchAsync(new StudentSearchRequestModel
+        {
             SearchText = "Alice",
             DistrictId = 1
-        };
-        
-        // Act
-        var responseData = await _client.SearchAsync(request);
+        });
         
         // Assert
         responseData.Should().NotBeNull();
@@ -299,38 +231,32 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
     [Fact]
     public async Task SearchStudents_ShouldReturnOnlyAuthorizedStudents_WhenProviderHasActiveAssignments()
     {
-        // Arrange - Create Provider user with active ESC assignments
+        // Arrange
         var providerUserId = 500;
         var providerId = 100;
         var escId = 10;
         var districtId = 50;
 
-        SetAuthorizationHeader(UserRoleIds.Provider, providerUserId.ToString());
-
         // Create User record that links AuthUser to User
-        var providerUser = new User
-        {
-            Id = 600, // User ID
-            AuthUserId = providerUserId, // Links to AuthUser ID from JWT
-            Email = "provider@test.com",
-            FirstName = "Test",
-            LastName = "Provider",
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06 }
-        };
-        await _context.Users.AddAsync(providerUser);
+        await CreateTestUser(_testResources, 600, "provider@test.com", "Test", "Provider", providerUserId);
+
+        // Create ProviderTitle first (required for Provider)
+        await CreateTestProviderTitle(_testResources, 1, "Test Provider Title");
+
+        // Create the ESC record before assigning it
+        await CreateTestEsc(_testResources, escId, "Test ESC", "TESC");
 
         // Create Provider
-        var provider = new Provider
+        await _testResources.TestDatabaseRepository.InsertProviderAsync(new Provider
         {
             Id = providerId,
             ProviderUserId = 600, // Points to User.Id (not AuthUser.Id)
             TitleId = 1,
+            ProviderEmploymentTypeId = 1,
             CreatedById = 1
-        };
-        await _context.Providers.AddAsync(provider);
+        });
 
-        // Create ESC Assignment
-        var escAssignment = new ProviderEscAssignment
+        await _testResources.TestDatabaseRepository.InsertProviderEscAssignmentAsync(new ProviderEscAssignment
         {
             Id = 200,
             ProviderId = providerId,
@@ -339,79 +265,63 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
             EndDate = null, // Active assignment
             Archived = false,
             CreatedById = 1
-        };
-        await _context.ProviderEscAssignments.AddAsync(escAssignment);
+        });
 
-        // Create ESC School District mapping
-        var escSchoolDistrict = new ProviderEscSchoolDistrict
+        // Create test districts and schools first
+        await CreateTestDistrict(_testResources, districtId, "Provider Test District", "PTD");
+        await CreateTestSchool(_testResources, 400, "Provider Test School");
+        await CreateTestDistrict(_testResources, 999, "Unauthorized District", "UD");
+
+        await _testResources.TestDatabaseRepository.InsertProviderEscSchoolDistrictAsync(new ProviderEscSchoolDistrict
         {
             Id = 300,
             ProviderEscAssignmentId = 200,
             SchoolDistrictId = districtId
-        };
-        await _context.ProviderEscSchoolDistricts.AddAsync(escSchoolDistrict);
+        });
 
-        // Create test district and school
-        var testDistrict = new SchoolDistrict
-        {
-            Id = districtId,
-            Name = "Provider Test District",
-            Code = "PTD",
-            Einnumber = "111111111",
-            Irnnumber = "222222",
-            Npinumber = "3333333333",
-            ProviderNumber = "4444444",
-            CreatedById = 1
-        };
-        await _context.SchoolDistricts.AddAsync(testDistrict);
-
-        var testSchool = new School
-        {
-            Id = 400,
-            Name = "Provider Test School",
-            CreatedById = 1
-        };
-        await _context.Schools.AddAsync(testSchool);
-
-        // User already created above for provider authorization
 
         // Create students - one in authorized district, one in unauthorized district
-        var authorizedStudent = new Student
+        await _testResources.TestDatabaseRepository.InsertStudentsAsync(new List<Student>
         {
-            Id = 3001,
-            FirstName = "Authorized",
-            LastName = "Student",
-            Grade = "5",
-            DateOfBirth = new DateTime(2010, 1, 1),
-            SchoolId = 400,
-            DistrictId = districtId, // In provider's authorized district
-            CreatedById = 600,
-            Archived = false
-        };
+            new Student
+            {
+                Id = 3001,
+                FirstName = "Authorized",
+                LastName = "Student",
+                Grade = "5",
+                DateOfBirth = new DateTime(2010, 1, 1),
+                SchoolId = 400,
+                DistrictId = districtId, // In provider's authorized district
+                CreatedById = 600,
+                Archived = false
+            },
+            new Student
+            {
+                Id = 3002,
+                FirstName = "Unauthorized",
+                LastName = "Student",
+                Grade = "6",
+                DateOfBirth = new DateTime(2009, 1, 1),
+                SchoolId = 400,
+                DistrictId = 999, // Different district
+                CreatedById = 600,
+                Archived = false
+            }
+        });
 
-        var unauthorizedStudent = new Student
-        {
-            Id = 3002,
-            FirstName = "Unauthorized",
-            LastName = "Student",
-            Grade = "6",
-            DateOfBirth = new DateTime(2009, 1, 1),
-            SchoolId = 400,
-            DistrictId = 999, // Different district
-            CreatedById = 600,
-            Archived = false
-        };
+        var authenticatedClient = _testResources.GetAuthenticatedApiClient(
+            userRoleTypeId: 2, // Provider
+            userId: "500", 
+            userName: "provider@test.com");
 
-        await _context.Students.AddRangeAsync(authorizedStudent, unauthorizedStudent);
-        await _context.SaveChangesAsync();
 
-        var request = new EduDocV5Client.StudentSearchRequestModel
+        var request = new StudentSearchRequestModel
         {
             SearchText = "Student"
         };
 
         // Act
-        var responseData = await _client.SearchAsync(request);
+        var responseData = await authenticatedClient.SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();
@@ -427,54 +337,53 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
         var providerUserId = 501;
         var providerId = 101;
 
-        SetAuthorizationHeader(UserRoleIds.Provider, providerUserId.ToString());
-
         // Create User record that links AuthUser to User  
-        var providerUser2 = new User
-        {
-            Id = 601, // User ID
-            AuthUserId = providerUserId, // Links to AuthUser ID from JWT
-            Email = "provider2@test.com",
-            FirstName = "Test",
-            LastName = "Provider2",
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07 }
-        };
-        await _context.Users.AddAsync(providerUser2);
+        await CreateTestUser(_testResources, 601, "provider2@test.com", "Test", "Provider2", providerUserId);
+
+        // Create ProviderTitle first (required for Provider)
+        await CreateTestProviderTitle(_testResources, 1, "Test Provider Title");
 
         // Create Provider
-        var provider = new Provider
+        await _testResources.TestDatabaseRepository.InsertProviderAsync(new Provider
         {
             Id = providerId,
             ProviderUserId = 601, // Points to User.Id (not AuthUser.Id)
             TitleId = 1,
+            ProviderEmploymentTypeId = 1,
             CreatedById = 1
-        };
-        await _context.Providers.AddAsync(provider);
+        });
 
-        // User already created above for provider authorization
+        // Create test district and school for the student
+        await CreateTestDistrict(_testResources, 10, "Test District", "TD");
+        await CreateTestSchool(_testResources, 10, "Test School");
 
-        var student = new Student
+        await _testResources.TestDatabaseRepository.InsertStudentAsync(new Student
         {
             Id = 3003,
             FirstName = "Should",
             LastName = "NotSee",
             Grade = "5",
             DateOfBirth = new DateTime(2010, 1, 1),
-            SchoolId = 1,
-            DistrictId = 1,
+            SchoolId = 10,
+            DistrictId = 10,
             CreatedById = 601, // Using the provider user we created
             Archived = false
-        };
-        await _context.Students.AddAsync(student);
-        await _context.SaveChangesAsync();
+        });
 
-        var request = new EduDocV5Client.StudentSearchRequestModel
+
+        var authenticatedClient = _testResources.GetAuthenticatedApiClient(
+            userRoleTypeId: 2, // Provider role
+            userId: "501", // The provider's AuthUser ID
+            userName: "provider2@test.com");
+
+
+        var request = new StudentSearchRequestModel
         {
             SearchText = "Should"
         };
 
         // Act
-        var responseData = await _client.SearchAsync(request);
+        var responseData = await authenticatedClient.SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();
@@ -488,102 +397,71 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
         var districtAdminUserId = 502;
         var assignedDistrictId = 51;
 
-        SetAuthorizationHeader(UserRoleIds.SchoolDistrictAdmin, districtAdminUserId.ToString());
-
         // Create User record that links AuthUser to User
-        var districtAdminUser = new User
-        {
-            Id = 700, // User ID
-            AuthUserId = districtAdminUserId, // Links to AuthUser ID from JWT
-            Email = "district.admin@test.com",
-            FirstName = "District",
-            LastName = "Admin",
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B }
-        };
-        await _context.Users.AddAsync(districtAdminUser);
+        await CreateTestUser(_testResources, 700, "district.admin@test.com", "District", "Admin", districtAdminUserId);
+
+        // Create test district and school FIRST (required for AdminSchoolDistrict FK)
+        await CreateTestDistrict(_testResources, assignedDistrictId, "Admin Test District", "ATD");
+        await CreateTestSchool(_testResources, 401, "Admin Test School");
+
+        // Create unauthorized district for testing (student will be in this district)
+        await CreateTestDistrict(_testResources, 999, "Unauthorized District", "UD");
 
         // Create AdminSchoolDistrict assignment
-        var adminSchoolDistrict = new AdminSchoolDistrict
+        await _testResources.TestDatabaseRepository.InsertAdminSchoolDistrictAsync(new AdminSchoolDistrict
         {
             Id = 400,
             AdminId = 700, // Points to User.Id (not AuthUser.Id)
             SchoolDistrictId = assignedDistrictId,
             Archived = false,
             CreatedById = 1
-        };
-        await _context.AdminSchoolDistricts.AddAsync(adminSchoolDistrict);
-
-        // Create test district and school
-        var testDistrict = new SchoolDistrict
-        {
-            Id = assignedDistrictId,
-            Name = "Admin Test District",
-            Code = "ATD",
-            Einnumber = "555555555",
-            Irnnumber = "666666",
-            Npinumber = "7777777777",
-            ProviderNumber = "8888888",
-            CreatedById = 1
-        };
-        await _context.SchoolDistricts.AddAsync(testDistrict);
-
-        var testSchool = new School
-        {
-            Id = 401,
-            Name = "Admin Test School",
-            CreatedById = 1
-        };
-        await _context.Schools.AddAsync(testSchool);
+        });
 
         // Create test user for CreatedBy
-        var testUser = new User
-        {
-            Id = 602,
-            Email = "admin.test@test.com",
-            FirstName = "Test",
-            LastName = "User",
-            AuthUserId = 1,
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08 }
-        };
-        await _context.Users.AddAsync(testUser);
+        await CreateTestUser(_testResources, 602, "admin.test@test.com", "Test", "User", 1);
 
         // Create students - one in authorized district, one in unauthorized district
-        var authorizedStudent = new Student
+        await _testResources.TestDatabaseRepository.InsertStudentsAsync(new List<Student>
         {
-            Id = 3004,
-            FirstName = "District",
-            LastName = "Authorized",
-            Grade = "5",
-            DateOfBirth = new DateTime(2010, 1, 1),
-            SchoolId = 401,
-            DistrictId = assignedDistrictId, // In admin's authorized district
-            CreatedById = 602,
-            Archived = false
-        };
+            new Student
+            {
+                Id = 3004,
+                FirstName = "District",
+                LastName = "Authorized",
+                Grade = "5",
+                DateOfBirth = new DateTime(2010, 1, 1),
+                SchoolId = 401,
+                DistrictId = assignedDistrictId, // In admin's authorized district
+                CreatedById = 602,
+                Archived = false
+            },
+            new Student
+            {
+                Id = 3005,
+                FirstName = "District",
+                LastName = "Unauthorized",
+                Grade = "6",
+                DateOfBirth = new DateTime(2009, 1, 1),
+                SchoolId = 401,
+                DistrictId = 999, // Different district
+                CreatedById = 602,
+                Archived = false
+            }
+        });
 
-        var unauthorizedStudent = new Student
-        {
-            Id = 3005,
-            FirstName = "District",
-            LastName = "Unauthorized",
-            Grade = "6",
-            DateOfBirth = new DateTime(2009, 1, 1),
-            SchoolId = 401,
-            DistrictId = 999, // Different district
-            CreatedById = 602,
-            Archived = false
-        };
+        var authenticatedClient = _testResources.GetAuthenticatedApiClient(
+            userRoleTypeId: 3, // School District Administrator
+            userId: "502", // The district admin user ID
+            userName: "district.admin@test.com");
 
-        await _context.Students.AddRangeAsync(authorizedStudent, unauthorizedStudent);
-        await _context.SaveChangesAsync();
 
-        var request = new EduDocV5Client.StudentSearchRequestModel
+        var request = new StudentSearchRequestModel
         {
             SearchText = "District"
         };
 
         // Act
-        var responseData = await _client.SearchAsync(request);
+        var responseData = await authenticatedClient.SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();
@@ -598,54 +476,42 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
         // Arrange - District Admin with no assigned districts
         var districtAdminUserId = 503;
 
-        SetAuthorizationHeader(UserRoleIds.SchoolDistrictAdmin, districtAdminUserId.ToString());
-
         // Create User record that links AuthUser to User (but no AdminSchoolDistrict assignment)
-        var districtAdminUser2 = new User
-        {
-            Id = 701, // User ID
-            AuthUserId = districtAdminUserId, // Links to AuthUser ID from JWT
-            Email = "district.admin2@test.com",
-            FirstName = "District",
-            LastName = "Admin2",
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0C }
-        };
-        await _context.Users.AddAsync(districtAdminUser2);
+        await CreateTestUser(_testResources, 701, "district.admin2@test.com", "District", "Admin2", districtAdminUserId);
 
         // Create test user and student (but no AdminSchoolDistrict assignment)
-        var testUser = new User
-        {
-            Id = 603,
-            Email = "admin.test2@test.com",
-            FirstName = "Test",
-            LastName = "User",
-            AuthUserId = 1,
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x09 }
-        };
-        await _context.Users.AddAsync(testUser);
+        await CreateTestUser(_testResources, 603, "admin.test2@test.com", "Test", "User", 1);
 
-        var student = new Student
+        // Create test district and school
+        await CreateTestDistrict(_testResources, 100, "Test District", "TD");
+        await CreateTestSchool(_testResources, 100, "Test School");
+
+        await _testResources.TestDatabaseRepository.InsertStudentAsync(new Student
         {
             Id = 3006,
             FirstName = "Should",
             LastName = "NotSeeThis",
             Grade = "5",
             DateOfBirth = new DateTime(2010, 1, 1),
-            SchoolId = 1,
-            DistrictId = 1,
+            SchoolId = 100,
+            DistrictId = 100,
             CreatedById = 603,
             Archived = false
-        };
-        await _context.Students.AddAsync(student);
-        await _context.SaveChangesAsync();
+        });
 
-        var request = new EduDocV5Client.StudentSearchRequestModel
+        var authenticatedClient = _testResources.GetAuthenticatedApiClient(
+            userRoleTypeId: 3, // School District Administrator
+            userId: "503", // The district admin user ID
+            userName: "district.admin2@test.com");
+
+
+        var request = new StudentSearchRequestModel
         {
             SearchText = "Should"
         };
 
         // Act
-        var responseData = await _client.SearchAsync(request);
+        var responseData = await authenticatedClient.SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();
@@ -656,9 +522,7 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
     public async Task SearchStudents_ShouldReturnValidationErrors_WhenDistrictIdIsInvalid()
     {
         // Arrange
-        SetAuthorizationHeader(UserRoleIds.Admin);
-
-        var request = new EduDocV5Client.StudentSearchRequestModel
+        var request = new StudentSearchRequestModel
         {
             SearchText = "Valid",
             DistrictId = -1 // Invalid district ID
@@ -667,13 +531,12 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
         // Act & Assert
         try
         {
-            await _client.SearchAsync(request);
+            await _testResources.GetAuthenticatedApiClient().SearchAsync(request);
             Assert.Fail("Should not have made it here");
         }
         catch (ApiException aix)
         {
             aix.StatusCode.Should().Be((int)HttpStatusCode.UnprocessableEntity);
-            // Note: Validation error details would be in the response body if needed
         }
     }
 
@@ -681,42 +544,12 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
     public async Task SearchStudents_ShouldTrimSearchText_WhenSearchTextHasWhitespace()
     {
         // Arrange
-        SetAuthorizationHeader(UserRoleIds.Admin);
-
         // Create test data
-        var testUser = new User
-        {
-            Id = 604,
-            Email = "trim.test@test.com",
-            FirstName = "Test",
-            LastName = "User",
-            AuthUserId = 1,
-            Version = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A }
-        };
-        await _context.Users.AddAsync(testUser);
+        await CreateTestUser(_testResources, 604, "trim.test@test.com", "Test", "User", 1);
+        await CreateTestSchool(_testResources, 402, "Trim Test School");
+        await CreateTestDistrict(_testResources, 52, "Trim Test District", "TTD");
 
-        var testSchool = new School
-        {
-            Id = 402,
-            Name = "Trim Test School",
-            CreatedById = 1
-        };
-        await _context.Schools.AddAsync(testSchool);
-
-        var testDistrict = new SchoolDistrict
-        {
-            Id = 52,
-            Name = "Trim Test District",
-            Code = "TTD",
-            Einnumber = "999999999",
-            Irnnumber = "888888",
-            Npinumber = "1111111111",
-            ProviderNumber = "2222222",
-            CreatedById = 1
-        };
-        await _context.SchoolDistricts.AddAsync(testDistrict);
-
-        var student = new Student
+        await _testResources.TestDatabaseRepository.InsertStudentAsync(new Student
         {
             Id = 3007,
             FirstName = "Trimmed",
@@ -727,17 +560,17 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
             DistrictId = 52,
             CreatedById = 604,
             Archived = false
-        };
-        await _context.Students.AddAsync(student);
-        await _context.SaveChangesAsync();
+        });
 
-        var request = new EduDocV5Client.StudentSearchRequestModel
+        var authenticatedClient = _testResources.GetAuthenticatedApiClient();
+
+        var request = new StudentSearchRequestModel
         {
             SearchText = "  Trimmed  " // Search text with leading/trailing whitespace
         };
 
         // Act
-        var responseData = await _client.SearchAsync(request);
+        var responseData = await authenticatedClient.SearchAsync(request);
 
         // Assert
         responseData.Should().NotBeNull();
@@ -745,10 +578,133 @@ public class StudentsControllerTests : AuthorizedIntegrationTestBase
         responseData.Records.First().FirstName.Should().Be("Trimmed");
     }
 
-    public override void Dispose()
+    /* Refactor these reuseable methods to use the shared functionality 
+     * await testResources.TestDatabaseRepository.InsertStudentAsync(...)
+     *  
+     */
+    private async Task<User> CreateTestUser(TestResources testResources, int id, string email, string firstName, string lastName, int authUserId)
     {
-        _scope.Dispose();
-        _context.Dispose();
-        base.Dispose();
+        // Create the AuthUser first if it doesn't exist
+        var existingAuthUser = await testResources.DbContext.AuthUsers.FindAsync(authUserId);
+        if (existingAuthUser == null)
+        {
+            await testResources.TestDatabaseRepository.InsertAuthUserAsync(new AuthUser
+            {
+                Id = authUserId,
+                Username = $"test_user_{authUserId}",
+                Password = new byte[12],
+                Salt = new byte[12],
+                ResetKey = new byte[12],
+                ResetKeyExpirationUtc = DateTime.MinValue,
+                RoleId = 2,
+                HasAccess = true,
+                IsEditable = true,
+                HasLoggedIn = false
+            });
+        }
+
+        // Then create the User
+        var user = new User
+        {
+            Id = id,
+            FirstName = firstName,
+            LastName = lastName,
+            Email = email,
+            AuthUserId = authUserId,
+            ImageId = null,
+            AddressId = null,
+            SchoolDistrictId = null,
+            CreatedById = 1,
+            ModifiedById = null,
+            DateCreated = DateTime.UtcNow,
+            DateModified = null,
+            Archived = false,
+            Version = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+        };
+        return await testResources.TestDatabaseRepository.InsertUserAsync(user);
+    }
+
+    private async Task<School> CreateTestSchool(TestResources testResources, int id, string name)
+    {
+        var school = new School
+        {
+            Id = id,
+            Name = name,
+            CreatedById = 1,
+            ModifiedById = null,
+            DateCreated = DateTime.UtcNow,
+            DateModified = null,
+            Archived = false
+        };
+        return await testResources.TestDatabaseRepository.InsertSchoolAsync(school);
+    }
+
+    private async Task<SchoolDistrict> CreateTestDistrict(TestResources testResources, int id, string name, string code)
+    {
+        var district = new SchoolDistrict
+        {
+            Id = id,
+            Name = name,
+            Code = code,
+            Einnumber = "123456789",
+            Irnnumber = "654321",
+            Npinumber = "9876543210",
+            ProviderNumber = "1234567",
+            CreatedById = 1
+        };
+        return await testResources.TestDatabaseRepository.InsertSchoolDistrictAsync(district);
+    }
+
+    private async Task CreateTestProviderTitle(TestResources testResources, int id, string name)
+    {
+        // First create ServiceCode if it doesn't exist (ProviderTitles has FK to ServiceCodes)
+        var existingServiceCode = await testResources.DbContext.ServiceCodes.FindAsync(1);
+        if (existingServiceCode == null)
+        {
+            await testResources.TestDatabaseRepository.InsertServiceCodeAsync(new ServiceCode
+            {
+                Id = 1,
+                Name = "Test Service",
+                Code = "TEST",
+                Area = "Test Area",
+                IsBillable = true,
+                NeedsReferral = false,
+                CanHaveMultipleProgressReportsPerStudent = false,
+                CanCosignProgressReports = false,
+            });
+        }
+
+        // Create ProviderEmploymentType if it doesn't exist (Providers has FK to ProviderEmploymentTypes)
+        var existingEmploymentType = await testResources.DbContext.ProviderEmploymentTypes.FindAsync(1);
+        if (existingEmploymentType == null)
+        {
+            await testResources.TestDatabaseRepository.InsertProviderEmploymentTypeAsync(new ProviderEmploymentType
+            {
+                Id = 1,
+                Name = "Test Employment",
+            });
+        }
+
+        await testResources.TestDatabaseRepository.InsertProviderTitleAsync(new ProviderTitle
+        {
+            Id = id,
+            Name = name,
+            ServiceCodeId = 1,
+            CreatedById = 1,
+            DateCreated = DateTime.UtcNow,
+            Archived = false
+        });
+    }
+
+    private async Task<Esc> CreateTestEsc(TestResources testResources, int id, string name, string code)
+    {
+        var esc = new Esc
+        {
+            Id = id,
+            Name = name,
+            Code = code,
+            CreatedById = 1
+        };
+        return await testResources.TestDatabaseRepository.InsertEscAsync(esc);
     }
 } 
