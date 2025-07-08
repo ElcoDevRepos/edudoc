@@ -9,7 +9,8 @@
         {
             NotSet,
             Required,
-            MinLength,
+            MinimumLengthNotMet,
+            PositiveIntegerRequired
         }
 
 

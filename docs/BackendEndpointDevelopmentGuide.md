@@ -49,21 +49,21 @@ When creating a new endpoint called `[EntityName]`, create the following structu
 
 ### 4. Query Handler (CQRS)
 **Query Class**: Implement `IRequest<TResponse>`, include request data and auth context properties.
-**QueryHandler Class**: Implement `IRequestHandler<TQuery, TResponse>`, handle validation first, call repository with auth context, map results, return structured responses.
+**QueryHandler Class**: Implement `IRequestHandler<TQuery, TResponse>`, format input if needed, handle validation, call repository with auth context, map results, return structured responses.
 
 ### 5. Controller
-**Setup**: Inherit from `BaseApiController`, accept `IMediator` via DI, use HTTP method attributes, add `[Authorize]` and `[ProducesResponseType]`.
-**Actions**: Accept request models with `[FromBody]`, create queries with request data and auth context, send via MediatR, handle success/failure responses.
+**Setup**: Inherit from `BaseApiController`, accept `IMediator` via DI, use HTTP method attributes, add `[ProducesResponseType]`.
+**Actions**: Accept request models with `[FromBody]`, create queries with request data and `this.Auth`, send via MediatR, handle success/failure responses.
 > **💡 Keep It Simple**: Use direct parameters for simple inputs. Don't force request models where they add unnecessary complexity.
 
 ### 6. Validators (Optional)
-**Implementation**: Inherit from `AbstractValidator<TRequestModel>`, define rules using `RuleFor()`, use validation methods (`NotEmpty()`, `GreaterThan()`, `Must()`), provide clear error messages with `WithMessage()` and error codes with `WithErrorCode()`.
+**Implementation**: Inherit from `AbstractValidator<TRequestModel>`, define rules using `RuleFor()`, use validation methods (`NotEmpty()`, `GreaterThan()`, `Must()`), provide clear error messages with `WithMessage()` and error codes with `WithErrorCode(ValidationError.EnumErrorCode.ErrorCodeName)`.
 > **⚠️ Pragmatic Validation**: Skip formal validators for simple cases. i.e. we do not need a validator on a "GetXById" endpoint, etc.
 
 ### 7. Dependency Injection
 **Pattern**: Create static extension class, register interfaces with implementations using appropriate lifetimes (`AddTransient<>()` for mappers, `AddScoped<>()` for repositories/validators).
 
-### 8. Program.cs Registration
+### 8. Startup.cs Registration
 Add your endpoint's DI registration: `builder.Services.DIRegister[EntityName]();`
 
 ## Client Generation for Testing
@@ -97,12 +97,52 @@ The V5 API provides client generation endpoints:
 - Mappers/[EntityName]MapperTests.cs  
 - Validators/[EntityName]RequestValidatorTests.cs
 
-**Controller Tests**: Mock `IMediator`, test success/error scenarios, verify HTTP status codes and response structure.
+**Controller Tests**: Mock `IMediator`, test success/error scenarios, verify HTTP status codes and response structure using FluentAssertions.
 **Mapper Tests**: Test single/list mapping, null/optional properties, navigation property mapping.
 **Validator Tests**: Test valid scenarios, individual validation rules, conditional validation, complex logic, error messages/codes.
 
 ### Integration Tests Setup
-Use `IClassFixture<CustomWebApplicationFactory<global::Program>>` for test setup, create an `EduDocClient` instance using the test factory's HttpClient, and use dependency injection to get `EdudocSqlContext` for test data setup.
+Use `IClassFixture<CustomWebApplicationFactory<Startup>>` for test setup. The class should use testResources in this manner
+
+---
+
+##### 🧪 Controller Integration Test Setup
+
+```csharp
+public class StudentsControllerTests : IClassFixture<CustomWebApplicationFactory<Startup>>, IAsyncLifetime
+{
+    private readonly CustomWebApplicationFactory<Startup> _factory;
+    private TestResources _testResources = null!;
+
+    public StudentsControllerTests(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper output)
+    {
+        _factory = factory;
+        _factory.OutputHelper = output;
+    }
+
+    public async Task InitializeAsync()
+    {
+        _testResources = await _factory.SetupTest();
+    }
+
+    public async Task DisposeAsync()
+    {
+        await Task.CompletedTask;
+    }
+}
+```
+---
+
+**Test Data Setup**:
+- Create comprehensive test data including all related entities (Users, Schools, Districts, Providers, etc.)
+- Use helper methods for creating test data to maintain consistency building on top of TestResources
+- Set up complex authorization scenarios (Provider ESC assignments, Admin School District assignments)
+- Ensure all foreign key relationships are properly established
+
+**Error Handling Pattern**:
+- Use try-catch blocks with `ApiException` for expected exceptions
+- Verify HTTP status codes using `ApiException.StatusCode`
+- Test both success and failure scenarios
 
 **Test Categories**: Authorization tests (401, role-based data access), validation tests (422 status), business logic tests, edge cases.
 **Key Patterns**: Use generated client methods, handle `ApiException` for errors, set up realistic test data, verify response structure using strongly-typed models.
@@ -120,7 +160,6 @@ Use `IClassFixture<CustomWebApplicationFactory<global::Program>>` for test setup
 - For validation errors, populate `Errors` property and return appropriate status code (422 for validation errors)
 
 ### Authorization & Security
-- Always add `[Authorize]` attribute to controller actions
 - Use role-based authorization when needed
 - Implement endpoint-specific authorization requirements
 
