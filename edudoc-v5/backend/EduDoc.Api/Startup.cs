@@ -3,6 +3,7 @@ using EduDoc.Api.EF;
 using EduDoc.Api.Endpoints.Encounters;
 using EduDoc.Api.Endpoints.Encounters.Queries;
 using EduDoc.Api.Endpoints.Encounters.Repositories;
+using EduDoc.Api.Endpoints.EncounterStatuses;
 using EduDoc.Api.Endpoints.EvaluationTypes;
 using EduDoc.Api.Endpoints.Students;
 using EduDoc.Api.Infrastructure;
@@ -71,6 +72,7 @@ public class Startup
         services.DIRegisterEncounters();
         services.DIRegisterEvaluationTypes();
         services.DIRegisterStudents();
+        services.DIRegisterEncounterStatuses();
 
         services.AddControllers();
 
