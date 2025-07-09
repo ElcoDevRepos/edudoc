@@ -39,4 +39,38 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'Id'
 
 GO
-CREATE NONCLUSTERED INDEX IX_Providers ON [dbo].[Providers] ([ProviderUserId]);
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_Providers_ProviderUserId] 
+ON [dbo].[Providers] ([ProviderUserId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Providers_TitleId] 
+ON [dbo].[Providers] ([TitleId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Providers_ProviderEmploymentTypeId] 
+ON [dbo].[Providers] ([ProviderEmploymentTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Providers_DoNotBillReasonId] 
+ON [dbo].[Providers] ([DoNotBillReasonId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Providers_CreatedById] 
+ON [dbo].[Providers] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Providers_ModifiedById] 
+ON [dbo].[Providers] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

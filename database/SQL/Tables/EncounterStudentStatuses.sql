@@ -11,3 +11,39 @@ CREATE TABLE [dbo].[EncounterStudentStatuses]
 	CONSTRAINT [FK_EncounterStudentStatuses_CreatedBy] FOREIGN KEY (CreatedById) REFERENCES [dbo].[Users] ([Id]),
 )
 
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_EncounterStudentStatuses_EncounterStudentId] 
+ON [dbo].[EncounterStudentStatuses] ([EncounterStudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudentStatuses_EncounterStatusId] 
+ON [dbo].[EncounterStudentStatuses] ([EncounterStatusId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudentStatuses_CreatedById] 
+ON [dbo].[EncounterStudentStatuses] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Primary filtering index - covers most common query patterns
+CREATE NONCLUSTERED INDEX [IX_EncounterStudentStatuses_EncounterStudentId_StatusId] 
+ON [dbo].[EncounterStudentStatuses] ([EncounterStudentId], [EncounterStatusId])
+INCLUDE ([DateCreated], [CreatedById])
+WITH (FILLFACTOR = 85, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Status-based filtering
+CREATE NONCLUSTERED INDEX [IX_EncounterStudentStatuses_StatusId_DateCreated] 
+ON [dbo].[EncounterStudentStatuses] ([EncounterStatusId], [DateCreated])
+WITH (FILLFACTOR = 85, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+

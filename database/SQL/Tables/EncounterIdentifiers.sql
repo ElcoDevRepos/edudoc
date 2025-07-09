@@ -8,3 +8,13 @@ CREATE TABLE [dbo].[EncounterIdentifiers]
     CONSTRAINT [FK_EncounterIdentifiers_SchoolDistricts] FOREIGN KEY ([SchoolDistrictId]) REFERENCES [SchoolDistricts]([Id]),
 
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_EncounterIdentifiers_SchoolDistrictId] 
+ON [dbo].[EncounterIdentifiers] ([SchoolDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+

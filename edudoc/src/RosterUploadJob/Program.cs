@@ -62,18 +62,21 @@ namespace RosterUploadJob
                 services.AddScoped<IProviderCaseUploadDocumentService, ProviderCaseUploadDocumentService>();
                 services.AddScoped<IMergeStudentsService, MergeStudentsService>();
                 services.AddScoped<IPrimaryContext, PrimaryContext>();
-                services.AddLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddConsole();
-                    logging.AddApplicationInsightsWebJobs(telemetryConfiguration =>
+
+                if (!string.IsNullOrEmpty(configuration["ApplicationInsights:JobsConnectionString"])) {
+                    services.AddLogging(logging =>
                     {
-                        telemetryConfiguration.ConnectionString = configuration["ApplicationInsights:JobsConnectionString"];
-                        telemetryConfiguration.DiagnosticsEventListenerLogLevel = System.Diagnostics.Tracing.EventLevel.Verbose;
-   
+                        logging.ClearProviders();
+                        logging.AddConsole();
+                        logging.AddApplicationInsightsWebJobs(telemetryConfiguration =>
+                        {
+                            telemetryConfiguration.ConnectionString = configuration["ApplicationInsights:JobsConnectionString"];
+                            telemetryConfiguration.DiagnosticsEventListenerLogLevel = System.Diagnostics.Tracing.EventLevel.Verbose;
+    
+                        });
+                        logging.SetMinimumLevel(LogLevel.Information);
                     });
-                    logging.SetMinimumLevel(LogLevel.Information);
-                });
+                }
 
                 var serviceProvider = services.BuildServiceProvider();
                 var logger = serviceProvider.GetRequiredService<ILogger<Program>>();

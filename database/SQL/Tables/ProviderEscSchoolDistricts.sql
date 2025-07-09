@@ -7,7 +7,15 @@ CREATE TABLE [dbo].[ProviderEscSchoolDistricts]
     CONSTRAINT [FK_ProviderEscSchoolDistricts_SchoolDistrict] FOREIGN KEY ([SchoolDistrictId]) REFERENCES [SchoolDistricts]([Id]),
     CONSTRAINT [PK_ProviderEscSchoolDistricts] PRIMARY KEY ([Id])
 )
-Go
-create nonclustered index [IX_ProviderEscSchoolDistricts_ProviderEscAssignmentId] on [dbo].[ProviderEscSchoolDistricts](ProviderEscAssignmentId);
-Go
-create nonclustered index [IX_ProviderEscSchoolDistricts_SchoolDistrictId] on [dbo].[ProviderEscSchoolDistricts](SchoolDistrictId);
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ProviderEscSchoolDistricts_ProviderEscAssignmentId] 
+ON [dbo].[ProviderEscSchoolDistricts] ([ProviderEscAssignmentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderEscSchoolDistricts_SchoolDistrictId] 
+ON [dbo].[ProviderEscSchoolDistricts] ([SchoolDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

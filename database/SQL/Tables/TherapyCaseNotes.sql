@@ -13,3 +13,12 @@ CREATE TABLE [dbo].[TherapyCaseNotes]
 
 Go
 create nonclustered index [IX_TherapyCaseNotes_ProviderId] on dbo.TherapyCaseNotes(ProviderId);
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_TherapyCaseNotes_CreatedById] 
+ON [dbo].[TherapyCaseNotes] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

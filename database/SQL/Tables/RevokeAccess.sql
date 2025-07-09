@@ -12,6 +12,19 @@ CREATE TABLE [dbo].[RevokeAccess]
 )
 
 GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_RevokeAccess_ProviderId] 
+ON [dbo].[RevokeAccess] ([ProviderId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_RevokeAccess_RevocationReasonId] 
+ON [dbo].[RevokeAccess] ([RevocationReasonId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'Module',
     @level0type = N'SCHEMA',

@@ -15,3 +15,9 @@ GO
 
 CREATE NONCLUSTERED INDEX [IX_Migration_ProviderCaseNotesHistory_ProviderId] ON dbo.Migration_ProviderCaseNotesHistory (ProviderId ASC)
 GO
+
+CREATE NONCLUSTERED INDEX [IX_Migration_ProviderCaseNotesHistory_StudentId] 
+ON dbo.Migration_ProviderCaseNotesHistory (StudentId)
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

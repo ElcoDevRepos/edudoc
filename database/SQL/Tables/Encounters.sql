@@ -30,6 +30,65 @@ CREATE TABLE [dbo].[Encounters]
 
 GO
 
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_Encounters_ProviderId] 
+ON [dbo].[Encounters] ([ProviderId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Encounters_ServiceTypeId] 
+ON [dbo].[Encounters] ([ServiceTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Encounters_EvaluationTypeId] 
+ON [dbo].[Encounters] ([EvaluationTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Encounters_CreatedById] 
+ON [dbo].[Encounters] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Encounters_ModifiedById] 
+ON [dbo].[Encounters] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Encounters_NonMspServiceTypeId] 
+ON [dbo].[Encounters] ([NonMspServiceTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Encounters_DiagnosisCodeId] 
+ON [dbo].[Encounters] ([DiagnosisCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Provider encounter filtering (very common in EF)
+CREATE NONCLUSTERED INDEX [IX_Encounters_ProviderId_EncounterDate_Archived] 
+ON [dbo].[Encounters] ([ProviderId], [EncounterDate], [Archived])
+INCLUDE ([EncounterStartTime], [EncounterEndTime], [IsGroup])
+WITH (FILLFACTOR = 85, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Encounter date range queries
+CREATE NONCLUSTERED INDEX [IX_Encounters_EncounterDate_ProviderId] 
+ON [dbo].[Encounters] ([EncounterDate], [ProviderId])
+INCLUDE ([Archived], [ServiceTypeId])
+WITH (FILLFACTOR = 85, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'Module',
     @level0type = N'SCHEMA',

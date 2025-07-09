@@ -18,3 +18,16 @@ CREATE TABLE [dbo].[ClaimsStudents]
     CONSTRAINT [FK_ClaimsStudents_Student] FOREIGN KEY ([StudentId]) REFERENCES Students(Id),
     CONSTRAINT [PK_ClaimsStudents] PRIMARY KEY ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ClaimsStudents_ClaimsDistrictId] 
+ON [dbo].[ClaimsStudents] ([ClaimsDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ClaimsStudents_StudentId] 
+ON [dbo].[ClaimsStudents] ([StudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

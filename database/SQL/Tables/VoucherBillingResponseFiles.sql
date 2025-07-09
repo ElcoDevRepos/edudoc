@@ -10,5 +10,25 @@ CREATE TABLE [dbo].[VoucherBillingResponseFiles]
     CONSTRAINT [FK_VoucherBillingResponseFiles_Students] FOREIGN KEY ([BillingResponseFileId]) REFERENCES [dbo].[BillingResponseFiles] ([Id]),
     CONSTRAINT [PK_VoucherBillingResponseFiles] PRIMARY KEY ([Id]),
 )
-Go
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_VoucherBillingResponseFiles_VoucherId] 
+ON [dbo].[VoucherBillingResponseFiles] ([VoucherId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_VoucherBillingResponseFiles_BillingResponseFileId] 
+ON [dbo].[VoucherBillingResponseFiles] ([BillingResponseFileId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_VoucherBillingResponseFiles_CreatedById] 
+ON [dbo].[VoucherBillingResponseFiles] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 

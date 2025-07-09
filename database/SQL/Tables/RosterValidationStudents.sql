@@ -21,6 +21,19 @@ CREATE TABLE [dbo].[RosterValidationStudents]
 )
 
 GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_RosterValidationStudents_RosterValidationDistrictId] 
+ON [dbo].[RosterValidationStudents] ([RosterValidationDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_RosterValidationStudents_StudentId] 
+ON [dbo].[RosterValidationStudents] ([StudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'Module',
     @level0type = N'SCHEMA',

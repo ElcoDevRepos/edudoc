@@ -10,5 +10,17 @@ CREATE TABLE [dbo].[ProviderODECertifications]
     CONSTRAINT [FK_ProviderODECertifiactions_Providers] FOREIGN KEY (ProviderId) REFERENCES [dbo].[Providers] ([Id]),
     CONSTRAINT [FK_ProviderODECertifiactions_CreatedBy] FOREIGN KEY (CreatedById) REFERENCES [dbo].[Users] ([Id]),
     CONSTRAINT [PK_ProviderODECertifiactions] PRIMARY KEY ([Id])
-
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ProviderODECertifications_ProviderId] 
+ON [dbo].[ProviderODECertifications] ([ProviderId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderODECertifications_CreatedById] 
+ON [dbo].[ProviderODECertifications] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

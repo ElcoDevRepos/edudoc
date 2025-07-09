@@ -20,5 +20,39 @@ CREATE TABLE [dbo].[ProviderEscAssignments]
 	CONSTRAINT [FK_ProviderEscs_Providers] FOREIGN KEY (ProviderId) REFERENCES [dbo].[Providers] ([Id]),
     CONSTRAINT [PK_ProviderEscs] PRIMARY KEY ([Id])
 )
-Go
-create nonclustered index [IX_ProviderEscAssignments_ProviderId_Archived] on [dbo].[ProviderEscAssignments](ProviderId, Archived);
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ProviderEscAssignments_ProviderId] 
+ON [dbo].[ProviderEscAssignments] ([ProviderId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderEscAssignments_EscId] 
+ON [dbo].[ProviderEscAssignments] ([EscId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderEscAssignments_AgencyTypeId] 
+ON [dbo].[ProviderEscAssignments] ([AgencyTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderEscAssignments_AgencyId] 
+ON [dbo].[ProviderEscAssignments] ([AgencyId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderEscAssignments_CreatedById] 
+ON [dbo].[ProviderEscAssignments] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderEscAssignments_ModifiedById] 
+ON [dbo].[ProviderEscAssignments] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

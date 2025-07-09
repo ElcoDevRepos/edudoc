@@ -19,3 +19,24 @@ CREATE TABLE [dbo].[CPTCodes]
     CONSTRAINT [PK_CPTCodes] PRIMARY KEY ([Id]) 
 )
 
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_CPTCodes_CreatedById] 
+ON [dbo].[CPTCodes] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CPTCodes_ModifiedById] 
+ON [dbo].[CPTCodes] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CPTCodes_ServiceUnitRuleId] 
+ON [dbo].[CPTCodes] ([ServiceUnitRuleId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+

@@ -57,16 +57,19 @@ namespace AnnualTrainingsJob
                 services.AddScoped<IMessageService, MessageService>();
                 services.AddScoped<IPrimaryContext, PrimaryContext>();
                 services.AddScoped<IStudentService, StudentService>();
-                services.AddLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddConsole();
-                    logging.AddApplicationInsightsWebJobs(telemetryConfiguration =>
+                
+                if (!string.IsNullOrEmpty(configuration["ApplicationInsights:JobsConnectionString"])) {
+                    services.AddLogging(logging =>
                     {
-                        telemetryConfiguration.ConnectionString = configuration["ApplicationInsights:JobsConnectionString"];
+                        logging.ClearProviders();
+                        logging.AddConsole();
+                        logging.AddApplicationInsightsWebJobs(telemetryConfiguration =>
+                        {
+                            telemetryConfiguration.ConnectionString = configuration["ApplicationInsights:JobsConnectionString"];
+                        });
+                        logging.SetMinimumLevel(LogLevel.Information);
                     });
-                    logging.SetMinimumLevel(LogLevel.Information);
-                });
+                }
 
                 var serviceProvider = services.BuildServiceProvider();
                 var logger = serviceProvider.GetRequiredService<ILogger<Program>>();

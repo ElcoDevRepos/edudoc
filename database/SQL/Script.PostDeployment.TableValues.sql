@@ -407,7 +407,7 @@ SET IDENTITY_INSERT [AuthUsers] ON;
 MERGE INTO [AuthUsers] AS Target
 USING (
 VALUES
-	( 1 ,'admin' ,@saltedHash ,@salt ,0x, 1, 0, 0)
+	( 1 ,'admin' ,@saltedHash ,@salt ,0x, 1, 0, 1)
 	 ) AS Source ( [Id], [Username], [Password], [Salt], [ResetKey], [RoleId], [IsEditable], [HasAccess] )
 ON ( Target.[Id] = Source.[Id] )
 WHEN MATCHED THEN

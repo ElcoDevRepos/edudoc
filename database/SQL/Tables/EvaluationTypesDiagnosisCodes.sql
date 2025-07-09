@@ -14,3 +14,30 @@ CREATE TABLE [dbo].[EvaluationTypesDiagnosisCodes]
     CONSTRAINT [FK_EvaluationTypesDiagnosisCodes_DiagnosisCodes] FOREIGN KEY (DiagnosisCodeId) REFERENCES [dbo].[DiagnosisCodes] ([Id]),
     CONSTRAINT [PK_EvaluationTypesDiagnosisCodes] PRIMARY KEY ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_EvaluationTypesDiagnosisCodes_CreatedById] 
+ON [dbo].[EvaluationTypesDiagnosisCodes] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EvaluationTypesDiagnosisCodes_ModifiedById] 
+ON [dbo].[EvaluationTypesDiagnosisCodes] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EvaluationTypesDiagnosisCodes_EvaluationTypeId] 
+ON [dbo].[EvaluationTypesDiagnosisCodes] ([EvaluationTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EvaluationTypesDiagnosisCodes_DiagnosisCodeId] 
+ON [dbo].[EvaluationTypesDiagnosisCodes] ([DiagnosisCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

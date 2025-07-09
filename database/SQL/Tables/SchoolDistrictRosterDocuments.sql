@@ -12,3 +12,16 @@ CREATE TABLE [dbo].[SchoolDistrictRosterDocuments]
     CONSTRAINT [PK_SchoolDistrictRosterDocuments] PRIMARY KEY ([Id]), 
     CONSTRAINT [FK_SchoolDistrictRosterDocuments_SchoolDistricts] FOREIGN KEY (SchoolDistrictId) REFERENCES [dbo].[SchoolDistricts](Id),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_SchoolDistrictRosterDocuments_UploadedBy] 
+ON [dbo].[SchoolDistrictRosterDocuments] ([UploadedBy])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistrictRosterDocuments_SchoolDistrictId] 
+ON [dbo].[SchoolDistrictRosterDocuments] ([SchoolDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

@@ -14,3 +14,25 @@ CREATE TABLE [dbo].[EdiErrorCodes]
 	CONSTRAINT [FK_EdiErrorCodes_ModifiedBy] FOREIGN KEY (ModifiedById) REFERENCES [dbo].[Users] ([Id]),
     CONSTRAINT [PK_EdiErrorCodes] PRIMARY KEY ([Id])
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_EdiErrorCodes_EdiFileTypeId] 
+ON [dbo].[EdiErrorCodes] ([EdiFileTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EdiErrorCodes_CreatedById] 
+ON [dbo].[EdiErrorCodes] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EdiErrorCodes_ModifiedById] 
+ON [dbo].[EdiErrorCodes] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+

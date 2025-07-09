@@ -17,6 +17,41 @@ CREATE TABLE [dbo].[Vouchers]
 )
 
 GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_Vouchers_SchoolDistrictId] 
+ON [dbo].[Vouchers] ([SchoolDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Vouchers_UnmatchedClaimDistrictId] 
+ON [dbo].[Vouchers] ([UnmatchedClaimDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Vouchers_VoucherTypeId] 
+ON [dbo].[Vouchers] ([VoucherTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Voucher date range queries (common in EF)
+CREATE NONCLUSTERED INDEX [IX_Vouchers_VoucherDate_Archived_SchoolDistrictId] 
+ON [dbo].[Vouchers] ([VoucherDate], [Archived], [SchoolDistrictId])
+INCLUDE ([VoucherAmount], [ServiceCode], [SchoolYear])
+WITH (FILLFACTOR = 90, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- District voucher filtering
+CREATE NONCLUSTERED INDEX [IX_Vouchers_SchoolDistrictId_VoucherDate] 
+ON [dbo].[Vouchers] ([SchoolDistrictId], [VoucherDate])
+INCLUDE ([VoucherAmount], [PaidAmount], [ServiceCode])
+WITH (FILLFACTOR = 90, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'Module',
     @level0type = N'SCHEMA',

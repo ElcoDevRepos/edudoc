@@ -13,3 +13,12 @@ GO
 
 -- Please Note this index could fail with KeyValue and TypeFullName combined length is over 1700 bytes (so AuditLogId = 8 bytes, TypeFullName = 2xlength, KeyValue 2xlength)
 CREATE INDEX [IX_AuditLogRelationships_Search] ON [dbo].[AuditLogRelationships] ([AuditLogId] ASC,[TypeFullName] ASC,[KeyValue] ASC)
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_AuditLogRelationships_AuditLogId] 
+ON [dbo].[AuditLogRelationships] ([AuditLogId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

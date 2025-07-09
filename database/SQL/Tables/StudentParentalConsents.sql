@@ -17,3 +17,42 @@ CREATE TABLE [dbo].[StudentParentalConsents]
 )                  
 
 GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_StudentParentalConsents_StudentId] 
+ON [dbo].[StudentParentalConsents] ([StudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentParentalConsents_ParentalConsentTypeId] 
+ON [dbo].[StudentParentalConsents] ([ParentalConsentTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentParentalConsents_CreatedById] 
+ON [dbo].[StudentParentalConsents] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentParentalConsents_ModifiedById] 
+ON [dbo].[StudentParentalConsents] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Consent effective date queries (common in EF)
+CREATE NONCLUSTERED INDEX [IX_StudentParentalConsents_StudentId_ParentalConsentEffectiveDate] 
+ON [dbo].[StudentParentalConsents] ([StudentId], [ParentalConsentEffectiveDate])
+INCLUDE ([ParentalConsentTypeId], [DateCreated])
+WITH (FILLFACTOR = 90, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Consent type filtering
+CREATE NONCLUSTERED INDEX [IX_StudentParentalConsents_ParentalConsentTypeId_EffectiveDate] 
+ON [dbo].[StudentParentalConsents] ([ParentalConsentTypeId], [ParentalConsentEffectiveDate])
+INCLUDE ([StudentId])
+WITH (FILLFACTOR = 90, ONLINE = ON, DATA_COMPRESSION = ROW);

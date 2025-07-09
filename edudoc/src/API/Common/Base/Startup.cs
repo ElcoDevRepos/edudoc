@@ -57,10 +57,12 @@ namespace API
 
                 });
                 logging.SetMinimumLevel(LogLevel.Debug);
-                logging.AddApplicationInsights(
-                   configureTelemetryConfiguration: config =>
-                       config.ConnectionString = Configuration["ApplicationInsights:ConnectionString"],
-                       configureApplicationInsightsLoggerOptions: options => { });
+                if (!string.IsNullOrEmpty(Configuration["ApplicationInsights:ConnectionString"])) {
+                    logging.AddApplicationInsights(
+                    configureTelemetryConfiguration: config =>
+                        config.ConnectionString = Configuration["ApplicationInsights:ConnectionString"],
+                        configureApplicationInsightsLoggerOptions: options => { });
+                }
             });
 
           

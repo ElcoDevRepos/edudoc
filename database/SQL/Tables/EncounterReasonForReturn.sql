@@ -16,3 +16,31 @@ CREATE TABLE [dbo].[EncounterReasonForReturn]
 	CONSTRAINT [FK_EncounterReasonForReturn_ModifiedBy] FOREIGN KEY (ModifiedById) REFERENCES [dbo].[Users] ([Id])
 
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_EncounterReasonForReturn_ReturnReasonCategoryId] 
+ON [dbo].[EncounterReasonForReturn] ([ReturnReasonCategoryId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterReasonForReturn_HpcUserId] 
+ON [dbo].[EncounterReasonForReturn] ([HpcUserId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterReasonForReturn_CreatedById] 
+ON [dbo].[EncounterReasonForReturn] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterReasonForReturn_ModifiedById] 
+ON [dbo].[EncounterReasonForReturn] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+

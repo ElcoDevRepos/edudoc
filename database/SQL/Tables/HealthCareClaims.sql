@@ -7,3 +7,12 @@ CREATE TABLE [dbo].[HealthCareClaims]
     CONSTRAINT [PK_HealthCareClaims] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_HealthCareClaims_BillingSchedules] FOREIGN KEY ([BillingScheduleId]) REFERENCES BillingSchedules(Id),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_HealthCareClaims_BillingScheduleId] 
+ON [dbo].[HealthCareClaims] ([BillingScheduleId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

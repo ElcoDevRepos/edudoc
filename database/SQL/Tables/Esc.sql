@@ -16,6 +16,25 @@ CREATE TABLE [dbo].[Escs]
     CONSTRAINT [PK_Escs] PRIMARY KEY ([Id]),
 )
 GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_Escs_AddressId] 
+ON [dbo].[Escs] ([AddressId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Escs_CreatedById] 
+ON [dbo].[Escs] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Escs_ModifiedById] 
+ON [dbo].[Escs] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 EXEC sp_addextendedproperty
     @name = N'MS_Description',
     @value = N'Module',

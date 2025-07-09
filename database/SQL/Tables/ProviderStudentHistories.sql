@@ -11,3 +11,16 @@ CREATE TABLE [dbo].[ProviderStudentHistories]
     CONSTRAINT [FK_ProviderStudentHistories_Students] FOREIGN KEY ([StudentId])
     REFERENCES [dbo].[Students] ([Id])
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ProviderStudentHistories_ProviderId] 
+ON [dbo].[ProviderStudentHistories] ([ProviderId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderStudentHistories_StudentId] 
+ON [dbo].[ProviderStudentHistories] ([StudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

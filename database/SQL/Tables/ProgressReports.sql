@@ -26,3 +26,36 @@ CREATE TABLE [dbo].[ProgressReports]
 	CONSTRAINT [FK_ProgressReports_ModifiedBy] FOREIGN KEY (ModifiedById) REFERENCES [dbo].[Users] ([Id]),
     CONSTRAINT [PK_ProgressReports] PRIMARY KEY ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ProgressReports_StudentId] 
+ON [dbo].[ProgressReports] ([StudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProgressReports_ESignedById] 
+ON [dbo].[ProgressReports] ([ESignedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProgressReports_SupervisorESignedById] 
+ON [dbo].[ProgressReports] ([SupervisorESignedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProgressReports_CreatedById] 
+ON [dbo].[ProgressReports] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProgressReports_ModifiedById] 
+ON [dbo].[ProgressReports] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

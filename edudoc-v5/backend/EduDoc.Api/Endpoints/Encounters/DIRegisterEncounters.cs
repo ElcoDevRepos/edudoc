@@ -12,7 +12,6 @@ namespace EduDoc.Api.Endpoints.Encounters
         {
             services.AddTransient<IEncounterMapper, EncounterMapper>();
             services.AddScoped<IEncounterRepository, EncounterRepository>();
-
             return services;
         }
     }

@@ -29,4 +29,26 @@ EXEC sp_addextendedproperty
 @level2name = N'Id'
 
 GO
-CREATE NONCLUSTERED INDEX IX_StudentTherapySchedules ON [dbo].[StudentTherapySchedules] ([DeviationReasonId]) INCLUDE ([Archived]);
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_StudentTherapySchedules_StudentTherapyId] 
+ON [dbo].[StudentTherapySchedules] ([StudentTherapyId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentTherapySchedules_DeviationReasonId] 
+ON [dbo].[StudentTherapySchedules] ([DeviationReasonId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentTherapySchedules_CreatedById] 
+ON [dbo].[StudentTherapySchedules] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentTherapySchedules_ModifiedById] 
+ON [dbo].[StudentTherapySchedules] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

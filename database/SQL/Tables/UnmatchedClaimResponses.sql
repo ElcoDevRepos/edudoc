@@ -23,3 +23,30 @@ CREATE TABLE [dbo].[UnmatchedClaimResponses]
     CONSTRAINT [FK_UnmatchedClaimResponses_UnmatchedDistrict] FOREIGN KEY ([UnmatchedDistrictId]) REFERENCES UnmatchedClaimDistricts(Id),
     CONSTRAINT [PK_UnmatchedClaimResponses] PRIMARY KEY ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_UnmatchedClaimResponses_ResponseFileId] 
+ON [dbo].[UnmatchedClaimResponses] ([ResponseFileId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_UnmatchedClaimResponses_EdiErrorCodeId] 
+ON [dbo].[UnmatchedClaimResponses] ([EdiErrorCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_UnmatchedClaimResponses_DistrictId] 
+ON [dbo].[UnmatchedClaimResponses] ([DistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_UnmatchedClaimResponses_UnmatchedDistrictId] 
+ON [dbo].[UnmatchedClaimResponses] ([UnmatchedDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

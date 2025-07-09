@@ -17,3 +17,28 @@ CREATE TABLE [dbo].[CaseLoadGoals]
 
 GO
 CREATE NONCLUSTERED INDEX IX_CaseLoadGoals ON [dbo].[CaseLoadGoals] ([CaseLoadId]) INCLUDE ([Archived]);
+GO
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_CaseLoadGoals_CreatedById] 
+ON [dbo].[CaseLoadGoals] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoadGoals_ModifiedById] 
+ON [dbo].[CaseLoadGoals] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoadGoals_GoalId] 
+ON [dbo].[CaseLoadGoals] ([GoalId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoadGoals_CaseLoadId] 
+ON [dbo].[CaseLoadGoals] ([CaseLoadId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

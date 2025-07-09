@@ -20,3 +20,22 @@ CREATE TABLE [dbo].[TherapyGroups]
     CONSTRAINT [FK_TherapyGroups_CreatedBy] FOREIGN KEY (CreatedById) REFERENCES [dbo].[Users] ([Id]),
 	CONSTRAINT [FK_TherapyGroups_ModifiedBy] FOREIGN KEY (ModifiedById) REFERENCES [dbo].[Users] ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_TherapyGroups_ProviderId] 
+ON [dbo].[TherapyGroups] ([ProviderId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_TherapyGroups_CreatedById] 
+ON [dbo].[TherapyGroups] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_TherapyGroups_ModifiedById] 
+ON [dbo].[TherapyGroups] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

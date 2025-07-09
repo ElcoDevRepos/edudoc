@@ -9,3 +9,18 @@ CREATE TABLE [dbo].[ContactPhones]
     CONSTRAINT [FK_ContactPhones_Contacts] FOREIGN KEY (ContactId) REFERENCES [Contacts]([Id]), 
     CONSTRAINT [PK_ContactPhones] PRIMARY KEY ([ContactId], [Phone]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ContactPhones_PhoneTypeId] 
+ON [dbo].[ContactPhones] ([PhoneTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ContactPhones_ContactId] 
+ON [dbo].[ContactPhones] ([ContactId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

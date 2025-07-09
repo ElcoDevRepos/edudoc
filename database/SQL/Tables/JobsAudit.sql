@@ -10,3 +10,16 @@ CREATE TABLE [dbo].[JobsAudit]
 	CONSTRAINT [FK_JobsAudit_BillingSchedule] FOREIGN KEY ([BillingScheduleId]) REFERENCES [dbo].[BillingSchedules] ([Id]),
     CONSTRAINT [PK_JobsAudit] PRIMARY KEY ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_JobsAudit_CreatedById] 
+ON [dbo].[JobsAudit] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_JobsAudit_BillingScheduleId] 
+ON [dbo].[JobsAudit] ([BillingScheduleId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

@@ -24,6 +24,59 @@ CREATE TABLE [dbo].[Users]
 )
 
 GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_Users_AuthUserId] 
+ON [dbo].[Users] ([AuthUserId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Users_ImageId] 
+ON [dbo].[Users] ([ImageId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Users_AddressId] 
+ON [dbo].[Users] ([AddressId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Users_CreatedById] 
+ON [dbo].[Users] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Users_ModifiedById] 
+ON [dbo].[Users] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Users_SchoolDistrictId] 
+ON [dbo].[Users] ([SchoolDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Email-based lookups (common in EF)
+CREATE NONCLUSTERED INDEX [IX_Users_Email_Archived] 
+ON [dbo].[Users] ([Email], [Archived])
+INCLUDE ([FirstName], [LastName], [AuthUserId])
+WITH (FILLFACTOR = 95, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- District admin lookups
+CREATE NONCLUSTERED INDEX [IX_Users_SchoolDistrictId_Archived] 
+ON [dbo].[Users] ([SchoolDistrictId], [Archived])
+INCLUDE ([FirstName], [LastName], [Email])
+WITH (FILLFACTOR = 95, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'Module',
     @level0type = N'SCHEMA',

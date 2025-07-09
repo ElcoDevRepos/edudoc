@@ -18,6 +18,19 @@ CREATE TABLE [dbo].[DiagnosisCodes]
 )
 
 GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_DiagnosisCodes_CreatedById] 
+ON [dbo].[DiagnosisCodes] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_DiagnosisCodes_ModifiedById] 
+ON [dbo].[DiagnosisCodes] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'Module',
     @level0type = N'SCHEMA',

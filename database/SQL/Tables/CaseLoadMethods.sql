@@ -14,3 +14,31 @@ CREATE TABLE [dbo].[CaseLoadMethods]
 	CONSTRAINT [FK_CaseLoadMethods_CaseLoad] FOREIGN KEY (CaseLoadId) REFERENCES [dbo].[CaseLoads] ([Id]),
 	CONSTRAINT [FK_CaseLoadMethods_Method] FOREIGN KEY (MethodId) REFERENCES [dbo].[Methods] ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_CaseLoadMethods_CaseLoadId] 
+ON [dbo].[CaseLoadMethods] ([CaseLoadId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoadMethods_MethodId] 
+ON [dbo].[CaseLoadMethods] ([MethodId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoadMethods_CreatedById] 
+ON [dbo].[CaseLoadMethods] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoadMethods_ModifiedById] 
+ON [dbo].[CaseLoadMethods] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+

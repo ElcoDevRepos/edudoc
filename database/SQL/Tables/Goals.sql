@@ -14,6 +14,25 @@ CREATE TABLE [dbo].[Goals]
 	CONSTRAINT [FK_Goals_NursingGoalResponse] FOREIGN KEY (NursingResponseId) REFERENCES [dbo].[NursingGoalResponse] ([Id])
 )
 GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_Goals_CreatedById] 
+ON [dbo].[Goals] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Goals_ModifiedById] 
+ON [dbo].[Goals] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Goals_NursingResponseId] 
+ON [dbo].[Goals] ([NursingResponseId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 EXEC sp_addextendedproperty
     @name = N'MS_Description',
     @value = N'Module',

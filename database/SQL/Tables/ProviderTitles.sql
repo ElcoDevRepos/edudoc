@@ -19,6 +19,30 @@ CREATE TABLE [dbo].[ProviderTitles]
 
 GO
 
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ProviderTitles_ServiceCodeId] 
+ON [dbo].[ProviderTitles] ([ServiceCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderTitles_SupervisorTitleId] 
+ON [dbo].[ProviderTitles] ([SupervisorTitleId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderTitles_CreatedById] 
+ON [dbo].[ProviderTitles] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderTitles_ModifiedById] 
+ON [dbo].[ProviderTitles] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'Module',
     @level0type = N'SCHEMA',
