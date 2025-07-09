@@ -20,3 +20,36 @@ CREATE TABLE [dbo].[Contacts]
     CONSTRAINT [FK_Contacts_ContactRoles] FOREIGN KEY ([RoleId]) REFERENCES [dbo].[ContactRoles] ([Id]),
     CONSTRAINT [PK_Contacts] PRIMARY KEY ([Id])
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_Contacts_CreatedById] 
+ON [dbo].[Contacts] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Contacts_ModifiedById] 
+ON [dbo].[Contacts] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Contacts_StatusId] 
+ON [dbo].[Contacts] ([StatusId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Contacts_AddressId] 
+ON [dbo].[Contacts] ([AddressId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Contacts_RoleId] 
+ON [dbo].[Contacts] ([RoleId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

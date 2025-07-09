@@ -42,6 +42,55 @@ CREATE TABLE [dbo].[SchoolDistricts]
     CONSTRAINT [PK_SchoolDistricts] PRIMARY KEY ([Id]),
 )
 GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_SchoolDistricts_AddressId] 
+ON [dbo].[SchoolDistricts] ([AddressId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistricts_CreatedById] 
+ON [dbo].[SchoolDistricts] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistricts_ModifiedById] 
+ON [dbo].[SchoolDistricts] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistricts_AccountManagerId] 
+ON [dbo].[SchoolDistricts] ([AccountManagerId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistricts_AccountAssistantId] 
+ON [dbo].[SchoolDistricts] ([AccountAssistantId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistricts_TreasurerId] 
+ON [dbo].[SchoolDistricts] ([TreasurerId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistricts_SpecialEducationDirectorId] 
+ON [dbo].[SchoolDistricts] ([SpecialEducationDirectorId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistricts_MerId] 
+ON [dbo].[SchoolDistricts] ([MerId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 EXEC sp_addextendedproperty
     @name = N'MS_Description',
     @value = N'Module',

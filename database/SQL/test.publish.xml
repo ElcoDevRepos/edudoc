@@ -19,7 +19,7 @@
     <ScriptDatabaseCollation>True</ScriptDatabaseCollation>
     
     <!-- Transaction Handling -->
-    <IncludeTransactionalScripts>True</IncludeTransactionalScripts>
+    <IncludeTransactionalScripts>False</IncludeTransactionalScripts>
     
     <!-- Protection Settings - Consistent Strategy -->
     <DoNotDropUsers>True</DoNotDropUsers>

@@ -15,3 +15,22 @@ CREATE TABLE [dbo].[UserRoles]
 	CONSTRAINT [FK_UserRoles_ModifiedBy] FOREIGN KEY (ModifiedById) REFERENCES [dbo].[Users] ([Id]), 
     CONSTRAINT [PK_UserRoles] PRIMARY KEY ([Id])
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_UserRoles_UserTypeId] 
+ON [dbo].[UserRoles] ([UserTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_UserRoles_CreatedById] 
+ON [dbo].[UserRoles] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_UserRoles_ModifiedById] 
+ON [dbo].[UserRoles] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

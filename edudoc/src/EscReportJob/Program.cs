@@ -56,17 +56,20 @@ namespace EscReportJob
                 services.AddScoped<IEscReportService, EscReportService>();
                 services.AddScoped<IPrimaryContext, PrimaryContext>();
                 services.AddScoped<IPrimaryContext, PrimaryContext>();
-                services.AddLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddConsole();
-                    logging.AddApplicationInsightsWebJobs(telemetryConfiguration =>
-                    {
-                        telemetryConfiguration.ConnectionString = configuration["ApplicationInsights:JobsConnectionString"];
-                    });
-                    logging.SetMinimumLevel(LogLevel.Information);
-                });
 
+                if (!string.IsNullOrEmpty(configuration["ApplicationInsights:JobsConnectionString"])) {
+                    services.AddLogging(logging =>
+                    {
+                        logging.ClearProviders();
+                        logging.AddConsole();
+                        logging.AddApplicationInsightsWebJobs(telemetryConfiguration =>
+                        {
+                            telemetryConfiguration.ConnectionString = configuration["ApplicationInsights:JobsConnectionString"];
+                        });
+                        logging.SetMinimumLevel(LogLevel.Information);
+                    });
+                }
+                
                 services.AddTransient<Application>();
 
                 var serviceProvider = services.BuildServiceProvider();

@@ -11,5 +11,14 @@
     CONSTRAINT [FK_AuthClients_AuthApplicationTypes] FOREIGN KEY ([AuthApplicationTypeId]) REFERENCES [dbo].[AuthApplicationTypes] ([Id])
 );
 
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_AuthClients_AuthApplicationTypeId] 
+ON [dbo].[AuthClients] ([AuthApplicationTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
 
 

@@ -24,3 +24,48 @@ CREATE TABLE [dbo].[CPTCodeAssocations]
     CONSTRAINT [PK_CPTCodeAssocations] PRIMARY KEY ([Id]) 
 )
 
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_CPTCodeAssocations_CPTCodeId] 
+ON [dbo].[CPTCodeAssocations] ([CPTCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CPTCodeAssocations_ServiceCodeId] 
+ON [dbo].[CPTCodeAssocations] ([ServiceCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CPTCodeAssocations_ServiceTypeId] 
+ON [dbo].[CPTCodeAssocations] ([ServiceTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CPTCodeAssocations_ProviderTitleId] 
+ON [dbo].[CPTCodeAssocations] ([ProviderTitleId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CPTCodeAssocations_EvaluationTypeId] 
+ON [dbo].[CPTCodeAssocations] ([EvaluationTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CPTCodeAssocations_CreatedById] 
+ON [dbo].[CPTCodeAssocations] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CPTCodeAssocations_ModifiedById] 
+ON [dbo].[CPTCodeAssocations] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+

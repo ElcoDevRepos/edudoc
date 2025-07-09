@@ -19,6 +19,18 @@ CREATE TABLE [dbo].[BillingSchedules]
 
 GO
 
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_BillingSchedules_CreatedById] 
+ON [dbo].[BillingSchedules] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_BillingSchedules_ModifiedById] 
+ON [dbo].[BillingSchedules] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'Module',
     @level0type = N'SCHEMA',

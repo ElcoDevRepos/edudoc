@@ -17,6 +17,13 @@ CREATE TABLE [dbo].[DistrictProgressReportDates]
 )
 
 GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_DistrictProgressReportDates_DistrictId] 
+ON [dbo].[DistrictProgressReportDates] ([DistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 EXEC sp_addextendedproperty
     @name = N'MS_Description',
     @value = N'Module',

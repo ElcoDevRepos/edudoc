@@ -10,3 +10,10 @@ CREATE TABLE [dbo].[ConsoleJobLogs]
     CONSTRAINT [PK_ConsoleJobLogs] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_ConsoleJobLogs_ConsoleJobTypes] FOREIGN KEY ([ConsoleJobTypeId]) REFERENCES [ConsoleJobTypes](Id),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ConsoleJobLogs_ConsoleJobTypeId] 
+ON [dbo].[ConsoleJobLogs] ([ConsoleJobTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

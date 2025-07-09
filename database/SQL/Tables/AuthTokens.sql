@@ -12,6 +12,21 @@
     CONSTRAINT [FK_AuthTokens_AuthUsers] FOREIGN KEY ([AuthUserId]) REFERENCES [dbo].[AuthUsers] ([Id])
 );
 
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_AuthTokens_AuthClientId] 
+ON [dbo].[AuthTokens] ([AuthClientId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_AuthTokens_AuthUserId] 
+ON [dbo].[AuthTokens] ([AuthUserId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
 
 
 

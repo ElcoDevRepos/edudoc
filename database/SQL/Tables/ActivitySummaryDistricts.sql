@@ -15,3 +15,24 @@ CREATE TABLE [dbo].[ActivitySummaryDistricts]
     CONSTRAINT [FK_ActivitySummaryDistricts_ActivitySummaries] FOREIGN KEY ([ActivitySummaryId]) REFERENCES ActivitySummaries(Id), 
     CONSTRAINT [FK_ActivitySummaryDistricts_SchoolDistricts] FOREIGN KEY ([DistrictId]) REFERENCES [SchoolDistricts]([Id])
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ActivitySummaryDistricts_CreatedById] 
+ON [dbo].[ActivitySummaryDistricts] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ActivitySummaryDistricts_ActivitySummaryId] 
+ON [dbo].[ActivitySummaryDistricts] ([ActivitySummaryId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ActivitySummaryDistricts_DistrictId] 
+ON [dbo].[ActivitySummaryDistricts] ([DistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

@@ -12,3 +12,18 @@ CREATE TABLE [dbo].[Addresses] (
 	CONSTRAINT [FK_Addresses_States] FOREIGN KEY ([StateCode]) REFERENCES [dbo].[States] ([StateCode]),
 	CONSTRAINT [FK_Addresses_Countries] FOREIGN KEY ([CountryCode]) REFERENCES [dbo].[Countries] ([CountryCode])
 );
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_Addresses_StateCode] 
+ON [dbo].[Addresses] ([StateCode])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Addresses_CountryCode] 
+ON [dbo].[Addresses] ([CountryCode])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

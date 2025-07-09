@@ -32,6 +32,31 @@ CREATE TABLE [dbo].[SchoolDistrictRosters]
 )
 
 GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_SchoolDistrictRosters_SchoolDistrictRosterDocumentId] 
+ON [dbo].[SchoolDistrictRosters] ([SchoolDistrictRosterDocumentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistrictRosters_ModifiedById] 
+ON [dbo].[SchoolDistrictRosters] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistrictRosters_SchoolDistrictId] 
+ON [dbo].[SchoolDistrictRosters] ([SchoolDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistrictRosters_StudentId] 
+ON [dbo].[SchoolDistrictRosters] ([StudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'Module',
     @level0type = N'SCHEMA',

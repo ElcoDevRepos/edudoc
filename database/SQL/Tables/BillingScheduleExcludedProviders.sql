@@ -10,3 +10,23 @@ CREATE TABLE [dbo].[BillingScheduleExcludedProviders]
 	CONSTRAINT [FK_BillingScheduleExcludedProviders_Provider] FOREIGN KEY ([ProviderId]) REFERENCES [dbo].[Providers] ([Id]),
     CONSTRAINT [PK_BillingScheduleExcludedProviders] PRIMARY KEY ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_BillingScheduleExcludedProviders_ProviderId] 
+ON [dbo].[BillingScheduleExcludedProviders] ([ProviderId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_BillingScheduleExcludedProviders_BillingScheduleId] 
+ON [dbo].[BillingScheduleExcludedProviders] ([BillingScheduleId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_BillingScheduleExcludedProviders_CreatedById] 
+ON [dbo].[BillingScheduleExcludedProviders] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+

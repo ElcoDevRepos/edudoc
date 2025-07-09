@@ -15,6 +15,26 @@ CREATE TABLE [dbo].[SchoolDistrictsSchools]
     CONSTRAINT [PK_SchoolDistrictsSchools] PRIMARY KEY ([Id]), 
 )
 GO
-create nonclustered index [IX_SchoolDistrictsSchools_SchoolDistrictId] on dbo.SchoolDistrictsSchools(SchoolDistrictId);
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_SchoolDistrictsSchools_SchoolDistrictId] 
+ON [dbo].[SchoolDistrictsSchools] ([SchoolDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
 GO
-create nonclustered index [IX_SchoolDistrictsSchools_SchoolId] on dbo.SchoolDistrictsSchools(SchoolId);
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistrictsSchools_SchoolId] 
+ON [dbo].[SchoolDistrictsSchools] ([SchoolId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistrictsSchools_CreatedById] 
+ON [dbo].[SchoolDistrictsSchools] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SchoolDistrictsSchools_ModifiedById] 
+ON [dbo].[SchoolDistrictsSchools] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

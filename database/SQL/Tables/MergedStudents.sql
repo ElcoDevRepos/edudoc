@@ -21,3 +21,26 @@ CREATE TABLE [dbo].[MergedStudents]
 
 GO
 
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_MergedStudents_CreatedById] 
+ON [dbo].[MergedStudents] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MergedStudents_AddressId] 
+ON [dbo].[MergedStudents] ([AddressId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MergedStudents_MergedToStudentId] 
+ON [dbo].[MergedStudents] ([MergedToStudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MergedStudents_SchoolId] 
+ON [dbo].[MergedStudents] ([SchoolId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+

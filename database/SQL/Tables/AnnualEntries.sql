@@ -16,6 +16,19 @@ CREATE TABLE [dbo].[AnnualEntries]
 )
 
 GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_AnnualEntries_StatusId] 
+ON [dbo].[AnnualEntries] ([StatusId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_AnnualEntries_SchoolDistrictId] 
+ON [dbo].[AnnualEntries] ([SchoolDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'Module',
     @level0type = N'SCHEMA',

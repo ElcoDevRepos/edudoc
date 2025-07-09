@@ -7,3 +7,12 @@
     CONSTRAINT [PK_ProviderAcknowledgmentLogs] PRIMARY KEY ([Id])
 
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ProviderAcknowledgmentLogs_ProviderId] 
+ON [dbo].[ProviderAcknowledgmentLogs] ([ProviderId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

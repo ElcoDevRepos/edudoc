@@ -26,3 +26,56 @@ CREATE TABLE [dbo].[StudentTherapies]
     CONSTRAINT [FK_StudentTherapies_CreatedBy] FOREIGN KEY (CreatedById) REFERENCES [dbo].[Users] ([Id]),
 	CONSTRAINT [FK_StudentTherapies_ModifiedBy] FOREIGN KEY (ModifiedById) REFERENCES [dbo].[Users] ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_StudentTherapies_CaseLoadId] 
+ON [dbo].[StudentTherapies] ([CaseLoadId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentTherapies_ProviderId] 
+ON [dbo].[StudentTherapies] ([ProviderId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentTherapies_EncounterLocationId] 
+ON [dbo].[StudentTherapies] ([EncounterLocationId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentTherapies_TherapyGroupId] 
+ON [dbo].[StudentTherapies] ([TherapyGroupId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentTherapies_CreatedById] 
+ON [dbo].[StudentTherapies] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentTherapies_ModifiedById] 
+ON [dbo].[StudentTherapies] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Case load therapy filtering (common in EF)
+CREATE NONCLUSTERED INDEX [IX_StudentTherapies_CaseLoadId_Archived_ProviderId] 
+ON [dbo].[StudentTherapies] ([CaseLoadId], [Archived], [ProviderId])
+INCLUDE ([StartDate], [EndDate], [TherapyGroupId])
+WITH (FILLFACTOR = 90, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Therapy group filtering
+CREATE NONCLUSTERED INDEX [IX_StudentTherapies_TherapyGroupId_Archived] 
+ON [dbo].[StudentTherapies] ([TherapyGroupId], [Archived])
+INCLUDE ([CaseLoadId], [ProviderId])
+WITH (FILLFACTOR = 90, ONLINE = ON, DATA_COMPRESSION = ROW);

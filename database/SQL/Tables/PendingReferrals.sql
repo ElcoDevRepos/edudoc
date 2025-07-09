@@ -26,3 +26,36 @@ CREATE TABLE [dbo].[PendingReferrals]
     CONSTRAINT [FK_PendingReferrals_PendingReferralJobRuns] FOREIGN KEY ([PendingReferralJobRunId])
         REFERENCES [dbo].[PendingReferralReportJobRuns] ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_PendingReferrals_StudentId] 
+ON [dbo].[PendingReferrals] ([StudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_PendingReferrals_DistrictId] 
+ON [dbo].[PendingReferrals] ([DistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_PendingReferrals_ProviderId] 
+ON [dbo].[PendingReferrals] ([ProviderId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_PendingReferrals_ServiceTypeId] 
+ON [dbo].[PendingReferrals] ([ServiceTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_PendingReferrals_PendingReferralJobRunId] 
+ON [dbo].[PendingReferrals] ([PendingReferralJobRunId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

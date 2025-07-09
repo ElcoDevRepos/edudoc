@@ -16,3 +16,22 @@ CREATE TABLE [dbo].[ServiceUnitTimeSegments]
 	CONSTRAINT [FK_ServiceUnitTimeSegments_ModifiedBy] FOREIGN KEY (ModifiedById) REFERENCES [dbo].[Users] ([Id]), 
     CONSTRAINT [PK_ServiceUnitTimeSegments] PRIMARY KEY ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ServiceUnitTimeSegments_ServiceUnitRuleId] 
+ON [dbo].[ServiceUnitTimeSegments] ([ServiceUnitRuleId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ServiceUnitTimeSegments_CreatedById] 
+ON [dbo].[ServiceUnitTimeSegments] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ServiceUnitTimeSegments_ModifiedById] 
+ON [dbo].[ServiceUnitTimeSegments] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

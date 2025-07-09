@@ -47,5 +47,55 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2type = N'COLUMN',
     @level2name = N'Id'
 
-Go
-create nonclustered index [IX_ClaimsEncounters_AggregateId] on dbo.ClaimsEncounters(AggregateId);
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ClaimsEncounters_AggregateId] 
+ON [dbo].[ClaimsEncounters] ([AggregateId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ClaimsEncounters_EncounterStudentId] 
+ON [dbo].[ClaimsEncounters] ([EncounterStudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ClaimsEncounters_ClaimsStudentId] 
+ON [dbo].[ClaimsEncounters] ([ClaimsStudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ClaimsEncounters_EncounterStudentCptCodeId] 
+ON [dbo].[ClaimsEncounters] ([EncounterStudentCptCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ClaimsEncounters_EdiErrorCodeId] 
+ON [dbo].[ClaimsEncounters] ([EdiErrorCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ClaimsEncounters_ReversedClaimId] 
+ON [dbo].[ClaimsEncounters] ([ReversedClaimId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Claims processing and voucher matching
+CREATE NONCLUSTERED INDEX [IX_ClaimsEncounters_VoucherDate_ClaimsStudentId] 
+ON [dbo].[ClaimsEncounters] ([VoucherDate], [ClaimsStudentId])
+INCLUDE ([ClaimAmount], [PaidAmount], [ServiceDate])
+WITH (FILLFACTOR = 85, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Service date range queries
+CREATE NONCLUSTERED INDEX [IX_ClaimsEncounters_ServiceDate_Response] 
+ON [dbo].[ClaimsEncounters] ([ServiceDate], [Response])
+INCLUDE ([ClaimAmount], [EdiErrorCodeId])
+WITH (FILLFACTOR = 85, ONLINE = ON, DATA_COMPRESSION = ROW);

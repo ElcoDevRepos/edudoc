@@ -30,3 +30,60 @@ CREATE TABLE [dbo].[MessageLinks]
     CONSTRAINT [FK_MessageLinks_CreatedBy] FOREIGN KEY ([CreatedById]) REFERENCES Users(Id),
     CONSTRAINT [FK_MessageLinks_ModifiedBy] FOREIGN KEY ([ModifiedById]) REFERENCES Users(Id)
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_MessageLinks_ServiceCodeId] 
+ON [dbo].[MessageLinks] ([ServiceCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageLinks_SchoolDistrictId] 
+ON [dbo].[MessageLinks] ([SchoolDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageLinks_ProviderTitleId] 
+ON [dbo].[MessageLinks] ([ProviderTitleId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageLinks_ProviderId] 
+ON [dbo].[MessageLinks] ([ProviderId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageLinks_EscId] 
+ON [dbo].[MessageLinks] ([EscId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageLinks_MessageFilterTypeId] 
+ON [dbo].[MessageLinks] ([MessageFilterTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageLinks_TrainingTypeId] 
+ON [dbo].[MessageLinks] ([TrainingTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageLinks_CreatedById] 
+ON [dbo].[MessageLinks] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageLinks_ModifiedById] 
+ON [dbo].[MessageLinks] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

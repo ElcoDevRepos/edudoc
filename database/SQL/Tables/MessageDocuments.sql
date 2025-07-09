@@ -33,6 +33,61 @@ CREATE TABLE [dbo].[MessageDocuments]
     )
  GO
 
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_MessageDocuments_ServiceCodeId] 
+ON [dbo].[MessageDocuments] ([ServiceCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageDocuments_SchoolDistrictId] 
+ON [dbo].[MessageDocuments] ([SchoolDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageDocuments_ProviderTitleId] 
+ON [dbo].[MessageDocuments] ([ProviderTitleId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageDocuments_ProviderId] 
+ON [dbo].[MessageDocuments] ([ProviderId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageDocuments_EscId] 
+ON [dbo].[MessageDocuments] ([EscId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageDocuments_TrainingTypeId] 
+ON [dbo].[MessageDocuments] ([TrainingTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageDocuments_CreatedById] 
+ON [dbo].[MessageDocuments] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageDocuments_MessageFilterTypeId] 
+ON [dbo].[MessageDocuments] ([MessageFilterTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_MessageDocuments_ModifiedById] 
+ON [dbo].[MessageDocuments] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
 EXEC sp_addextendedproperty
 @name = N'MS_Description',
 @value = N'Module',

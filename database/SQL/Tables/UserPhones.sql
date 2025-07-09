@@ -9,3 +9,16 @@ CREATE TABLE [dbo].[UserPhones]
     CONSTRAINT [FK_UserPhones_PhoneTypes] FOREIGN KEY (PhoneTypeId) REFERENCES PhoneTypes(Id), 
     CONSTRAINT [PK_UserPhones] PRIMARY KEY ([UserId], [Phone]) 
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_UserPhones_UserId] 
+ON [dbo].[UserPhones] ([UserId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_UserPhones_PhoneTypeId] 
+ON [dbo].[UserPhones] ([PhoneTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

@@ -14,3 +14,31 @@ CREATE TABLE [dbo].[BillingFailures]
     CONSTRAINT [FK_BillingFailures_ResolvedBy] FOREIGN KEY ([ResolvedById]) REFERENCES Users(Id),
     CONSTRAINT [PK_BillingFailures] PRIMARY KEY ([Id]) 
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_BillingFailures_EncounterStudentId] 
+ON [dbo].[BillingFailures] ([EncounterStudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_BillingFailures_BillingFailureReasonId] 
+ON [dbo].[BillingFailures] ([BillingFailureReasonId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_BillingFailures_BillingScheduleId] 
+ON [dbo].[BillingFailures] ([BillingScheduleId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_BillingFailures_ResolvedById] 
+ON [dbo].[BillingFailures] ([ResolvedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+

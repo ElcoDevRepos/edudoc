@@ -56,15 +56,110 @@ CREATE INDEX [IX_EncounterId_Archived] ON [dbo].[EncounterStudents] ([EncounterI
 
 GO
 
-CREATE NONCLUSTERED INDEX [IX_EncounterStudents_StudentId] ON [dbo].[EncounterStudents] ([StudentId]) INCLUDE ([CaseLoadId]);
-
-GO
-
 CREATE NONCLUSTERED INDEX [IX_EncounterStudents_EncounterStatusId_SupervisorDateESigned_ESignedById_Archived] ON [dbo].[EncounterStudents] ([EncounterStatusId],[SupervisorDateESigned],[ESignedById],[Archived])
 INCLUDE ([EncounterId],[StudentId],[ReasonForReturn],[EncounterNumber],[CaseLoadId],[EncounterStartTime],[EncounterEndTime],[EncounterDate],[SupervisorComments],[TherapyCaseNotes],[AbandonmentNotes]);
 
 GO
 
-CREATE NONCLUSTERED INDEX [IX_EncounterStudents_StudentDeviationId_EncounterId_EncounterStatusId_ESignedById_Archived]
-ON [dbo].[EncounterStudents] ([StudentDeviationReasonId],[EncounterId],[EncounterStatusId],[ESignedById],[Archived])
-INCLUDE ([StudentId],[EncounterStartTime],[EncounterEndTime],[EncounterDate])
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_EncounterId] 
+ON [dbo].[EncounterStudents] ([EncounterId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_StudentId] 
+ON [dbo].[EncounterStudents] ([StudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_EncounterStatusId] 
+ON [dbo].[EncounterStudents] ([EncounterStatusId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_EncounterLocationId] 
+ON [dbo].[EncounterStudents] ([EncounterLocationId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_CaseLoadId] 
+ON [dbo].[EncounterStudents] ([CaseLoadId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_StudentTherapyScheduleId] 
+ON [dbo].[EncounterStudents] ([StudentTherapyScheduleId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_StudentDeviationReasonId] 
+ON [dbo].[EncounterStudents] ([StudentDeviationReasonId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_ESignedById] 
+ON [dbo].[EncounterStudents] ([ESignedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_SupervisorESignedById] 
+ON [dbo].[EncounterStudents] ([SupervisorESignedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_DiagnosisCodeId] 
+ON [dbo].[EncounterStudents] ([DiagnosisCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_DocumentTypeId] 
+ON [dbo].[EncounterStudents] ([DocumentTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_CreatedById] 
+ON [dbo].[EncounterStudents] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_ModifiedById] 
+ON [dbo].[EncounterStudents] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Primary student encounter filtering (most common EF pattern)
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_StudentId_Archived_DateESigned] 
+ON [dbo].[EncounterStudents] ([StudentId], [Archived], [DateESigned])
+INCLUDE ([EncounterDate], [ESignedById], [EncounterStartTime], [EncounterEndTime])
+WITH (FILLFACTOR = 85, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Encounter date range queries (very common in EF)
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_EncounterDate_Archived_StudentId] 
+ON [dbo].[EncounterStudents] ([EncounterDate], [Archived], [StudentId])
+INCLUDE ([DateESigned], [ESignedById])
+WITH (FILLFACTOR = 85, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Signed encounters filtering
+CREATE NONCLUSTERED INDEX [IX_EncounterStudents_ESignedById_DateESigned] 
+ON [dbo].[EncounterStudents] ([ESignedById], [DateESigned])
+WHERE ([ESignedById] IS NOT NULL AND [DateESigned] IS NOT NULL)
+WITH (FILLFACTOR = 85, ONLINE = ON, DATA_COMPRESSION = ROW);

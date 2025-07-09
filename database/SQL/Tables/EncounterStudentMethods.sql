@@ -17,5 +17,33 @@ CREATE TABLE [dbo].[EncounterStudentMethods]
 
 GO
 
-CREATE NONCLUSTERED INDEX [IX_EncounterStudentMethods_EncounterStudentId_Archived]
-ON [dbo].[EncounterStudentMethods] ([EncounterStudentId],[Archived])
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_EncounterStudentMethods_EncounterStudentId] 
+ON [dbo].[EncounterStudentMethods] ([EncounterStudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudentMethods_MethodId] 
+ON [dbo].[EncounterStudentMethods] ([MethodId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudentMethods_CreatedById] 
+ON [dbo].[EncounterStudentMethods] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_EncounterStudentMethods_ModifiedById] 
+ON [dbo].[EncounterStudentMethods] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Primary encounter-method relationship
+CREATE NONCLUSTERED INDEX [IX_EncounterStudentMethods_EncounterStudentId_MethodId] 
+ON [dbo].[EncounterStudentMethods] ([EncounterStudentId], [MethodId])
+INCLUDE ([Archived], [DateCreated])
+WITH (FILLFACTOR = 85, ONLINE = ON, DATA_COMPRESSION = ROW);

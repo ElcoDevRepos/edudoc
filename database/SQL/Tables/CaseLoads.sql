@@ -39,3 +39,53 @@ GO
 CREATE NONCLUSTERED INDEX IX_CaseLoads_ServiceCodeId_StudentId ON [dbo].[CaseLoads] ([ServiceCodeId], [StudentId]) INCLUDE ([Archived]);
 GO
 CREATE NONCLUSTERED INDEX IX_CaseLoads_ServiceCodeId ON [dbo].[CaseLoads] ([ServiceCodeId]) INCLUDE ([Archived], [StudentId]);
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_CaseLoads_CreatedById] 
+ON [dbo].[CaseLoads] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoads_ModifiedById] 
+ON [dbo].[CaseLoads] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoads_StudentTypeId] 
+ON [dbo].[CaseLoads] ([StudentTypeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoads_DiagnosisCodeId] 
+ON [dbo].[CaseLoads] ([DiagnosisCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoads_DisabilityCodeId] 
+ON [dbo].[CaseLoads] ([DisabilityCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Student case load with archived filtering (common in EF)
+CREATE NONCLUSTERED INDEX [IX_CaseLoads_StudentId_Archived_ServiceCodeId] 
+ON [dbo].[CaseLoads] ([StudentId], [Archived], [ServiceCodeId])
+INCLUDE ([StudentTypeId], [DiagnosisCodeId])
+WITH (FILLFACTOR = 90, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Service code case loads
+CREATE NONCLUSTERED INDEX [IX_CaseLoads_ServiceCodeId_Archived_StudentTypeId] 
+ON [dbo].[CaseLoads] ([ServiceCodeId], [Archived], [StudentTypeId])
+INCLUDE ([StudentId])
+WITH (FILLFACTOR = 90, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+

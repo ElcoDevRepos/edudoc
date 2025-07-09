@@ -12,3 +12,16 @@ CREATE TABLE [dbo].[ProviderCaseUploadDocuments]
     CONSTRAINT [PK_ProviderCaseUploadDocuments] PRIMARY KEY ([Id]),     
     CONSTRAINT [FK_ProviderCaseUploadDocuments_SchoolDistricts] FOREIGN KEY (DistrictId) REFERENCES [dbo].[SchoolDistricts](Id),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ProviderCaseUploadDocuments_UploadedBy] 
+ON [dbo].[ProviderCaseUploadDocuments] ([UploadedBy])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderCaseUploadDocuments_DistrictId] 
+ON [dbo].[ProviderCaseUploadDocuments] ([DistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

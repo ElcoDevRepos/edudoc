@@ -10,3 +10,12 @@ CREATE TABLE [dbo].[ActivitySummaries]
     CONSTRAINT [PK_ActivitySummaries] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_ActivitySummaries_Users] FOREIGN KEY ([CreatedById]) REFERENCES Users(Id),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ActivitySummaries_CreatedById] 
+ON [dbo].[ActivitySummaries] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

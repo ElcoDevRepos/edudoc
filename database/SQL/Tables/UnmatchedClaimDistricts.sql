@@ -12,3 +12,12 @@ CREATE TABLE [dbo].[UnmatchedClaimDistricts]
     CONSTRAINT [FK_UnmatchedClaimDistricts_ResponseFile] FOREIGN KEY ([ResponseFileId]) REFERENCES BillingResponseFiles(Id),
     CONSTRAINT [PK_UnmatchedClaimDistricts] PRIMARY KEY ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_UnmatchedClaimDistricts_ResponseFileId] 
+ON [dbo].[UnmatchedClaimDistricts] ([ResponseFileId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

@@ -7,3 +7,12 @@ CREATE TABLE [dbo].[ImpersonationLogs]
     CONSTRAINT [FK_ImpersonationLogs_User] FOREIGN KEY (ImpersonaterId) REFERENCES dbo.Users ([Id]), 
     CONSTRAINT [PK_ImpersonationLogs] PRIMARY KEY (Id)
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ImpersonationLogs_ImpersonaterId] 
+ON [dbo].[ImpersonationLogs] ([ImpersonaterId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

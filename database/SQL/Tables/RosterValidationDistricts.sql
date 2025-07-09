@@ -16,3 +16,16 @@ CREATE TABLE [dbo].[RosterValidationDistricts]
     CONSTRAINT [FK_RosterValidationDistricts_SchoolDistrict] FOREIGN KEY ([SchoolDistrictId]) REFERENCES SchoolDistricts(Id),
     CONSTRAINT [PK_RosterValidationDistricts] PRIMARY KEY ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_RosterValidationDistricts_RosterValidationId] 
+ON [dbo].[RosterValidationDistricts] ([RosterValidationId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_RosterValidationDistricts_SchoolDistrictId] 
+ON [dbo].[RosterValidationDistricts] ([SchoolDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

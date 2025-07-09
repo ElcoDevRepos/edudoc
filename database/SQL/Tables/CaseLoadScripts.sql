@@ -21,3 +21,30 @@ CREATE TABLE [dbo].[CaseLoadScripts]
     CONSTRAINT [FK_CaseLoadScripts_CaseLoad] FOREIGN KEY ([CaseLoadId]) REFERENCES CaseLoads(Id),
 	CONSTRAINT [FK_CaseLoadScripts_DiagnosisCodes] FOREIGN KEY ([DiagnosisCodeId]) REFERENCES [dbo].[DiagnosisCodes] ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_CaseLoadScripts_UploadedById] 
+ON [dbo].[CaseLoadScripts] ([UploadedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoadScripts_ModifiedById] 
+ON [dbo].[CaseLoadScripts] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoadScripts_CaseLoadId] 
+ON [dbo].[CaseLoadScripts] ([CaseLoadId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoadScripts_DiagnosisCodeId] 
+ON [dbo].[CaseLoadScripts] ([DiagnosisCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

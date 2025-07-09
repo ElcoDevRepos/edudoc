@@ -51,16 +51,19 @@ namespace ActivitySummaryJob
                 services.AddTransient<IConfigurationSettings, ConfigurationSettings>();
                 services.AddScoped<IActivitySummaryService, ActivitySummaryService>();
                 services.AddScoped<IPrimaryContext, PrimaryContext>();
-                services.AddLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddConsole();
-                    logging.AddApplicationInsightsWebJobs(telemetryConfiguration =>
+
+                if (!string.IsNullOrEmpty(configuration["ApplicationInsights:JobsConnectionString"])) {
+                    services.AddLogging(logging =>
                     {
-                        telemetryConfiguration.ConnectionString = configuration["ApplicationInsights:JobsConnectionString"];
+                        logging.ClearProviders();
+                        logging.AddConsole();
+                        logging.AddApplicationInsightsWebJobs(telemetryConfiguration =>
+                        {
+                            telemetryConfiguration.ConnectionString = configuration["ApplicationInsights:JobsConnectionString"];
+                        });
+                        logging.SetMinimumLevel(LogLevel.Information);
                     });
-                    logging.SetMinimumLevel(LogLevel.Information);
-                });
+                }
 
                 services.AddTransient<Application>();
 

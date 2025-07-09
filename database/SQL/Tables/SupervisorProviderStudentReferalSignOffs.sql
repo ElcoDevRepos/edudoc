@@ -38,3 +38,56 @@ GO
 CREATE NONCLUSTERED INDEX IX_SupervisorProviderStudentReferalSignOffs_2 ON [dbo].[SupervisorProviderStudentReferalSignOffs] ([StudentId]) INCLUDE ([SupervisorId], [SignOffText], [SignOffDate], [SignedOffById], [ServiceCodeId], [EffectiveDateFrom], [EffectiveDateTo], [CreatedById], [ModifiedById], [DateCreated], [DateModified]);
 GO
 CREATE NONCLUSTERED INDEX [IX_SupervisorProviderStudentReferalSignOffs_StudentId_ServiceCodeId] ON [dbo].[SupervisorProviderStudentReferalSignOffs] ([StudentId], [ServiceCodeId]) INCLUDE ([SignOffDate]);
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_SupervisorProviderStudentReferalSignOffs_SignedOffById] 
+ON [dbo].[SupervisorProviderStudentReferalSignOffs] ([SignedOffById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SupervisorProviderStudentReferalSignOffs_SupervisorId] 
+ON [dbo].[SupervisorProviderStudentReferalSignOffs] ([SupervisorId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SupervisorProviderStudentReferalSignOffs_StudentId] 
+ON [dbo].[SupervisorProviderStudentReferalSignOffs] ([StudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SupervisorProviderStudentReferalSignOffs_ServiceCodeId] 
+ON [dbo].[SupervisorProviderStudentReferalSignOffs] ([ServiceCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SupervisorProviderStudentReferalSignOffs_CreatedById] 
+ON [dbo].[SupervisorProviderStudentReferalSignOffs] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SupervisorProviderStudentReferalSignOffs_ModifiedById] 
+ON [dbo].[SupervisorProviderStudentReferalSignOffs] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Referral date range filtering (common in EF)
+CREATE NONCLUSTERED INDEX [IX_SupervisorProviderStudentReferalSignOffs_EffectiveDateFrom_EffectiveDateTo] 
+ON [dbo].[SupervisorProviderStudentReferalSignOffs] ([EffectiveDateFrom], [EffectiveDateTo])
+INCLUDE ([StudentId], [ServiceCodeId], [SupervisorId])
+WITH (FILLFACTOR = 90, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Service code referral tracking
+CREATE NONCLUSTERED INDEX [IX_SupervisorProviderStudentReferalSignOffs_ServiceCodeId_StudentId_EffectiveDateFrom] 
+ON [dbo].[SupervisorProviderStudentReferalSignOffs] ([ServiceCodeId], [StudentId], [EffectiveDateFrom])
+INCLUDE ([EffectiveDateTo], [SupervisorId])
+WITH (FILLFACTOR = 90, ONLINE = ON, DATA_COMPRESSION = ROW);

@@ -7,3 +7,12 @@ CREATE TABLE [dbo].[PendingReferralReportJobRuns]
     CONSTRAINT [FK_PendingReferralReportJobRuns_Users] FOREIGN KEY ([JobRunById])
         REFERENCES [dbo].[Users]([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_PendingReferralReportJobRuns_JobRunById] 
+ON [dbo].[PendingReferralReportJobRuns] ([JobRunById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO

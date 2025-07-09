@@ -16,3 +16,28 @@ CREATE TABLE [dbo].[StudentDistrictWithdrawals]
 	CONSTRAINT [FK_StudentDistrictWithdrawals_Student] FOREIGN KEY ([StudentId]) REFERENCES [dbo].[Students] ([Id]),
 	CONSTRAINT [FK_StudentDistrictWithdrawals_SchoolDistrict] FOREIGN KEY ([DistrictId]) REFERENCES [dbo].[SchoolDistricts] ([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_StudentDistrictWithdrawals_StudentId] 
+ON [dbo].[StudentDistrictWithdrawals] ([StudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentDistrictWithdrawals_DistrictId] 
+ON [dbo].[StudentDistrictWithdrawals] ([DistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentDistrictWithdrawals_CreatedById] 
+ON [dbo].[StudentDistrictWithdrawals] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_StudentDistrictWithdrawals_ModifiedById] 
+ON [dbo].[StudentDistrictWithdrawals] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

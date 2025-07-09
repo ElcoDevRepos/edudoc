@@ -14,3 +14,31 @@ CREATE TABLE [dbo].[AdminSchoolDistricts]
     CONSTRAINT [FK_AdminSchoolDistrict_SchoolDistrict] FOREIGN KEY (SchoolDistrictId) REFERENCES [SchoolDistricts]([Id]),
     CONSTRAINT [PK_AdminSchoolDistrict] PRIMARY KEY ([Id]), 
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_AdminSchoolDistricts_AdminId] 
+ON [dbo].[AdminSchoolDistricts] ([AdminId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_AdminSchoolDistricts_SchoolDistrictId] 
+ON [dbo].[AdminSchoolDistricts] ([SchoolDistrictId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_AdminSchoolDistricts_CreatedById] 
+ON [dbo].[AdminSchoolDistricts] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_AdminSchoolDistricts_ModifiedById] 
+ON [dbo].[AdminSchoolDistricts] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+

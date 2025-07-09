@@ -18,3 +18,31 @@ CREATE TABLE [dbo].[CaseLoadCptCodes]
 
 GO
 CREATE NONCLUSTERED INDEX IX_CaseLoadCptCodes ON [dbo].[CaseLoadCptCodes] ([CaseLoadId]) INCLUDE ([Archived]);
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_CaseLoadCptCodes_CreatedById] 
+ON [dbo].[CaseLoadCptCodes] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoadCptCodes_ModifiedById] 
+ON [dbo].[CaseLoadCptCodes] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoadCptCodes_CptCodeId] 
+ON [dbo].[CaseLoadCptCodes] ([CptCodeId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CaseLoadCptCodes_CaseLoadId] 
+ON [dbo].[CaseLoadCptCodes] ([CaseLoadId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+

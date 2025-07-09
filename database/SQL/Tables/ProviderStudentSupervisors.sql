@@ -17,7 +17,7 @@ CREATE TABLE [dbo].[ProviderStudentSupervisors]
 	CONSTRAINT [FK_ProviderStudentSupervisors_ModifiedBy] FOREIGN KEY (ModifiedById) REFERENCES [dbo].[Users] ([Id]),
     CONSTRAINT [PK_ProviderStudentSupervisors] PRIMARY KEY ([Id]),
 )
-Go
+GO
 EXEC sp_addextendedproperty
 @name = N'MS_Description',
 @value = N'Module',
@@ -28,10 +28,51 @@ EXEC sp_addextendedproperty
 @level2type = N'COLUMN',
 @level2name = N'Id'
 
-Go
+GO
 create nonclustered index [IX_ProviderStudentSupervisors_StudentId_SupervisorId_EffectiveEndDate] on [dbo].[ProviderStudentSupervisors](StudentId, SupervisorId, EffectiveEndDate);
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ProviderStudentSupervisors_AssistantId] 
+ON [dbo].[ProviderStudentSupervisors] ([AssistantId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
 
 GO
 
-create nonclustered index [IX_ProviderStudentSupervisors_AssistantId] ON [dbo].[ProviderStudentSupervisors] ([AssistantId])
-INCLUDE ([SupervisorId],[StudentId])
+CREATE NONCLUSTERED INDEX [IX_ProviderStudentSupervisors_SupervisorId] 
+ON [dbo].[ProviderStudentSupervisors] ([SupervisorId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderStudentSupervisors_StudentId] 
+ON [dbo].[ProviderStudentSupervisors] ([StudentId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderStudentSupervisors_CreatedById] 
+ON [dbo].[ProviderStudentSupervisors] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProviderStudentSupervisors_ModifiedById] 
+ON [dbo].[ProviderStudentSupervisors] ([ModifiedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Supervisor assignment with effective dates (common in EF)
+CREATE NONCLUSTERED INDEX [IX_ProviderStudentSupervisors_SupervisorId_EffectiveEndDate] 
+ON [dbo].[ProviderStudentSupervisors] ([SupervisorId], [EffectiveEndDate])
+INCLUDE ([StudentId], [AssistantId], [EffectiveStartDate])
+WITH (FILLFACTOR = 90, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+-- Assistant assignment filtering
+CREATE NONCLUSTERED INDEX [IX_ProviderStudentSupervisors_AssistantId_EffectiveEndDate] 
+ON [dbo].[ProviderStudentSupervisors] ([AssistantId], [EffectiveEndDate])
+INCLUDE ([StudentId], [SupervisorId], [EffectiveStartDate])
+WITH (FILLFACTOR = 90, ONLINE = ON, DATA_COMPRESSION = ROW);

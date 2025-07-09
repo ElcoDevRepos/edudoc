@@ -10,3 +10,16 @@ CREATE TABLE [dbo].[RosterValidationResponseFiles]
     CONSTRAINT [PK_RosterValidationResponseFiles] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_RosterValidationResponseFiles_Users] FOREIGN KEY ([UploadedById]) REFERENCES Users(Id),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_RosterValidationResponseFiles_RosterValidationFileId] 
+ON [dbo].[RosterValidationResponseFiles] ([RosterValidationFileId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_RosterValidationResponseFiles_UploadedById] 
+ON [dbo].[RosterValidationResponseFiles] ([UploadedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);

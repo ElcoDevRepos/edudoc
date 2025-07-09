@@ -15,3 +15,25 @@ CREATE TABLE [dbo].[ActivitySummaryProviders]
     CONSTRAINT [FK_ActivitySummaryProviders_ActivitySummaryServiceAreas] FOREIGN KEY ([ActivitySummaryServiceAreaId]) REFERENCES ActivitySummaryServiceAreas(Id), 
     CONSTRAINT [FK_ActivitySummaryProviders_Providers] FOREIGN KEY ([ProviderId]) REFERENCES [Providers]([Id]),
 )
+
+GO
+
+-- Indexes for Foreign Keys
+CREATE NONCLUSTERED INDEX [IX_ActivitySummaryProviders_ProviderId] 
+ON [dbo].[ActivitySummaryProviders] ([ProviderId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ActivitySummaryProviders_CreatedById] 
+ON [dbo].[ActivitySummaryProviders] ([CreatedById])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ActivitySummaryProviders_ActivitySummaryServiceAreaId] 
+ON [dbo].[ActivitySummaryProviders] ([ActivitySummaryServiceAreaId])
+WITH (FILLFACTOR = 100, ONLINE = ON, DATA_COMPRESSION = ROW);
+
+GO
+
